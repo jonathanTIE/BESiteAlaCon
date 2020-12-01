@@ -3,3 +3,38 @@
 {% block title_2 %}
     Webmaster
 {% endblock %}
+
+{% block content %}
+
+    <img src="{{ url_for('static', filename='images/rasoir.png')}}" />
+    <img src="{{ url_for('static', filename='images/hache.jpg')}}" />
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="section-block" id="cards">
+                                    <h3 class="section-title">Cards</h3>
+                                    <p>Cards support a wide variety of content, including images, text, list groups, links, and more. Below are examples of what’s supported.</p>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">Jonathan</h3>
+                                        <p class="card-text">Un lycéen</p>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3 class="card-title">Corentin</h3>
+                                        <h6 class="card-subtitle mb-2 text-muted">Un prépa</h6>
+                                        <p class="card-text">Un prépa</p>
+                                        <a href="#" class="card-link">Card link</a>
+                                        <a href="#" class="card-link">Another link</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+{% endblock %}
