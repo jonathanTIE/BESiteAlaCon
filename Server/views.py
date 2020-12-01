@@ -10,18 +10,23 @@ app.template_folder = "../template"
 @app.route('/index')
 @app.route('/')
 def index():
-
     return render_template("accueil.html")
 
 @app.route('/vigie')
 def vigie():
-
     return render_template("vigie.html")
 
 @app.route('/webmaster')
 def webmaster():
-
     return render_template("webmaster.html")
+
+@app.route('/creation-compte')
+def create_account():
+    return render_template("compte.html")
+
+@app.route('/statistiques')
+def stats():
+    return render_template("statistiques.html")
 
 @app.route('/connecter', methods=['POST','GET'])
 def connecter():
