@@ -1,8 +1,11 @@
 from flask import Flask, session, render_template, request, redirect, url_for
 from Server.Data import db
 
+class Statut(object):
+    pass
+
 def add_account(request):
-    user = request.form['user']
+    user = request.form['login']
     password = request.form['password']
     return msg
 

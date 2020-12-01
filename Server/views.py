@@ -10,6 +10,8 @@ app.template_folder = "../template"
 @app.route('/index')
 @app.route('/')
 def index():
+    #session['statut'] = 0 #pour tester le menu
+    print(session.get('idUser'))
     return render_template("accueil.html")
 
 @app.route('/vigie')
