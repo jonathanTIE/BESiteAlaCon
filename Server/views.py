@@ -12,7 +12,7 @@ app.template_folder = "../template"
 def index():
     #session['statut'] = 0 #pour tester le menu
     print(session.get('idUser'))
-    return render_template("accueil.html")
+    return render_template("accueil.html", msg=request.args.get('msg'))
 
 @app.route('/vigie')
 def vigie():
@@ -30,13 +30,13 @@ def create_account():
 def stats():
     return render_template("statistiques.html")
 
-@app.route('/connecter', methods=['POST','GET'])
+@app.route('/connecter', methods=['POST'])
 def connecter():
     print(request.form)
     msg = Auth.connect_account(request)
 
     if msg != True:
-        return render_template("index.html",  msg=msg)
+        return redirect(url_for('index', msg=msg))
     else:
         return redirect(url_for('vigie'))
 

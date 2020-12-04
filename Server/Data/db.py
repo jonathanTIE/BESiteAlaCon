@@ -7,7 +7,7 @@ config = {
         'password': 'mysql',
         'host': 'localhost',
         'port': 3306,  # 8889 pour les macs
-        'database': 'GSEA19B_Jonathan_Corentin',  # nom de la BDD
+        'database': 'gsea19b_jonathan_corentin',  # nom de la BDD
         'raise_on_warnings': True,
 }
 

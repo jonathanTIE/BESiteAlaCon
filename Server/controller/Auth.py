@@ -4,10 +4,10 @@ from Server.Data import db
 class Statut(object):
     pass
 
-def add_account(request):
-    user = request.form['login']
-    password = request.form['password']
-    return msg
+#def add_account(request):
+#    user = request.form['login']
+#    password = request.form['password']
+#    return msg
 
 def connect_account(request):
     """
@@ -27,7 +27,7 @@ def connect_account(request):
         session["login"] = res[0]['login']
         session["statut"] = res[0]['statut']
         session["mail"] = res[0]['mail']
-        session["new_mdp"] = res[0]['new_mdp']
+        session["newMdp"] = res[0]['newMdp']
         msg = True
     except:
         msg = "echec d'authentification : vérifiez le mdp/login"
