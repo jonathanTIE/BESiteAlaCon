@@ -10,6 +10,11 @@ def add_account(request):
     return msg
 
 def connect_account(request):
+    """
+
+    :param request:
+    :return: True if login/pwd correct, error message if incorrect
+    """
     login = request.form['login']
     mdp = request.form['password']
     print(request)
@@ -23,7 +28,7 @@ def connect_account(request):
         session["statut"] = res[0]['statut']
         session["mail"] = res[0]['mail']
         session["new_mdp"] = res[0]['new_mdp']
-        msg = "succes"
+        msg = True
     except:
-        msg = "echec"
+        msg = "echec d'authentification : vérifiez le mdp/login"
     return msg

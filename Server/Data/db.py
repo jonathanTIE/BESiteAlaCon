@@ -3,8 +3,8 @@ from mysql.connector import errorcode
 
 config = {
 
-        'user': 'gsea',
-        'password': '*gsea*',
+        'user': 'root',
+        'password': 'mysql',
         'host': 'localhost',
         'port': 3306,  # 8889 pour les macs
         'database': 'GSEA19B_Jonathan_Corentin',  # nom de la BDD
@@ -21,11 +21,13 @@ def connexion():
         cnx = mysql.connector.connect(**config)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Mauvais login ou mot de passe")
+            print("Mauvais login ou mot de passe de config de db")
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
             print("La Base de données n'existe pas.")
         else:
             print(err)
+    if cnx == "":
+        raise Exception("pb base de donnes : voir sur la console")
     return cnx
 
 

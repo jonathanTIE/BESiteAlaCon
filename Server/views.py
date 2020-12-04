@@ -35,8 +35,8 @@ def connecter():
     print(request.form)
     msg = Auth.connect_account(request)
 
-    if msg == "echec":
-        return render_template("index.html", infoC = "Echec d'authentification")
+    if msg != True:
+        return render_template("index.html",  msg=msg)
     else:
         return redirect(url_for('vigie'))
 
