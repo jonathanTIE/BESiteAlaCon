@@ -1,5 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block title_2 %}
+    {% if session.idUser %}
+    <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
+    {% endif %}
     Vigie
 {% endblock %}
