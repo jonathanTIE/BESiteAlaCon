@@ -85,13 +85,13 @@ def del_membreData(idUser):
         msg = "Failed delete membre Data: {}".format(err)
 
     return msg
-
-def add_membreData(nom, idEquipe):
+"""
+def add_userdata(email, nom:str, prenom:str,statut:int,login:str):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "INSERT INTO membre (nom, idEquipe) VALUES (%s, %s)"
-        param = (nom, idEquipe)
+        sql = "INSERT INTO identification (nom, prenom, mail, login, statut) VALUES (%s, %s, %s,%s, %s)"
+        param = (nom, prenom, email, login, statut)
         cursor.execute(sql, param)
         cnx.commit()
         msg = "addOK"
@@ -101,7 +101,7 @@ def add_membreData(nom, idEquipe):
         msg = "Failed add membre Data: {}".format(err)
 
     return msg
-
+"""
 def update_membreData(champ,idUser,newvalue):
     try:
         cnx = connexion()
