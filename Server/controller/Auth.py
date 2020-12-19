@@ -36,4 +36,3 @@ def connect_account(request):
         msg = "echec d'authentification : vérifiez le mdp/login"
     return msg
 
-

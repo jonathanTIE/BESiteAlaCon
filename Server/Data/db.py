@@ -1,4 +1,6 @@
-import mysql.connector
+from secrets import choice
+
+import mysql.connector, string
 from mysql.connector import errorcode
 
 config = {
@@ -85,22 +87,53 @@ def del_membreData(idUser):
         msg = "Failed delete membre Data: {}".format(err)
 
     return msg
+    
 """
-def add_userdata(email, nom:str, prenom:str,statut:int,login:str):
+
+def User_Mdp( mdp:int ):
+    return mdp
+
+
+def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "INSERT INTO identification (nom, prenom, mail, login, statut) VALUES (%s, %s, %s,%s, %s)"
-        param = (nom, prenom, email, login, statut)
+
+
+        alphabet = string.ascii_letters + string.digits
+        while True:
+            new_Mdp = ''.join(choice(alphabet) for i in range(10))
+            if (any(c.islower() for c in new_Mdp)
+                    and any(c.isupper() for c in new_Mdp)
+                    and sum(c.isdigit() for c in new_Mdp) >= 3):
+                break
+
+# Ligne de code trouvée sur : https://riptutorial.com/fr/python/example/4000/creation-d-un-mot-de-passe-utilisateur-aleatoire
+
+        sql = "INSERT INTO identification (nom, prenom, newMdp, mail, login, statut) VALUES (%s, %s, %s, %s,%s, %s)"
+        param = (nom, prenom, new_Mdp, email, login, statut)
         cursor.execute(sql, param)
-        cnx.commit()
-        msg = "addOK"
-        close_bd(cursor,cnx)
+
+        new_Mdp = 2
+
+        if new_Mdp == 2:
+            new_Mdp="You need to change the password"
+            Final_Mdp = User_Mdp()
+            sql = "INSERT INTO identification (newMdp) VALUES (%s)"
+            param = Final_Mdp
+            cursor.execute(sql, param)
+
+        else:
+            last_id = cursor.lastrowid
+            cnx.commit()
+            msg = "addOK"
+            close_bd(cursor, cnx)
 
     except mysql.connector.Error as err:
         msg = "Failed add membre Data: {}".format(err)
 
-    return msg
+    return (msg, last_id)
+
 """
 def update_membreData(champ,idUser,newvalue):
     try:
@@ -132,3 +165,20 @@ def getAuthData(login,mdp):
         res = "Failed get verifAuth Data: {}".format(err)
 
     return res
+
+
+"""
+import smtplib, ssl
+port = 587 # For starttls
+smtp_server = "smtp.gmail.com" 
+sender_email = "fromMail@gmail.com"
+receiver_email = "toMail@gmail.com" 
+password = "Votre mot de passe Gmail"
+message = "Subject: Creation de compte Vigie Annexe \n\n Votre login est: {} \n\n Votre mot de passe est: {}".format(login, mdp_clair)
+
+context = ssl.create_default_context() 
+with smtplib.SMTP(smtp_server, port) as server:
+    server.starttls(context=context) 
+    server.login(sender_email, password) 
+    server.sendmail(sender_email, receiver_email, message)
+"""
