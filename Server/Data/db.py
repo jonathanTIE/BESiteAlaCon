@@ -168,7 +168,6 @@ def getLoginMdp(login,mdp):
 
     return res
 
-
 """
 import smtplib, ssl
 port = 587 # For starttls
