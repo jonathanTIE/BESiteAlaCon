@@ -1,5 +1,5 @@
 from secrets import choice
-
+from email.message import EmailMessage
 import mysql.connector, string
 from mysql.connector import errorcode
 
@@ -95,32 +95,33 @@ def User_Mdp( mdp:int ):
 
 
 def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
+    global last_id, msg
     try:
         cnx = connexion()
         cursor = cnx.cursor()
 
-
         alphabet = string.ascii_letters + string.digits
         while True:
-            new_Mdp = ''.join(choice(alphabet) for i in range(10))
-            if (any(c.islower() for c in new_Mdp)
-                    and any(c.isupper() for c in new_Mdp)
-                    and sum(c.isdigit() for c in new_Mdp) >= 3):
+            Default_password = ''.join(choice(alphabet) for i in range(10))
+            if (any(c.islower() for c in Default_password)
+                    and any(c.isupper() for c in Default_password)
+                    and sum(c.isdigit() for c in Default_password) >= 3):
                 break
 
-# Ligne de code trouvée sur : https://riptutorial.com/fr/python/example/4000/creation-d-un-mot-de-passe-utilisateur-aleatoire
-
-        sql = "INSERT INTO identification (nom, prenom, newMdp, mail, login, statut) VALUES (%s, %s, %s, %s,%s, %s)"
-        param = (nom, prenom, new_Mdp, email, login, statut)
-        cursor.execute(sql, param)
+# Lignes de code du dessus trouvées sur : https://riptutorial.com/fr/python/example/4000/creation-d-un-mot-de-passe-utilisateur-aleatoire
 
         new_Mdp = 2
 
+        sql = "INSERT INTO identification (nom, prenom, newMdp, motPasse, mail, login, statut) VALUES (%s, %s, %s, %s,%s, %s)"
+        param = (nom, prenom, new_Mdp, Default_password,email, login, statut)
+        cursor.execute(sql, param)
+
+
+
         if new_Mdp == 2:
-            new_Mdp="You need to change the password"
-            Final_Mdp = User_Mdp()
-            sql = "INSERT INTO identification (newMdp) VALUES (%s)"
-            param = Final_Mdp
+            new_Mdp = 0
+            sql = "INSERT INTO identification (newMdp,motPasse) VALUES (%s)"
+            param = (User_Mdp(),new_Mdp)
             cursor.execute(sql, param)
 
         else:
@@ -132,9 +133,9 @@ def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
     except mysql.connector.Error as err:
         msg = "Failed add membre Data: {}".format(err)
 
-    return (msg, last_id)
+    return msg, last_id
 
-"""
+
 def update_membreData(champ,idUser,newvalue):
     try:
         cnx = connexion()
@@ -150,12 +151,13 @@ def update_membreData(champ,idUser,newvalue):
         msg = "Failed update membre data: {}".format(err)
 
     return msg
-"""
-def getAuthData(login,mdp):
+
+
+def getLoginMdp(login,mdp):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT * FROM identification WHERE login=%s and motPasse=%s"
+        sql = "SELECT motPasse,login FROM identification WHERE login=%s and motPasse=%s"
         param = (login, mdp)
         cursor.execute(sql, param)
         res = convert_dictionnary(cursor)
@@ -166,15 +168,14 @@ def getAuthData(login,mdp):
 
     return res
 
-
 """
 import smtplib, ssl
 port = 587 # For starttls
 smtp_server = "smtp.gmail.com" 
-sender_email = "fromMail@gmail.com"
-receiver_email = "toMail@gmail.com" 
-password = "Votre mot de passe Gmail"
-message = "Subject: Creation de compte Vigie Annexe \n\n Votre login est: {} \n\n Votre mot de passe est: {}".format(login, mdp_clair)
+sender_email = "monsterdragon3.emperor@gmail.com"
+receiver_email = "monsterdragon3.emperor@gmail.com"
+password = "MONSTERDRAGON42500-Artemis//CHINOIS2"
+message = "Subject: Creation de compte Vigie Annexe \n\n Votre login est: {""} \n\n Votre mot de passe est: {}".format(login, mdp_clair)
 
 context = ssl.create_default_context() 
 with smtplib.SMTP(smtp_server, port) as server:
