@@ -36,3 +36,12 @@ def connect_account(request):
         msg = "echec d'authentification : vérifiez le mdp/login"
     return msg
 
+def update_pwd_account(request):
+    pwd = request.form['password']
+    pwdConfirmation = request.form['password confirm']
+    if pwd == pwdConfirmation:
+        db.update_membreData('motPasse',session["idUser"],pwd)
+        db.update_membreData('newMdp', session["idUser"], 0)
+        session["newMdp"] = 0
+    #return redirect("/vigie")
+
