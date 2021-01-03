@@ -1,6 +1,6 @@
 from secrets import choice
 from email.message import EmailMessage
-import mysql.connector, string
+import mysql.connector, string, hashlib
 from mysql.connector import errorcode
 
 config = {
@@ -56,6 +56,7 @@ def convert_dictionnary(cursor):
             tmp[columns[index][0]] = column
         result.append(tmp)
     return result
+
 """
 def get_membreData():
 
@@ -120,8 +121,11 @@ def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
 
         if new_Mdp == 2:
             new_Mdp = 0
+            UserPassWord=User_Mdp()
+            mdp = hashlib.sha256(UserPassWord.encode())
+            mdp = mdp.hexdigest()
             sql = "INSERT INTO identification (newMdp,motPasse) VALUES (%s)"
-            param = (User_Mdp(),new_Mdp)
+            param = (UserPassWord,new_Mdp)
             cursor.execute(sql, param)
 
         else:
@@ -140,6 +144,9 @@ def update_membreData(champ,idUser,newvalue):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
+        UserPassWord = User_Mdp()
+        mdp = hashlib.sha256(UserPassWord.encode())
+        mdp = mdp.hexdigest()
         sql = "UPDATE membre SET "+champ+" = %s WHERE idUser = %s;"
         param = (newvalue, idUser)
         cursor.execute(sql, param)
