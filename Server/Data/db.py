@@ -13,6 +13,12 @@ config = {
         'raise_on_warnings': True,
 }
 
+"""
+CREATE OR REPLACE VIEW vueParkingLibre AS
+SELECT parking.idParking FROM parking
+	LEFT JOIN asso_avionparking ON parking.idParking = asso_avionparking.idParking
+WHERE asso_avionparking.idParking IS NULL
+"""
 #################################################################################################################
 # connexion au serveur de la base de données
 
