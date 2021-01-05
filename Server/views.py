@@ -22,9 +22,15 @@ def vigie():
 def webmaster():
     return render_template("webmaster.html")
 
-@app.route('/creation-compte')
+@app.route("/creation-compte")
 def create_account():
     return render_template("compte.html")
+
+@app.route("/build-account", methods=['POST'])
+def build():
+    Auth.add_account(request)
+    return redirect(url_for('create_account'))
+
 
 @app.route('/statistiques')
 def stats():
@@ -32,13 +38,16 @@ def stats():
 
 @app.route('/connecter', methods=['POST'])
 def connecter():
-    print(request.form)
     msg = Auth.connect_account(request)
 
     if msg != True:
         return redirect(url_for('index', msg=msg))
     else:
         return redirect(url_for('vigie'))
+
+@app.route('/maj-mdp', methods=["POST"])
+def update_pwd():
+    return Auth.update_pwd_account(request)
 
 @app.route('/logout')
 def logout():

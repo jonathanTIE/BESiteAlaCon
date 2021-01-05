@@ -57,14 +57,15 @@ def convert_dictionnary(cursor):
         result.append(tmp)
     return result
 
-"""
-def get_membreData():
+
+def getAuthData(login,mdp):
 
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT * FROM membre"
-        cursor.execute(sql)
+        sql = "SELECT * FROM identification WHERE login=%s AND motPasse=%s"
+        param=(login,mdp)
+        cursor.execute(sql,param)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
 
@@ -73,6 +74,7 @@ def get_membreData():
 
     return res
 
+"""""
 def del_membreData(idUser):
     try:
         cnx = connexion()
@@ -91,12 +93,9 @@ def del_membreData(idUser):
     
 """
 
-def User_Mdp( mdp:int ):
-    return mdp
 
 
 def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
-    global last_id, msg
     try:
         cnx = connexion()
         cursor = cnx.cursor()
@@ -110,43 +109,34 @@ def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
                 break
 
 # Lignes de code du dessus trouvées sur : https://riptutorial.com/fr/python/example/4000/creation-d-un-mot-de-passe-utilisateur-aleatoire
-
+        print(Default_password)
         new_Mdp = 2
+        Default_password_crypted = hashlib.sha256(Default_password.encode())
+        Default_password_crypted = Default_password_crypted.hexdigest()
 
-        sql = "INSERT INTO identification (nom, prenom, newMdp, motPasse, mail, login, statut) VALUES (%s, %s, %s, %s,%s, %s)"
-        param = (nom, prenom, new_Mdp, Default_password,email, login, statut)
+        sql = "INSERT INTO identification (nom, prenom, newMdp, motPasse, mail, login, statut) VALUES (%s, %s, %s, %s, %s,%s, %s)"
+        param = (nom, prenom, new_Mdp, Default_password_crypted,email, login, statut)
         cursor.execute(sql, param)
 
-
-
-        if new_Mdp == 2:
-            new_Mdp = 0
-            UserPassWord=User_Mdp()
-            mdp = hashlib.sha256(UserPassWord.encode())
-            mdp = mdp.hexdigest()
-            sql = "INSERT INTO identification (newMdp,motPasse) VALUES (%s)"
-            param = (UserPassWord,new_Mdp)
-            cursor.execute(sql, param)
-
-        else:
-            last_id = cursor.lastrowid
-            cnx.commit()
-            msg = "addOK"
-            close_bd(cursor, cnx)
+        last_id = cursor.lastrowid
+        cnx.commit()
+        msg = "addOK"
+        close_bd(cursor, cnx)
 
     except mysql.connector.Error as err:
+        last_id = 0
         msg = "Failed add membre Data: {}".format(err)
 
     return msg, last_id
 
 
-def update_membreData(champ,idUser,newvalue):
+def update_membreData(champ,idUser,newvalue,hash=False):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        UserPassWord = User_Mdp()
-        mdp = hashlib.sha256(UserPassWord.encode())
-        mdp = mdp.hexdigest()
+        if hash:
+            newvalue = hashlib.sha256(newvalue.encode())
+            newvalue = newvalue.hexdigest()
         sql = "UPDATE membre SET "+champ+" = %s WHERE idUser = %s;"
         param = (newvalue, idUser)
         cursor.execute(sql, param)
@@ -190,3 +180,18 @@ with smtplib.SMTP(smtp_server, port) as server:
     server.login(sender_email, password) 
     server.sendmail(sender_email, receiver_email, message)
 """
+
+
+def get_parkingData():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT * FROM parking"
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get Parking Data: {}".format(err)
+
+    return res

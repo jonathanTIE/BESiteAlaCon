@@ -1,5 +1,8 @@
 from flask import Flask, session, render_template, request, redirect, url_for
 from Server.Data import db
+import hashlib
+
+
 
 class Statut(object):
     pass
@@ -20,9 +23,10 @@ def connect_account(request):
     """
     login = request.form['login']
     mdp = request.form['password']
+    Default_password_crypted = hashlib.sha256(mdp.encode())
+    Default_password_crypted = Default_password_crypted.hexdigest()
     print(request)
-    res = db.getAuthData(login,mdp)
-    #print(res)
+    res = db.getAuthData(login,Default_password_crypted)
     try:
         session["idUser"] = res[0]['idUser']
         session["nom"] = res[0]['nom']
@@ -37,11 +41,11 @@ def connect_account(request):
     return msg
 
 def update_pwd_account(request):
-    pwd = request.form['password']
-    pwdConfirmation = request.form['password confirm']
+    pwd = request.form['inputPassword']
+    pwdConfirmation = request.form['inputConfirmPassword']
     if pwd == pwdConfirmation:
-        db.update_membreData('motPasse',session["idUser"],pwd)
+        db.update_membreData('motPasse',session["idUser"],pwd, True)
         db.update_membreData('newMdp', session["idUser"], 0)
         session["newMdp"] = 0
-    #return redirect("/vigie")
+    return redirect(url_for("vigie"))
 
