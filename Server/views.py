@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template, request, redirect, session
+from flask import Flask, url_for, render_template, request, redirect, session, jsonify
 from Server.Data import db
 from Server.controller import Auth
 
@@ -45,7 +45,7 @@ def connecter():
     else:
         return redirect(url_for('vigie'))
 
-@app.route('/maj-mdp', methods=["POST"])
+@app.route('/maj-mdp', methods=['POST'])
 def update_pwd():
     return Auth.update_pwd_account(request)
 
@@ -53,3 +53,8 @@ def update_pwd():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@app.route('/getParking', methods=['POST'])
+def getParking():
+    data = db.get_parkingData()
+    return jsonify(data)
