@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  localhost:3306
--- Généré le :  Ven 04 Décembre 2020 à 14:06
+-- Généré le :  Mar 05 Janvier 2021 à 11:16
 -- Version du serveur :  5.7.26-0ubuntu0.18.04.1
 -- Version de PHP :  7.2.19-0ubuntu0.18.04.1
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `GSEA19B_Jonathan_Corentin`
+-- Base de données :  `Sitealacon`
 --
 
 -- --------------------------------------------------------
@@ -115,6 +115,26 @@ CREATE TABLE `parking` (
   `waypointProche` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_mysql500_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Contenu de la table `parking`
+--
+
+INSERT INTO `parking` (`idParking`, `nomParking`, `categorie`, `coordonnees`, `waypointProche`) VALUES
+('P1', 'Parking Nord 1', 'B', '139.78942, 35.55493', 'T1'),
+('P10', 'Parking Ouest 6', 'A', '139.79079, 35.54998', 'T3'),
+('P11', 'Parking Sud 1', 'C', '139.79149, 35.54928', 'T3'),
+('P12', 'Parking Sud 2', 'C', '139.79224, 35.54939', 'T3'),
+('P13', 'Parking Sud 2', 'C', '139.79247, 35.54974', 'T3'),
+('P14', 'Parking Sud 3', 'B', '139.79304, 35.54988', 'T3'),
+('P2', 'Parking Nord 2', 'A', '139.78883, 35.55461', 'T1'),
+('P3', 'Parking Nord 3', 'A', '139.78786, 35.55411', 'T1'),
+('P4', 'Parking Ouest 1', 'A', '139.78836, 35.55320', 'T1'),
+('P5', 'Parking Ouest 2', 'B', '139.78882, 35.55270', 'T2'),
+('P6', 'Parking ouest 3', 'B', '139.78921, 35.55218', 'T2'),
+('P7', 'Parking Ouest 3', 'B', '139.78959, 35.55162', 'T2'),
+('P8', 'Parking Ouest 4', 'A', '139.78997, 35.55109', 'T2'),
+('P9', 'Parking Ouest 5', 'A', '139.79041, 35.55051', 'T3');
+
 -- --------------------------------------------------------
 
 --
@@ -127,6 +147,26 @@ CREATE TABLE `waypoint` (
   `type` enum('taxiway','circuit','pisteArrivee','pisteDepart','circuitDep','') CHARACTER SET ucs2 COLLATE ucs2_general_mysql500_ci NOT NULL,
   `rang` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `waypoint`
+--
+
+INSERT INTO `waypoint` (`idWaypoint`, `coordonnees`, `type`, `rang`) VALUES
+('A1', '139.82050, 35.54157', 'taxiway', 1),
+('A2', '139.80679, 35.53006', 'taxiway', 2),
+('A3', '139.80132, 35.53793', 'taxiway', 3),
+('A4', '139.80004, 35.53732', 'taxiway', 4),
+('A5', '139.80556, 35.52920', 'taxiway', 5),
+('A6', '139.80143, 35.52579', 'taxiway', 6),
+('ARR1', '139.80383, 35.52428', 'pisteArrivee', 1),
+('ARR2', '139.82198, 35.54049', 'pisteArrivee', 2),
+('C1', '139.78066, 35.50289', 'circuit', 1),
+('DEP1', '139.80376, 35.52421', 'pisteDepart', 1),
+('DEP2', '139.84302, 35.55940', 'pisteDepart', 2),
+('T1', '139.78913, 35.55393', 'taxiway', 1),
+('T2', '139.79029, 35.55205', 'taxiway', 2),
+('T3', '139.79165, 35.55012', 'taxiway', 3);
 
 --
 -- Index pour les tables exportées
