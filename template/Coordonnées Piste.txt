@@ -1,5 +1,5 @@
 Par défaut : haut de gauche à droite puis bas de gauche à droite
-piste 05 (EN cycle LTO):
+piste 05 (EN cycle LTO): DEP1, DEP2, A
 139.78066, 35.50289
 139.80383, 35.52428
 139.82198, 35.54049
@@ -12,7 +12,7 @@ piste 05 (EN cycle LTO):
 139.80376, 35.52421
 139.84302, 35.55940
  
-Piste 34R :
+Piste 34R : DEP3,DEP4, B
 139.81992, 35.51907
 139.80307, 35.54261
 139.80081, 35.54595 (touchdown zone)
@@ -27,13 +27,13 @@ Piste 34R :
 139.80308, 35.53897
 139.77512, 35.58139
 
-Parking :
+Parking : T
 Centres :
 139.78913, 35.55393
 139.79029, 35.55205
 139.79165, 35.55012
 
-place de haut vers bas :
+place de haut vers bas : P
 139.78942, 35.55493
 139.78883, 35.55461
 139.78786, 35.55411
