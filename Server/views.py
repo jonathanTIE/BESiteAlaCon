@@ -58,3 +58,8 @@ def logout():
 def getParking():
     data = db.get_parkingData()
     return jsonify(data)
+
+@app.route('/getParkingSolution', methods=['POST'])
+def getPlaneFree():
+    data = db.get_parking_free(3)
+    return jsonify(data)

@@ -206,3 +206,20 @@ def get_parkingData():
         res = "Failed get Parking Data: {}".format(err)
 
     return res
+
+def get_parking_free(nb=3):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = """
+            SELECT * FROM vueParkingLibre
+            ORDER BY RAND() LIMIT 3;
+        """
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get Parking Data: {}".format(err)
+
+    return res

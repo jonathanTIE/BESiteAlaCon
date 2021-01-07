@@ -160,14 +160,12 @@ function getAion()
 
 function getParkingSolution()
 {
-var sel = document.completion_form.completion_select ;
- 	document.completion_form.completion_text.value = sel.options[sel.selectedIndex].value;
- 	sel.style.display = 'none';
- 	requete="WHERE BPRNAM='"+document.completion_form.completion_text.value+"'";
- 		$query = "SELECT nomParking FROM parking ORDER BY RAND() LIMIT 3";
-		$result = mysql_query($query);
-		while($row = mysql_fetch_assoc($result)){
-		    alert($row["BPAADDLIG"]);}
+    $.post("/getParkingSolution","", function (data)
+    {
+        /*data.idParking*/
+        /* Appeler des fonctions d'interface*/
+
+    },'json');
 
  }
 

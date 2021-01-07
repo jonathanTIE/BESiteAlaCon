@@ -264,3 +264,13 @@ ALTER TABLE `parking`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+CREATE OR REPLACE VIEW vueParkingLibre AS
+SELECT parking.idParking FROM parking
+	LEFT JOIN asso_avionparking ON parking.idParking = asso_avionparking.idParking
+WHERE asso_avionparking.dateDepart IS NULL;
+
+CREATE OR REPLACE VIEW vueAvionLibre AS
+SELECT avions.idAvion FROM avions
+	LEFT JOIN asso_avionparking ON avions.idAvion = asso_avionparking.idAvion
+WHERE asso_avionparking.dateArrivee IS NULL;
