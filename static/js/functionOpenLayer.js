@@ -71,7 +71,6 @@ function draw_markerParking(latitude, longitude,nomParking, couleur, rotation, m
 
         // coordonnées longitude, latitude du marker
         let coord = [parseFloat(longitude), parseFloat(latitude)];
-
         // création du marker
 
         let layerWaypoint = new ol.layer.Vector({
@@ -79,7 +78,7 @@ function draw_markerParking(latitude, longitude,nomParking, couleur, rotation, m
                 features: [new ol.Feature(
                     {
                         type:"Point",
-                        desc: nomWaypoint,
+                        desc: nomParking,
                         geometry: new ol.geom.Point(ol.proj.fromLonLat(coord))
 
                     })
@@ -104,7 +103,7 @@ function draw_markerParking(latitude, longitude,nomParking, couleur, rotation, m
         });
 
 
-        layerWaypoint.set('name', nomWaypoint);
+        layerWaypoint.set('name', nomParking);
 
         return layerWaypoint;
 
@@ -147,4 +146,31 @@ function displayTooltip(evt, overlay, map) {
         overlay.setPosition(evt.coordinate);
         tooltip.innerHTML = feature.get('desc'); //Affichage de la description du marker
     }
+}
+
+
+
+
+
+
+function getAvion()
+{
+    $.post("/getAvionLibre","", function (dataA)
+    {
+        let tableau = [];
+        tableau[1] = dataA.idAvion;
+        tableau[2] = dataA.immatAvion;
+        tableau[3] = dataA.categorie;
+
+        return tableau
+    },'json');
+}
+
+function ChoiceParking()
+{
+    $.post("/ChoicePark","",function(dataP)
+        {
+
+        });
+
 }
