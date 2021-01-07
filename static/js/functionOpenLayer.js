@@ -66,7 +66,49 @@ function draw_markerWaypoint(latitude, longitude,nomWaypoint, couleur)
         return layerWaypoint;
 
 }
+function draw_markerParking(latitude, longitude,nomParking, couleur, rotation, map)
+{
 
+        // coordonnées longitude, latitude du marker
+        let coord = [parseFloat(longitude), parseFloat(latitude)];
+
+        // création du marker
+
+        let layerWaypoint = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [new ol.Feature(
+                    {
+                        type:"Point",
+                        desc: nomWaypoint,
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat(coord))
+
+                    })
+                ] // marker en forme de point
+            }),
+            style: [new ol.style.Style({ // style du marker
+                image: new ol.style.RegularShape({
+                    radius: 16,
+                    points: 4,
+                    angle: rotation,
+                    fill: new ol.style.Fill({color: couleur}), // couleur interieur du cercle
+                    stroke: new ol.style.Stroke({color: "black", width: 1}) // couleur bordure du cercle
+                }),
+                text: new ol.style.Text({
+                text:nomParking,
+                textBaseline: 'center',
+                font: '14px Calibri,sans-serif',
+                fill: new ol.style.Fill({ color: '#000' }),
+                stroke: new ol.style.Stroke({ color: '#fff', width: 2 })
+                })
+            })]
+        });
+
+
+        layerWaypoint.set('name', nomWaypoint);
+
+        return layerWaypoint;
+
+}
 
 
 function move_marker(marker, line, stepMarker, callb)
