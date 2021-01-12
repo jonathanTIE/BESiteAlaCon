@@ -223,3 +223,51 @@ def get_parking_free(nb=3):
         res = "Failed get Parking Data: {}".format(err)
 
     return res
+
+
+def get_WaypointData():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT * FROM waypoint"
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get Waypoint Data: {}".format(err)
+
+    return res
+
+
+def get_AvionLibre():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT * FROM vueAvionlibre"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get Avion Data: {}".format(err)
+
+    return res
+
+
+
+
+def choice_parking():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "UPDATE asso_avionParking SET dateDepart = %s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        param = ("NULL")
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get Parking of Agent: {}".format(err)
+
+    return res

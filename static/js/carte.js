@@ -24,17 +24,19 @@ $(document).ready(function (){
      map.set('name', 'mapName');
 
 
+/*
+
     var listeLayerParking=[];
     $.each(dataP,function (i,park) {
         let xy = park.coordonnees.split(',');
         let latitude = xy[0];
         longitude = xy[1];
         let nomParking = park.idParking;
+             alert("2");
         listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurParking, rotation, map);
     });
 
-
-
+*/
 
 
 
@@ -104,7 +106,6 @@ $(document).ready(function (){
 
 
 /*FIN Parking*/
-
 
 
 

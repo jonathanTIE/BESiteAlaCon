@@ -79,7 +79,7 @@ function draw_markerParking(latitude, longitude,nomParking, couleur, rotation, m
                 features: [new ol.Feature(
                     {
                         type:"Point",
-                        desc: nomWaypoint,
+                        desc: nomParking,
                         geometry: new ol.geom.Point(ol.proj.fromLonLat(coord))
 
                     })
@@ -104,7 +104,7 @@ function draw_markerParking(latitude, longitude,nomParking, couleur, rotation, m
         });
 
 
-        layerWaypoint.set('name', nomWaypoint);
+        layerWaypoint.set('name', nomParking);
 
         return layerWaypoint;
 
