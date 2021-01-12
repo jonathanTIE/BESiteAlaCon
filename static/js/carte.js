@@ -36,8 +36,27 @@ $(document).ready(function (){
 
 
 
+     //Affichage piste 05 (EN cycle LTO):
+    let coordWaypoint=[ [35.50289,139.78066],
+                        [35.52428,139.80383],
+                        [35.54049,139.82198,],
+                        [35.54157,139.82050],
+                        [139.80679, 35.53006],
+                        [139.80132, 35.53793],
+                        [139.80004, 35.53732],
+                        [139.80556, 35.52920],
+                        [139.80143, 35.52579],
+                        [139.84302, 35.55940]];
 
-
+    let Way=Array();
+    let i=0;
+    $.each(coordWaypoint, function(index, value){
+        let latitude = value[0];
+        let longitude = value [1];
+        Way[i]=draw_markerWaypoint(latitude, longitude,"WB"+index , "blue");
+        map.addLayer(Way[i]); // affichage sur la carte des markers
+        i++;
+    });
 
     /*
     // trajectoire vers l'homme Parking
@@ -58,25 +77,28 @@ $(document).ready(function (){
 
      //Affichage des avions
 
-    $.post("/getParking","", function (dataP)
+    $.post("/getParking","", function (data)
     {
-        var couleur = "#66ffff"
-        var rotation = 0.0
-        var listeLayerParking=[];
-        $.each(dataP,function (i,park) {
-            let xy = park.coordonnees.split(',');
-            let latitude = xy[1]; longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
-            let nomParking = park.idParking;
 
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleur, rotation, map);
-            /*Ajout sur principe du pacman*/
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleur, rotation, map);
-            map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
-            listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
+        //alert(JSON.stringify(data));
+        let newLayer=Array();
+        $.each(data, function(index, lay) {
+            let xy = lay.coord.split(','); // separation par la virgule
+            let latitude = parseFloat(xy[1]);
+            let longitude = parseFloat(xy[0]);
+            let nomMarker = lay.nomLayer;
+            let imageMarker = lay.image;
+            let echelleMarker = parseFloat(lay.echelle);
+            let rotationMarker = parseFloat(lay.rotation);
 
-            let Avion1=listeLayerParking[0];    //Pacman
-            let HomPark=listeLayerParking[1];   //fantomeB
-            let HomDecAtt=listeLayerParking[2];   //fantomeR
+            newLayer[index] = draw_marker(nomMarker, longitude, latitude, imageMarker, echelleMarker);
+            map.addLayer(newLayer[index]); // affichage sur la carte des markers
+            newLayer[index].getStyle()[0].getImage().setRotation(rotationMarker); // rotation en radian
+
+            let Avion1=newLayer[0];    //Pacman
+            let HomPark=newLayer[1];   //fantomeB
+            let HomDecAtt=newLayer[2];   //fantomeR
+
 
 
     $('button').on('click', function (){ // click sur bouton "en route"
@@ -84,103 +106,29 @@ $(document).ready(function (){
 
             let lineB = new ol.geom.LineString(lineBleue); // formatage de la ligne
              var callb1 = function () { // function de callback
-                map.removeLayer(HomDecAtt); // suppression du layer Homme Décollage/Atterrissage
+                map.removeLayer(HomDecAtt); // suppression du layer fantomeR
                  insertRepasBDD(3);
             };
 
             var callb = function () { // function de callback
-                map.removeLayer(HomPark); // suppression du layer Homme Parking
+                map.removeLayer(HomPark); // suppression du layer fantomeB
                 insertRepasBDD(2);
                 let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
-                move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
+                move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement du pacman vers fontomeR
             };
-            move_marker(Avion1, lineB, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
+            move_marker(Avion1, lineB, stepMarker, callb);//déplacement du pacman vers fontomeB
 
     });
 
-
     });
-
-    },'json');
-
-
-/*FIN Parking*/
-
-
-
-
-    $.post("/getWaypoint","", function (dataP)
-    {
-        var couleur = "#6FF"
-        var couleurtax = "#F45715" /*Orange*/
-        var couleurcir = "#10CF35" /*VertClair*/
-        var couleurpistD = "#FAF80C" /*Jaune*/
-        var couleurpistA = "#FA0001" /*Rouge*/
-        var rotation = 0.0
-        var listeLayerWaypoint=[];
-        $.each(dataP,function (i,way) {
-            let type = way.type;
-            let xy = way.coordonnees.split(',');
-            let latitude = xy[1]; longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
-            let nomWaypoint = way.idWaypoint;
-
-            switch (type) {
-                case 'circuit':
-                    couleur = couleurcir;
-                    break;
-                case 'pisteArrivee':
-                    couleur = couleurpistA;
-                    break;
-                case 'pisteDepart':
-                    couleur = couleurpistD;
-                    break;
-                case 'taxiway':
-                    couleur = couleurtax;
-                    break;
-                default:
-                console.log(`Sorry, we are out of color`);
-            }
-
-
-            listeLayerWaypoint[i] = draw_markerWaypoint(latitude, longitude,nomWaypoint, couleur);
-            /*Ajout sur principe du pacman*/
-            listeLayerWaypoint[i] = draw_markerWaypoint(latitude, longitude,nomWaypoint, couleur);
-            map.addLayer(listeLayerWaypoint[i]); // affichage sur la carte des markers
-            listeLayerWaypoint[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
-
-
-            let Avion1=listeLayerWaypoint[0];    //Pacman
-            let HomPark=listeLayerWaypoint[1];   //fantomeB
-            let HomDecAtt=listeLayerWaypoint[2];   //fantomeR
-
-
-    $('button').on('click', function (){ // click sur bouton "en route"
-        let stepMarker = 100;
-
-            let lineB = new ol.geom.LineString(lineBleue); // formatage de la ligne
-             var callb1 = function () { // function de callback
-                map.removeLayer(HomDecAtt); // suppression du layer Homme Décollage/Atterrissage
-                 insertRepasBDD(3);
-            };
-
-            var callb = function () { // function de callback
-                map.removeLayer(HomPark); // suppression du layer Homme Parking
-                insertRepasBDD(2);
-                let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
-                move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
-            };
-            move_marker(Avion1, lineB, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
-
-    });
-
-
-    });
-
     },'json');
 
 
 
-    /* FIN Waypoint */
+
+
+
+
 
     //tooltip sur chacun des layers
     var tooltip = document.getElementById('tooltip');
@@ -196,19 +144,28 @@ $(document).ready(function (){
     });
 
 
+});
 
+let tableau=[];
+tableau[1]=idAvion;
+tableau[2]=immatAvion;
+tableau[3]=categorie;
+
+
+function getAion()
+{
+    return tableau
+}
 
 
 function getParkingSolution()
 {
-var sel = document.completion_form.completion_select ;
- 	document.completion_form.completion_text.value = sel.options[sel.selectedIndex].value;
- 	sel.style.display = 'none';
- 	requete="WHERE BPRNAM='"+document.completion_form.completion_text.value+"'";
- 		$query = "SELECT nomParking FROM parking ORDER BY RAND() LIMIT 3";
-		$result = mysql_query($query);
-		while($row = mysql_fetch_assoc($result)){
-		    alert($row["BPAADDLIG"]);}
+    $.post("/getParkingSolution","", function (data)
+    {
+        /*data.idParking*/
+        /* Appeler des fonctions d'interface*/
+
+    },'json');
 
  }
 
@@ -219,7 +176,4 @@ function insertRepasBDD(idFantome)
      });
 
 }
-});
-
-alert(getAvion())
 
