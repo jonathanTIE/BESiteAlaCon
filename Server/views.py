@@ -59,18 +59,6 @@ def getParking():
     data = db.get_parkingData()
     return jsonify(data)
 
-
-@app.route('/getWaypoint', methods=['POST'])
-def getWaypoint():
-    data = db.get_WaypointData()
-    return jsonify(data)
-
-@app.route('/getAvionLibre', methods=['POST','GET'])
-def getAvionLibre():
-    data = db.get_AvionLibre()
-    return jsonify(data)
-
-
 @app.route('/getParkingSolution', methods=['POST'])
 def getPlaneFree():
     data = db.get_parking_free(3)
