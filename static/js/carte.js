@@ -38,7 +38,6 @@ $(document).ready(function (){
 
 
 
-
     /*
     // trajectoire vers l'homme Parking
     let lineBleue=[
@@ -141,7 +140,6 @@ $(document).ready(function (){
                 console.log(`Sorry, we are out of color`);
             }
 
-
             listeLayerWaypoint[i] = draw_markerWaypoint(latitude, longitude,nomWaypoint, couleur);
             /*Ajout sur principe du pacman*/
             listeLayerWaypoint[i] = draw_markerWaypoint(latitude, longitude,nomWaypoint, couleur);
@@ -173,9 +171,7 @@ $(document).ready(function (){
 
     });
 
-
     });
-
     },'json');
 
 
@@ -201,14 +197,13 @@ $(document).ready(function (){
 
 function getParkingSolution()
 {
-var sel = document.completion_form.completion_select ;
- 	document.completion_form.completion_text.value = sel.options[sel.selectedIndex].value;
- 	sel.style.display = 'none';
- 	requete="WHERE BPRNAM='"+document.completion_form.completion_text.value+"'";
- 		$query = "SELECT nomParking FROM parking ORDER BY RAND() LIMIT 3";
-		$result = mysql_query($query);
-		while($row = mysql_fetch_assoc($result)){
-		    alert($row["BPAADDLIG"]);}
+    $.post("/getParkingSolution","", function (data)
+    {
+        /*data.idParking*/
+        /* Appeler des fonctions d'interface*/
+
+    },'json');
+
 
  }
 

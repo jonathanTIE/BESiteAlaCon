@@ -71,6 +71,7 @@ function draw_markerParking(latitude, longitude,nomParking, couleur, rotation, m
 
         // coordonnées longitude, latitude du marker
         let coord = [parseFloat(longitude), parseFloat(latitude)];
+
         // création du marker
 
         let layerWaypoint = new ol.layer.Vector({
