@@ -212,7 +212,7 @@ def get_parking_free(nb=3):
         cnx = connexion()
         cursor = cnx.cursor()
         sql = """
-            SELECT * FROM vueParkingLibre
+            SELECT * FROM vueparkinglibre
             ORDER BY RAND() LIMIT %s;
         """
         params=(nb,)
