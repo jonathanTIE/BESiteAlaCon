@@ -20,7 +20,7 @@ function draw_marker(nomMarker, longitude, latitude, imageMarker, echelle)
             style: [new ol.style.Style({ // style du marker
                 image: new ol.style.Icon({
                     rotation: 0,
-                    //crossOrigin: 'anonymous',
+                    //crossOrigin: 'anonimymous',
                     src : '../static/images/'+imageMarker,
                     scale: echelle,
                 })
@@ -123,8 +123,11 @@ function move_marker(marker, line, stepMarker, callb)
     {
         step++;
         let coord = line.getCoordinateAt(step/stepMarker); // retourne les coordonnées géographiques sur un point de la trajectoire
+        alert(coord)
         let newPoint=new ol.geom.Point(ol.proj.fromLonLat(coord)); // formatage des coordonnées géographiques
+        // calculeAngle()
         featureToUpdate.setGeometry(newPoint); // deplacement du marker
+        // marker.getStyle()[0].getImage().setRotation(angle);
 
     } else {
         clearInterval(key); // fin du déplacement
@@ -147,6 +150,21 @@ function displayTooltip(evt, overlay, map) {
         overlay.setPosition(evt.coordinate);
         tooltip.innerHTML = feature.get('desc'); //Affichage de la description du marker
     }
+}
+
+function calculeAngle(long1,long2,lat1,lat2) {
+     Long = (long2 - long1);
+
+     y = Math.sin(Long) * Math.cos(lat2);
+     x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)* Math.cos(lat2) * Math.cos(Long);
+
+     brng = Math.atan2(y, x);
+
+    brng = Math.toDegrees(brng);
+    brng = (brng + 360) % 360;
+    brng = 360 - brng; // calculer les degrées dans le sens inverse des aiguilles d'une montre (enlever pour faire dans le sens ordinaire)
+
+    return brng;
 }
 
 

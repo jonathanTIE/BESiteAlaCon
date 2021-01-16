@@ -1,6 +1,6 @@
 $(document).ready(function (){
 
-    /* debut fonctions */
+/* debut fonctions */
 
     function updateParkingSolutionFront()
     {
@@ -53,13 +53,7 @@ $(document).ready(function (){
         }
     }
 
-    function insertRepasBDD(idFantome)
-    {
-         $.post("/repas",{idLayer:idFantome}, function (data) {
-             console.log(data);
-         });
 
-    }
 
 
 /* fin fonctions */
@@ -123,6 +117,8 @@ $(document).ready(function (){
 
      //Affichage des avions
 
+/*DEBUT Parking*/
+
     $.post("/getParking","", function (dataP)
     {
         var couleur = "#66ffff"
@@ -135,33 +131,12 @@ $(document).ready(function (){
 
             listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleur, rotation, map);
             /*Ajout sur principe du pacman*/
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleur, rotation, map);
             map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
             listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
 
-            let Avion1=listeLayerParking[0];    //Pacman
-            let HomPark=listeLayerParking[1];   //fantomeB
-            let HomDecAtt=listeLayerParking[2];   //fantomeR
-
 
     $('button').on('click', function (){ // click sur bouton "en route"
-        let stepMarker = 100;
-
-            let lineB = new ol.geom.LineString(lineBleue); // formatage de la ligne
-             var callb1 = function () { // function de callback
-                map.removeLayer(HomDecAtt); // suppression du layer Homme Décollage/Atterrissage
-                 insertRepasBDD(3);
-            };
-
-            var callb = function () { // function de callback
-                map.removeLayer(HomPark); // suppression du layer Homme Parking
-                insertRepasBDD(2);
-                let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
-                move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
-            };
-            move_marker(Avion1, lineB, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
-
-    });
+        let stepMarker = 100;});
 
 
     });
@@ -171,11 +146,11 @@ $(document).ready(function (){
 
 /*FIN Parking*/
 
-
+/* DEBUT Waypoint */
 
     $.post("/getWaypoint","", function (dataP)
     {
-        var couleur = "#6FF"
+        var couleur = ""
         var couleurtax = "#F45715" /*Orange*/
         var couleurcir = "#10CF35" /*VertClair*/
         var couleurpistD = "#FAF80C" /*Jaune*/
@@ -207,41 +182,79 @@ $(document).ready(function (){
 
             listeLayerWaypoint[i] = draw_markerWaypoint(latitude, longitude,nomWaypoint, couleur);
             /*Ajout sur principe du pacman*/
-            listeLayerWaypoint[i] = draw_markerWaypoint(latitude, longitude,nomWaypoint, couleur);
             map.addLayer(listeLayerWaypoint[i]); // affichage sur la carte des markers
             listeLayerWaypoint[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
 
 
-            let Avion1=listeLayerWaypoint[0];    //Pacman
-            let HomPark=listeLayerWaypoint[1];   //fantomeB
-            let HomDecAtt=listeLayerWaypoint[2];   //fantomeR
 
 
     $('button').on('click', function (){ // click sur bouton "en route"
-        let stepMarker = 100;
-
-            let lineB = new ol.geom.LineString(lineBleue); // formatage de la ligne
-             var callb1 = function () { // function de callback
-                map.removeLayer(HomDecAtt); // suppression du layer Homme Décollage/Atterrissage
-                 insertRepasBDD(3);
-            };
-
-            var callb = function () { // function de callback
-                map.removeLayer(HomPark); // suppression du layer Homme Parking
-                insertRepasBDD(2);
-                let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
-                move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
-            };
-            move_marker(Avion1, lineB, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
-
-    });
+        let stepMarker = 100;});
 
     });
     },'json');
 
 
 
-    /* FIN Waypoint */
+/* FIN Waypoint */
+
+/* DEBUT Avion */
+
+    var routeArrivee=[
+        [139.84302, 35.55940],
+        [139.80383, 35.52428],
+        [139.80679, 35.53006],
+        [139.80132, 35.53793],
+        [139.79304, 35.54988]];
+
+
+   $.post("/getPlane","", function (dataA)
+    {
+
+        var rotation = 0.0
+        var listeAvion=[];
+        $.each(dataA,function (i,avion) {
+            let nomMarker = "FSEXE";
+            // let xy = avion.coordonnees.split(',');
+            let echelle = 0.03;
+            // let latitude = xy[1]; longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
+
+
+
+
+            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
+            // map.addLayer(listeAvion[i]); // affichage sur la carte des markers
+            listeAvion[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
+
+
+            /*let Avion2=listeAvion[1];*/
+            let Avion3=listeAvion[2];
+
+
+    $('button#depart').on('click', function (){ // click sur bouton "en route"
+        let stepMarker = 100;
+            map.addLayer(listeAvion[0]);
+            let routeArr = new ol.geom.LineString(routeArrivee);
+            var callb = function () { // function de callback
+                /*map.removeLayer(Avion3); // suppression du layer Homme Décollage/Atterrissage
+                 insertFlightPlan(3);*/
+            };
+
+            /*var callb = function () { // function de callback
+                map.removeLayer(HomPark); // suppression du layer Homme Parking
+                insertRepasBDD(2);
+                let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
+                move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
+            };
+            */
+            move_marker(listeAvion[0], routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
+    });
+
+    });
+    },'json');
+
+/* FIN Avion */
+
 
     //tooltip sur chacun des layers
     var tooltip = document.getElementById('tooltip');
@@ -268,5 +281,14 @@ $(document).ready(function (){
 
 /* FIN BOUTONS */
 
+function insertFlightPlan(idAvion)
+{
+     $.post("/flightplan",{idLayer:idAvion}, function (data) {
+         console.log(data);
+     });
+
+}
 });
+
+/*alert(getAvion())*/
 
