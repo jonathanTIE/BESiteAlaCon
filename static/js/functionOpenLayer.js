@@ -148,3 +148,21 @@ function displayTooltip(evt, overlay, map) {
         tooltip.innerHTML = feature.get('desc'); //Affichage de la description du marker
     }
 }
+
+function getAvion() {
+    let planes = [];
+    $.post("/getAvionLibre","", function (data)
+    {
+        $.each(data,function (i,plane) {
+            let tableau=[];
+            tableau[0]=plane.idAvion;
+            tableau[1]=plane.immatAvion;
+            tableau[2]=plane.categorie;
+            planes[i] = tableau;
+        });
+
+
+    },'json');
+    alert(planes);
+    return planes;
+}

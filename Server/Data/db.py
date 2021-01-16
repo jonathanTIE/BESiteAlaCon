@@ -212,10 +212,11 @@ def get_parking_free(nb=3):
         cnx = connexion()
         cursor = cnx.cursor()
         sql = """
-            SELECT * FROM vueParkingLibre
-            ORDER BY RAND() LIMIT 3;
+            SELECT * FROM vueparkinglibre
+            ORDER BY RAND() LIMIT %s;
         """
-        cursor.execute(sql)
+        params=(nb,)
+        cursor.execute(sql, params)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
 
@@ -240,11 +241,11 @@ def get_WaypointData():
     return res
 
 
-def get_AvionLibre():
+def get_plane_free():
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT * FROM vueAvionlibre"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        sql = "SELECT * FROM vueavionlibre"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
         cursor.execute(sql)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)

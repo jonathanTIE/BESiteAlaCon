@@ -4,8 +4,21 @@
     {% if session.idUser %}
     <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
     {% endif %}
-    Vigie
-
+    <h2>Vigie</h2>
+    <table class="table table-striped table-bordered first">
+        <thead>
+            <tr>
+                Choix du parking
+            </tr>
+        </thead>
+        <tbody>
+            <td id="plane">NOM AVION</td>
+            {% for parkingNb in range(3) %} <!-- chercher dans form-elements et general-table pour l'html-->
+                <td id="parking-{{parkingNb}}">nom parking</td>
+            {% endfor %}
+            <td id="solution-button"><button type="button" class="btn btn-primary">NO JAVA</button></td>
+        </tbody>
+    </table>
     {% if session.newMdp==2 %}
     <form action="/maj-mdp" method="post">
         <div class="form-group">

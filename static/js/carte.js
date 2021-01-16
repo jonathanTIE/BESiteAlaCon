@@ -1,5 +1,44 @@
 $(document).ready(function (){
 
+    /* debut fonctions */
+
+    function getParkingSolution()
+    {
+        var parkings = [];
+        $.post("/getParkingLibre","", function (data)
+        {
+            $.each(data,function (i,park) {
+                parkings[i] = park.idParking;
+            });
+        },'json');
+        return parkings;
+
+
+    }
+
+    function updateParkingSolutionFront()
+    {
+        var parkings = getParkingSolution();
+        alert();
+        for (i=0; i < 3; i++)
+        {
+            $("#parking-"+i.toString()).html(parkings[i]);
+
+        }
+
+    }
+
+    function insertRepasBDD(idFantome)
+    {
+         $.post("/repas",{idLayer:idFantome}, function (data) {
+             console.log(data);
+         });
+
+    }
+
+
+/* fin fonctions */
+
     //affiche de la carte dur l'Haneda
     var map = new ol.Map({
         target: 'map',
@@ -194,28 +233,13 @@ $(document).ready(function (){
 
 
 
+/* DEBUT BOUTONS */
 
+    $('#solution-button').on('click', function (){ // click sur bouton "en route"
+        updateParkingSolutionFront();
+    });
 
-function getParkingSolution()
-{
-    $.post("/getParkingSolution","", function (data)
-    {
-        /*data.idParking*/
-        /* Appeler des fonctions d'interface*/
+/* FIN BOUTONS */
 
-    },'json');
-
-
- }
-
-function insertRepasBDD(idFantome)
-{
-     $.post("/repas",{idLayer:idFantome}, function (data) {
-         console.log(data);
-     });
-
-}
 });
-
-alert(getAvion())
 
