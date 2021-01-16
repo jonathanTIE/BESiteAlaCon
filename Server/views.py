@@ -89,6 +89,14 @@ def assignPlane():
 @app.route("/supprimerAssociationsAvions", methods=['POST'])
 def deletePlanes():
     print(db.reset_planes())
-    return redirect(url_for('vigie'))
+    return redirect(url_for('vigie')
 
+# @app.route('/getPlane', methods=['POST'])
+# def getPlane():
+#     data = db.get_AvionLibre()
+#     return jsonify(data)
 
+@app.route('/flightplan', methods=['POST']))
+def flightplan():
+    msg = "Yoh"
+    return msg
