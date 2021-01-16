@@ -14,8 +14,8 @@ config = {
 }
 
 """
-CREATE OR REPLACE VIEW vueParkingLibre AS
-SELECT parking.idParking FROM parking
+CREATE OR REPLACE VIEW vueparkinglibre AS
+SELECT parking.idParking, parking.categorie FROM parking
 	LEFT JOIN asso_avionparking ON parking.idParking = asso_avionparking.idParking
 WHERE asso_avionparking.dateArrivee IS NULL
 

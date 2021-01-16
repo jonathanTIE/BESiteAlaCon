@@ -123,7 +123,6 @@ function move_marker(marker, line, stepMarker, callb)
     {
         step++;
         let coord = line.getCoordinateAt(step/stepMarker); // retourne les coordonnées géographiques sur un point de la trajectoire
-        alert(coord)
         let newPoint=new ol.geom.Point(ol.proj.fromLonLat(coord)); // formatage des coordonnées géographiques
         // calculeAngle()
         featureToUpdate.setGeometry(newPoint); // deplacement du marker
