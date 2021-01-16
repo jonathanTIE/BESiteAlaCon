@@ -10,6 +10,8 @@ $(document).ready(function (){
             $.each(data,function (i,park) {
                 parkings[i] = park.idParking;
             });
+
+            //alert($('#plane').text());
         for (i=0; i < 3; i++)
         {
             $("#parking-"+i.toString()).text(parkings[i]);

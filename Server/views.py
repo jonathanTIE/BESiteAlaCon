@@ -75,6 +75,11 @@ def getParkingFree():
     data = db.get_parking_free(3)
     return jsonify(data)
 
+@app.route('/getAvionCategorie', methods=['POST'])
+def getPlaneCat(immat):
+    data = db.get_plane_cat(immat)
+    return jsonify(data)
+
 @app.route("/assignerAvion", methods=['POST'])
 def assignPlane():
     #TODO : validation des données dans form

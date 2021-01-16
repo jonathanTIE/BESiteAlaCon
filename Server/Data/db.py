@@ -301,6 +301,21 @@ def get_plane_id(planeImmat):
 
     return res
 
+def get_plane_cat(planeImmat):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT categorie from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        params = (planeImmat, )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get plane category: {}".format(err)
+
+    return res
+
 def reset_planes():
     try:
         cnx = connexion()
