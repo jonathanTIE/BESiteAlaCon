@@ -277,6 +277,7 @@ def set_parking_choice(planeId, parkingId, userId):
             """  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
         params = (planeId, parkingId, userId)
         cursor.execute(sql, params)
+        cnx.commit()
         res = "insertion in asso_avionParking executed"
         close_bd(cursor,cnx)
 
@@ -297,5 +298,20 @@ def get_plane_id(planeImmat):
 
     except mysql.connector.Error as err:
         res = "Failed get plane ID: {}".format(err)
+
+    return res
+
+def reset_planes():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "DELETE FROM asso_avionparking"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        cursor.execute(sql)
+        res = "Supression asso_avionparking"
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to reset asso_parkingavion: {}".format(err)
 
     return res

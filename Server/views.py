@@ -81,4 +81,9 @@ def assignPlane():
     ids = form.select_parking_with_session(request)
     return db.set_parking_choice(*ids)
 
+@app.route("/supprimerAssociationsAvions", methods=['POST'])
+def deletePlanes():
+    print(db.reset_planes())
+    return redirect(url_for('vigie'))
+
 

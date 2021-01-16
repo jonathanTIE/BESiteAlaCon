@@ -34,7 +34,14 @@ $(document).ready(function (){
             });
 
             /* choice of 1 plane (first one) & frontend update*/
+            if(planes[0] != null) //there are still planes to land
+            {
             $("#plane").text(planes[0][1]);
+            }
+            else
+            {
+                $("#plane").text("PLUS D'AVION !");
+            }
 
             return planes;
 
@@ -56,7 +63,10 @@ $(document).ready(function (){
     {
         $.post("/assignerAvion", {plane:plane, parking:parking}, function(isExecuted)
         {
-            alert(isExecuted);
+            updatePlaneFront();
+            updateParkingSolutionFront();
+            
+
         });
     }
     function insertRepasBDD(idFantome)
@@ -267,13 +277,15 @@ $(document).ready(function (){
 /* DEBUT BOUTONS */
 
     updatePlaneFront();
+    updateButtonFront();
+
     $('#solution-button').on('click', function (){ // click sur bouton "en route"
         updateParkingSolutionFront();
     });
+
     $(".parking-button").on('click', function(data) {
         assignParking($("#plane").text(), $(this).text());
     });
-    updateButtonFront();
 
 /* FIN BOUTONS */
 
