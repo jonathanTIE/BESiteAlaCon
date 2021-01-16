@@ -294,6 +294,7 @@ ALTER TABLE `asso_avionparking`
   ADD CONSTRAINT `FKParking` FOREIGN KEY (`idParking`) REFERENCES `parking` (`idParking`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FKUser` FOREIGN KEY (`idUserValidation`) REFERENCES `identification` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE `asso_avionparking` CHANGE `dateDepart` `dateDepart` DATETIME NULL DEFAULT NULL;
 --
 -- Contraintes pour la table `avions`
 --

@@ -258,17 +258,44 @@ def get_plane_free():
 
 
 
-def choice_parking():
+def set_parking_choice(planeId, parkingId, userId):
+    """
+    set automatically landing date with date of calling this function/sql request
+    :param planeId:
+    :param parkingId:
+    :param userId:
+    :return: true or false if request got executed or not
+    """
+ #return
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "UPDATE asso_avionParking SET dateDepart = %s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
-        param = ("NULL")
-        cursor.execute(sql)
-        res = convert_dictionnary(cursor)
+        sql = """
+            INSERT INTO asso_avionParking (idAvion, idParking, dateArrivee, dateDepart, idUserValidation)
+            VALUES 
+            (%s, %s, NOW(), NULL, %s);
+            """  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        params = (planeId, parkingId, userId)
+        cursor.execute(sql, params)
+        res = "insertion in asso_avionParking executed"
         close_bd(cursor,cnx)
 
     except mysql.connector.Error as err:
-        res = "Failed get Parking of Agent: {}".format(err)
+        res = "Failed assign to Parking of Agent: {}".format(err)
+
+    return res
+
+def get_plane_id(planeImmat):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT idAvion from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        params = (planeImmat, )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get plane ID: {}".format(err)
 
     return res

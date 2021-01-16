@@ -5,6 +5,7 @@
     <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
     {% endif %}
     <h2>Vigie</h2>
+    <form method="POST" action="/assignerAvion" id="formParkingChoice"></form>
     <table class="table table-striped table-bordered first">
         <thead>
             <tr>
@@ -12,11 +13,13 @@
             </tr>
         </thead>
         <tbody>
-            <td id="plane">NOM AVION</td>
-            {% for parkingNb in range(3) %} <!-- chercher dans form-elements et general-table pour l'html-->
-                <td id="parking-{{parkingNb}}">nom parking</td>
-            {% endfor %}
-            <td id="solution-button"><button type="button" class="btn btn-primary">NO JAVA</button></td>
+                <td id="plane" data-immatAvion="X" data-categorie="Z">NOM AVION</td> <!-- class : btn-outline-info -->
+                {% for parkingNb in range(3) %} <!-- chercher dans form-elements et general-table pour l'html-->
+                    <td>
+                        <button type="button" id="parking-{{parkingNb}}" class="parking-button btn btn-info">nom parking</button>
+                    </td>
+                {% endfor %}
+            <td><button type="button" class="btn btn-primary" id="solution-button">NO JAVA</button></td>
         </tbody>
     </table>
     {% if session.newMdp==2 %}

@@ -12,7 +12,7 @@ $(document).ready(function (){
             });
         for (i=0; i < 3; i++)
         {
-            $("#parking-"+i.toString()).html(parkings[i]);
+            $("#parking-"+i.toString()).text(parkings[i]);
 
         }
         },'json');
@@ -33,9 +33,8 @@ $(document).ready(function (){
                 planes[i] = tableau;
             });
 
-            /* choice of 1 plane & frontend update*/
+            /* choice of 1 plane (first one) & frontend update*/
             $("#plane").text(planes[0][1]);
-
 
             return planes;
 
@@ -45,14 +44,21 @@ $(document).ready(function (){
     {
         if (updateParkingSolutionFront().length === 0)
         {
-            $('#solution-button').children(0).text("Recalculer");
+            $('#solution-button').text("Recalculer");
         }
         else
         {
-            $('#solution-button').children(0).text("Refuser");
+            $('#solution-button').text("Refuser");
         }
     }
 
+    function assignParking(plane, parking)
+    {
+        $.post("/assignerAvion", {plane:plane, parking:parking}, function(isExecuted)
+        {
+            alert(isExecuted);
+        });
+    }
     function insertRepasBDD(idFantome)
     {
          $.post("/repas",{idLayer:idFantome}, function (data) {
@@ -143,7 +149,7 @@ $(document).ready(function (){
             let HomPark=listeLayerParking[1];   //fantomeB
             let HomDecAtt=listeLayerParking[2];   //fantomeR
 
-
+/*
     $('button').on('click', function (){ // click sur bouton "en route"
         let stepMarker = 100;
 
@@ -161,7 +167,7 @@ $(document).ready(function (){
             };
             move_marker(Avion1, lineB, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
 
-    });
+    }); */
 
 
     });
@@ -216,7 +222,7 @@ $(document).ready(function (){
             let HomPark=listeLayerWaypoint[1];   //fantomeB
             let HomDecAtt=listeLayerWaypoint[2];   //fantomeR
 
-
+ /*
     $('button').on('click', function (){ // click sur bouton "en route"
         let stepMarker = 100;
 
@@ -234,7 +240,7 @@ $(document).ready(function (){
             };
             move_marker(Avion1, lineB, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
 
-    });
+    }); */
 
     });
     },'json');
@@ -263,6 +269,9 @@ $(document).ready(function (){
     updatePlaneFront();
     $('#solution-button').on('click', function (){ // click sur bouton "en route"
         updateParkingSolutionFront();
+    });
+    $(".parking-button").on('click', function(data) {
+        assignParking($("#plane").text(), $(this).text());
     });
     updateButtonFront();
 
