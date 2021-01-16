@@ -1,6 +1,7 @@
 from flask import Flask, url_for, render_template, request, redirect, session, jsonify
 from Server.Data import db
 from Server.controller import Auth
+from Server.controller import form
 
 app = Flask(__name__)
 app.static_folder = "../static"
@@ -74,12 +75,23 @@ def getParkingFree():
     data = db.get_parking_free(3)
     return jsonify(data)
 
+@app.route("/assignerAvion", methods=['POST'])
+def assignPlane():
+    #TODO : validation des données dans form
+    ids = form.select_parking_with_session(request)
+    return db.set_parking_choice(*ids)
+
+@app.route("/supprimerAssociationsAvions", methods=['POST'])
+def deletePlanes():
+    print(db.reset_planes())
+    return redirect(url_for('vigie')
+
 # @app.route('/getPlane', methods=['POST'])
 # def getPlane():
 #     data = db.get_AvionLibre()
 #     return jsonify(data)
 
-@app.route('/flightplan', methods=['POST'])
+@app.route('/flightplan', methods=['POST']))
 def flightplan():
     msg = "Yoh"
     return msg

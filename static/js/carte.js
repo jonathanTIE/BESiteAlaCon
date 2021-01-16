@@ -1,6 +1,6 @@
 $(document).ready(function (){
 
-/* debut fonctions */
+    /* debut fonctions */
 
     function updateParkingSolutionFront()
     {
@@ -12,7 +12,7 @@ $(document).ready(function (){
             });
         for (i=0; i < 3; i++)
         {
-            $("#parking-"+i.toString()).html(parkings[i]);
+            $("#parking-"+i.toString()).text(parkings[i]);
 
         }
         },'json');
@@ -33,9 +33,15 @@ $(document).ready(function (){
                 planes[i] = tableau;
             });
 
-            /* choice of 1 plane & frontend update*/
+            /* choice of 1 plane (first one) & frontend update*/
+            if(planes[0] != null) //there are still planes to land
+            {
             $("#plane").text(planes[0][1]);
-
+            }
+            else
+            {
+                $("#plane").text("PLUS D'AVION !");
+            }
 
             return planes;
 
@@ -45,14 +51,24 @@ $(document).ready(function (){
     {
         if (updateParkingSolutionFront().length === 0)
         {
-            $('#solution-button').children(0).text("Recalculer");
+            $('#solution-button').text("Recalculer");
         }
         else
         {
-            $('#solution-button').children(0).text("Refuser");
+            $('#solution-button').text("Refuser");
         }
     }
 
+    function assignParking(plane, parking)
+    {
+        $.post("/assignerAvion", {plane:plane, parking:parking}, function(isExecuted)
+        {
+            updatePlaneFront();
+            updateParkingSolutionFront();
+
+
+        });
+    }
 
 
 
@@ -150,7 +166,7 @@ $(document).ready(function (){
 
     $.post("/getWaypoint","", function (dataP)
     {
-        var couleur = ""
+        var couleur = "#6FF"
         var couleurtax = "#F45715" /*Orange*/
         var couleurcir = "#10CF35" /*VertClair*/
         var couleurpistD = "#FAF80C" /*Jaune*/
@@ -274,10 +290,15 @@ $(document).ready(function (){
 /* DEBUT BOUTONS */
 
     updatePlaneFront();
+    updateButtonFront();
+
     $('#solution-button').on('click', function (){ // click sur bouton "en route"
         updateParkingSolutionFront();
     });
-    updateButtonFront();
+
+    $(".parking-button").on('click', function(data) {
+        assignParking($("#plane").text(), $(this).text());
+    });
 
 /* FIN BOUTONS */
 
