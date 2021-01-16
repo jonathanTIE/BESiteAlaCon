@@ -149,20 +149,8 @@ function displayTooltip(evt, overlay, map) {
     }
 }
 
-function getAvion() {
-    let planes = [];
-    $.post("/getAvionLibre","", function (data)
-    {
-        $.each(data,function (i,plane) {
-            let tableau=[];
-            tableau[0]=plane.idAvion;
-            tableau[1]=plane.immatAvion;
-            tableau[2]=plane.categorie;
-            planes[i] = tableau;
-        });
 
-
-    },'json');
-    alert(planes);
-    return planes;
+function assignPlane()
+{
+    //dans la table asso_avionParking, mettre le champ dateDepart à NULL.
 }

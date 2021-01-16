@@ -2,7 +2,7 @@ $(document).ready(function (){
 
     /* debut fonctions */
 
-    function getParkingSolution()
+    function updateParkingSolutionFront()
     {
         var parkings = [];
         $.post("/getParkingLibre","", function (data)
@@ -10,22 +10,47 @@ $(document).ready(function (){
             $.each(data,function (i,park) {
                 parkings[i] = park.idParking;
             });
-        },'json');
-        return parkings;
-
-
-    }
-
-    function updateParkingSolutionFront()
-    {
-        var parkings = getParkingSolution();
-        alert();
         for (i=0; i < 3; i++)
         {
             $("#parking-"+i.toString()).html(parkings[i]);
 
         }
+        },'json');
+        return parkings;
+    }
 
+    function updatePlaneFront() //return list of all planes from view if needed
+    {
+        $.post("/getAvionLibre","", function (data)
+        {
+            /* array from database data */
+            let planes = [];
+            $.each(data,function (i,plane) {
+                let tableau=[];
+                tableau[0]=plane.idAvion;
+                tableau[1]=plane.immatAvion;
+                tableau[2]=plane.categorie;
+                planes[i] = tableau;
+            });
+
+            /* choice of 1 plane & frontend update*/
+            $("#plane").text(planes[0][1]);
+
+
+            return planes;
+
+        },'json');
+    }
+    function updateButtonFront()
+    {
+        if (updateParkingSolutionFront().length === 0)
+        {
+            $('#solution-button').children(0).text("Recalculer");
+        }
+        else
+        {
+            $('#solution-button').children(0).text("Refuser");
+        }
     }
 
     function insertRepasBDD(idFantome)
@@ -235,9 +260,11 @@ $(document).ready(function (){
 
 /* DEBUT BOUTONS */
 
+    updatePlaneFront();
     $('#solution-button').on('click', function (){ // click sur bouton "en route"
         updateParkingSolutionFront();
     });
+    updateButtonFront();
 
 /* FIN BOUTONS */
 
