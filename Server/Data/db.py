@@ -207,15 +207,28 @@ def get_parkingData():
 
     return res
 
-def get_parking_free(nb=3):
+def get_parking_free(nb=3, cat=None):
+    """
+
+    :param nb:
+    :param cat: array/list of the authorized categories
+    :return:
+    """
+    if cat is None or len(cat)==1:
+        cat = ["A"]
+    if len(cat) == 1:
+        cat.append("Z") #problem when formatting below if array/list is length 1
+    cat = tuple(cat)
+    #sql_cat = ', '.join('"{0}"'.format(w) for w in cat)#https://stackoverflow.com/questions/27882402/give-parameterlist-or-array-to-in-operator-python-sql
     try:
         cnx = connexion()
         cursor = cnx.cursor()
         sql = """
             SELECT * FROM vueparkinglibre
+            WHERE categorie IN {}
             ORDER BY RAND() LIMIT %s;
-        """
-        params=(nb,)
+        """.format(cat) #TODO : éviter de passer par un format pour la sanitation
+        params=(nb, )
         cursor.execute(sql, params)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)

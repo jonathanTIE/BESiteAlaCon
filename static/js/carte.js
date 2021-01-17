@@ -4,25 +4,26 @@ $(document).ready(function () {
 
     function updateParkingSolutionFront() {
         var parkings = [];
-        $.post("/getParkingLibre", "", function (data) {
+        var category = $("#plane").attr("categorie");
+        $.post("/getParkingLibre", {qtPark: 3, category:category}, function (data) {
             $.each(data, function (i, park) {
                 parkings[i] = park.idParking;
             });
-
-            //alert($('#plane').text());
             for (i = 0; i < 3; i++) {
                 $("#parking-" + i.toString()).text(parkings[i]);
 
             }
-        }, 'json');
+        }, 'json')
+            .done(updateButtonFront(parkings.length));
+
         return parkings;
     }
 
     function updatePlaneFront() //return list of all planes from view if needed
     {
+        let planes = [];
         $.post("/getAvionLibre", "", function (data) {
             /* array from database data */
-            let planes = [];
             $.each(data, function (i, plane) {
                 let tableau = [];
                 tableau[0] = plane.idAvion;
@@ -34,28 +35,39 @@ $(document).ready(function () {
             /* choice of 1 plane (first one) & frontend update*/
             if (planes[0] != null) //there are still planes to land
             {
-                $("#plane").text(planes[0][1]);
+                $("#plane").text(planes[0][1])
+                    .attr('categorie', planes[0][2]);
             } else {
                 $("#plane").text("PLUS D'AVION !");
             }
 
-            return planes;
 
         }, 'json');
+        alert("plane update done ");
+        return planes;
+
     }
 
-    function updateButtonFront() {
-        if (updateParkingSolutionFront().length === 0) {
+    function updateButtonFront(nbParking) {
+        alert(nbParking)
+        if (nbParking === 0) {
             $('#solution-button').text("Recalculer");
         } else {
             $('#solution-button').text("Refuser");
         }
     }
 
+    function getPlaneParkingPair()
+    {
+        //update parking (with right category) from plane immatriculation
+        $.when(updatePlaneFront()).then(updateParkingSolutionFront())
+    }
+
     function assignParking(plane, parking) {
         $.post("/assignerAvion", {plane: plane, parking: parking}, function (isExecuted) {
-            updatePlaneFront();
-            updateParkingSolutionFront();
+            getPlaneParkingPair();
+            //updatePlaneFront();
+            //updateParkingSolutionFront();
 
 
         });
@@ -272,15 +284,14 @@ $(document).ready(function () {
     map.on('pointermove', function(evt){
         displayTooltip(evt, overlay, map);
     });
-    
+
 
 
     /* DEBUT BOUTONS */
+    getPlaneParkingPair();
+    //updatePlaneFront();
 
-    updatePlaneFront();
-    updateButtonFront();
-
-    $('#solution-button').on('click', function () { // click sur bouton "en route"
+    $('#solution-button').on('click', function () { // click sur bouton 'recalculer/refuser'
         updateParkingSolutionFront();
     });
 
