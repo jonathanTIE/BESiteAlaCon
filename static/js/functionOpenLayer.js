@@ -151,6 +151,12 @@ function displayTooltip(evt, overlay, map) {
     }
 }
 
+function radians_to_degrees(radians)
+{
+  var pi = Math.PI;
+  return radians * (180/pi);
+}
+
 function calculeAngle(long1,long2,lat1,lat2) {
      Long = (long2 - long1);
 
@@ -159,10 +165,10 @@ function calculeAngle(long1,long2,lat1,lat2) {
 
      brng = Math.atan2(y, x);
 
-    brng = Math.toDegrees(brng);
+    brng = radians_to_degrees(brng);
     brng = (brng + 360) % 360;
     brng = 360 - brng; // calculer les degrées dans le sens inverse des aiguilles d'une montre (enlever pour faire dans le sens ordinaire)
-
+    alert(brng);
     return brng;
 }
 

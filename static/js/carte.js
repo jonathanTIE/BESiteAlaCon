@@ -238,6 +238,7 @@ $(document).ready(function () {
 
             listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
             // map.addLayer(listeAvion[i]); // affichage sur la carte des markers
+            //alert(calculeAngle(0, 139.84302, 0, 35.55940));
             listeAvion[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
 
 
