@@ -123,10 +123,16 @@ function move_marker(marker, line, stepMarker, callb)
     {
         step++;
         let coord = line.getCoordinateAt(step/stepMarker); // retourne les coordonnées géographiques sur un point de la trajectoire
+        let previousCoord = line.getCoordinateAt((step+0.001)/(stepMarker));
+        previousCoord = (previousCoord[0]<coord[0]) ? previousCoord : line.getCoordinateAt((step-0.001)/(stepMarker));
+        //alert(coord);
+        //alert(previousCoord);
+        //alert(step);
+        //alert(stepMarker);
         let newPoint=new ol.geom.Point(ol.proj.fromLonLat(coord)); // formatage des coordonnées géographiques
-        // calculeAngle()
+        //alert(calculeAngle(coord[0], coord[1], previousCoord[0], previousCoord[1]));
         featureToUpdate.setGeometry(newPoint); // deplacement du marker
-        // marker.getStyle()[0].getImage().setRotation(angle);
+        marker.getStyle()[0].getImage().setRotation(calculeAngle(coord[0], coord[1], previousCoord[0], previousCoord[1]));
 
     } else {
         clearInterval(key); // fin du déplacement
@@ -157,7 +163,7 @@ function radians_to_degrees(radians)
   return radians * (180/pi);
 }
 
-function calculeAngle(long1,long2,lat1,lat2) {
+function calculeAngle(long1,lat1, long2=0,lat2=0) {
      Long = (long2 - long1);
 
      y = Math.sin(Long) * Math.cos(lat2);
@@ -168,7 +174,6 @@ function calculeAngle(long1,long2,lat1,lat2) {
     brng = radians_to_degrees(brng);
     brng = (brng + 360) % 360;
     brng = 360 - brng; // calculer les degrées dans le sens inverse des aiguilles d'une montre (enlever pour faire dans le sens ordinaire)
-    alert(brng);
     return brng;
 }
 
