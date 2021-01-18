@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 12 jan. 2021 à 10:43
+-- Généré le : lun. 18 jan. 2021 à 14:11
 -- Version du serveur :  10.4.14-MariaDB
 -- Version de PHP : 7.4.10
 
@@ -47,16 +47,17 @@ CREATE TABLE `avions` (
   `typeAvion` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_mysql500_ci NOT NULL,
   `immatAvion` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_mysql500_ci NOT NULL,
   `categorie` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_mysql500_ci NOT NULL,
-  `idCompagnie` int(11) NOT NULL
+  `idCompagnie` int(11) NOT NULL,
+  `images` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `avions`
 --
 
-INSERT INTO `avions` (`idAvion`, `typeAvion`, `immatAvion`, `categorie`, `idCompagnie`) VALUES
-(1, 'A380', 'F-GAFT', 'A', 1),
-(2, 'B787', 'JA0011', 'A', 2);
+INSERT INTO `avions` (`idAvion`, `typeAvion`, `immatAvion`, `categorie`, `idCompagnie`, `images`) VALUES
+(1, 'A380', 'F-GAFT', 'A', 1, 'Avion_1.png'),
+(2, 'B787', 'JA0011', 'A', 2, 'Avion_2.png');
 
 -- --------------------------------------------------------
 
@@ -144,6 +145,7 @@ INSERT INTO `parking` (`idParking`, `nomParking`, `categorie`, `coordonnees`, `w
 --
 CREATE TABLE `vueavionlibre` (
 `idAvion` int(11)
+,`images` varchar(50)
 ,`immatAvion` varchar(10)
 ,`categorie` varchar(5)
 );
@@ -198,7 +200,7 @@ INSERT INTO `waypoint` (`idWaypoint`, `coordonnees`, `type`, `rang`) VALUES
 --
 DROP TABLE IF EXISTS `vueavionlibre`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueavionlibre`  AS  select `avions`.`idAvion` AS `idAvion`,`avions`.`immatAvion` AS `immatAvion`,`avions`.`categorie` AS `categorie` from (`avions` left join `asso_avionparking` on(`avions`.`idAvion` = `asso_avionparking`.`idAvion`)) where `asso_avionparking`.`dateArrivee` is null ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueavionlibre`  AS  select `avions`.`idAvion` AS `idAvion`,`avions`.`images` AS `images`,`avions`.`immatAvion` AS `immatAvion`,`avions`.`categorie` AS `categorie` from (`avions` left join `asso_avionparking` on(`avions`.`idAvion` = `asso_avionparking`.`idAvion`)) where `asso_avionparking`.`dateArrivee` is null ;
 
 -- --------------------------------------------------------
 
