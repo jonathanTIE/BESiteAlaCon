@@ -7,5 +7,11 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/gsea19b_jonathan_corentin</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="@server.redshift.amazonaws.com" uuid="cd2182e1-b973-4f5a-a715-25ba30c1d04d">
+      <driver-ref>redshift</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.amazon.redshift.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:redshift://server.redshift.amazonaws.com:5439</jdbc-url>
+    </data-source>
   </component>
 </project>
