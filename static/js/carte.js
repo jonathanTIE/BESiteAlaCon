@@ -83,13 +83,38 @@ $(document).ready(function () {
         });
     }
 
-    function getPathLanding(waypoint="C1")
+    function getPathCoords(path) //path is an array of waypoints in str form
     {
-    //SELECT path from WAYPOINT WHERE WaypointBegin = %s
-    //SELECT * from WAYPOINT WHERE (LIKE)
-    //SELECT * from games WHERE (lower(title) LIKE '%age of empires III%');
-    //C1 -> base de données -> avec les rangs après en incrémentant l'ID
+        let pathOrderBy = ["idWaypoint"];
+        pathOrderBy.push(path);
+
+        /* Requete chemin -> coordonnées GPS
+        SELECT coordonnes from waypoint
+        WHERE idWaypoint IN {}.format(path)
+        ORDER BY FIELD({}).format(pathOrderBy)
+         */
+        /*
+        TRAITEMENT coordonnées Base de données -> coordonnées en array d'array[2] JS
+         */
+
     }
+    function getPathLanding(waypoint="C1", parking="P1")
+    {
+        //SELECT path from WAYPOINT WHERE WaypointBegin = %s (-> waypoint)
+        /*
+        Requete 'parking waypoint' du parking:
+        SELECT waypointProche from parking
+        WHERE idParking = %s (-> parking) //check  waypointProche ou waypointproche
+         */
+        let pathToTerminal = "resultat premiere requete";
+        let terminalWaypoint = "result requete dessus";
+        let pathStr = pathToTerminal +"-" + terminalWaypoint+ "-" + parking; //resultat DB + parking waypoint + parking
+        let path = path.split("-");
+
+        return getPathCoords(path);
+
+    }
+
 
 
     /* fin fonctions */
