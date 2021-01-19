@@ -43,13 +43,11 @@ $(document).ready(function () {
 
 
         }, 'json');
-        alert("plane update done ");
         return planes;
 
     }
 
     function updateButtonFront(nbParking) {
-        alert(nbParking)
         if (nbParking === 0) {
             $('#solution-button').text("Recalculer");
         } else {
@@ -218,8 +216,10 @@ $(document).ready(function () {
 
     var routeArrivee = [
         [139.84302, 35.55940],
+        [139.82198, 35.54049],
         [139.80383, 35.52428],
         [139.80143, 35.52579],
+        [139.80556, 35.52920],
         [139.80679, 35.53006],
         [139.80132, 35.53793],
         [139.79304, 35.54988]];
@@ -231,24 +231,18 @@ $(document).ready(function () {
         var listeAvion = [];
         $.each(dataA, function (i, avion) {
             let nomMarker = "FSEXE";
-            // let xy = avion.coordonnees.split(',');
             let echelle = 0.03;
-            // let latitude = xy[1]; longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
 
 
             listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
-            // map.addLayer(listeAvion[i]); // affichage sur la carte des markers
-            //alert(calculeAngle(0, 139.84302, 0, 35.55940));
-            listeAvion[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
 
 
-            /*let Avion2=listeAvion[1];*/
+
             let Avion3 = listeAvion[2];
 
 
             $('button#depart').on('click', function () { // click sur bouton "en route"
                 let stepMarker = 100;
-                alert(listeAvion);
                 map.addLayer(listeAvion[0]);
                 let routeArr = new ol.geom.LineString(routeArrivee);
                 var callb = function () { // function de callback
@@ -312,3 +306,32 @@ $(document).ready(function () {
 
 /*alert(getAvion())*/
 
+/*
+Parcours test Séance 8 Avion 1
+Parking :
+    P3
+Parking Nord 3       [139.78786, 35.55411],
+Wayppint proche :
+T1 :
+Prévoir un waypoint en plus pour pour la sorti des parkings. Coordonnées possibles :
+[35.5545813706495, 139.79057567546323] devant le point T1
+[35.552780402431665, 139.7919959993632] devant le point T2
+[35.5509169303004, 139.7933907318415] devant le point T3
+
+[35.54766161885484, 139.79555994293432]
+[35.54653828179949, 139.7929574565983]
+
+Taxiway :
+A4 : [139.80004, 35.53732]
+A5 : [139.80556, 35.52920]
+A6 : [139.80143, 35.52579]
+
+
+Piste de décollage :
+DEP1 : [139.80376, 35.52421]
+
+Circuit de départ :
+DEP 2 : [139.84302, 35.55940]
+
+
+ */

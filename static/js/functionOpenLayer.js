@@ -26,6 +26,7 @@ function draw_marker(nomMarker, longitude, latitude, imageMarker, echelle)
                 })
             })]
         });
+        console.log('../static/images/'+imageMarker);
 
         layerMarker.set('name', nomMarker);
         return layerMarker;
@@ -118,20 +119,20 @@ function move_marker(marker, line, stepMarker, callb)
     var featureToUpdate=features[0];
 
     var step = 0;
+
     var key = setInterval( function() { // la fonction suivante s'execute toutes les 70ms
-    if (step < stepMarker)
+
+        if (step < stepMarker)
     {
         step++;
         let coord = line.getCoordinateAt(step/stepMarker); // retourne les coordonnées géographiques sur un point de la trajectoire
-        let previousCoord = line.getCoordinateAt((step+0.001)/(stepMarker));
-        previousCoord[0] = (previousCoord[0]<coord[0]) ? previousCoord[0] : line.getCoordinateAt((step-0.001)/(stepMarker))[0];
-        previousCoord[1] = (previousCoord[1]<coord[1]) ? previousCoord[1] : line.getCoordinateAt((step-0.001)/(stepMarker))[1];
-        //alert(step);
-        //alert(stepMarker);
+        let coord1 = line.getCoordinateAt(step/stepMarker);
+                let coord2 = line.getCoordinateAt((step+1)/stepMarker);
+
+
         let newPoint=new ol.geom.Point(ol.proj.fromLonLat(coord)); // formatage des coordonnées géographiques
-        //alert(calculeAngle(coord[0], coord[1], previousCoord[0], previousCoord[1]));
         featureToUpdate.setGeometry(newPoint); // deplacement du marker
-        marker.getStyle()[0].getImage().setRotation(calculeAngle(coord[0], coord[1], previousCoord[0], previousCoord[1]));
+        marker.getStyle()[0].getImage().setRotation(calculeAngle(coord1[0], coord1[1], coord2[0], coord2[1])); //désactiver la ligne à la dernière étape ou boucle *- TO DO -*
 
     } else {
         clearInterval(key); // fin du déplacement
@@ -156,23 +157,16 @@ function displayTooltip(evt, overlay, map) {
     }
 }
 
-function radians_to_degrees(radians)
-{
-  var pi = Math.PI;
-  return radians * (180/pi);
-}
 
-function calculeAngle(long1,lat1, long2=0,lat2=0) {
-     Long = (long2 - long1);
 
-     y = Math.sin(Long) * Math.cos(lat2);
-     x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)* Math.cos(lat2) * Math.cos(Long);
+function calculeAngle(long1,lat1, long2,lat2) {
+     let Long = (long1 - long2);
 
-     brng = Math.atan2(y, x);
+     let y = Math.sin(Long) * Math.cos(lat2);
+     let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)* Math.cos(lat2) * Math.cos(Long);
 
-    brng = radians_to_degrees(brng);
-    brng = (brng + 360) % 360;
-    brng = 360 - brng; // calculer les degrées dans le sens inverse des aiguilles d'une montre (enlever pour faire dans le sens ordinaire)
+     let brng = Math.atan2(y, x) - Math.PI/2;
+
     return brng;
 }
 
