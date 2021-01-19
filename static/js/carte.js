@@ -5,6 +5,7 @@ $(document).ready(function () {
     function updateParkingSolutionFront() {
         var parkings = [];
         var category = $("#plane").attr("categorie");
+        console.log(category);
         $.post("/getParkingLibre", {qtPark: 3, category:category}, function (data) {
             $.each(data, function (i, park) {
                 parkings[i] = park.idParking;
@@ -13,16 +14,19 @@ $(document).ready(function () {
                 $("#parking-" + i.toString()).text(parkings[i]);
 
             }
+            $("#plane").attr("nbParkings", parkings.length);
+            updateButtonFront();
         }, 'json')
-            .done(updateButtonFront(parkings.length));
+
 
         return parkings;
     }
 
-    function updatePlaneFront() //return list of all planes from view if needed
+    function updatePlaneFront(callback) //return list of all planes from view if needed
     {
-        let planes = [];
+                let planes = [];
         $.post("/getAvionLibre", "", function (data) {
+
             /* array from database data */
             $.each(data, function (i, plane) {
                 let tableau = [];
@@ -37,18 +41,24 @@ $(document).ready(function () {
             {
                 $("#plane").text(planes[0][1])
                     .attr('categorie', planes[0][2]);
+                   console.log("fin update category");
             } else {
                 $("#plane").text("PLUS D'AVION !");
             }
+            callback();
 
 
         }, 'json');
-        return planes;
+            return planes;
+
+
+
 
     }
 
-    function updateButtonFront(nbParking) {
-        if (nbParking === 0) {
+    function updateButtonFront() {
+        console.log(parseInt($("#plane").attr("nbParkings"),10));
+        if (parseInt($("#plane").attr("nbParkings"),10) === 0) {
             $('#solution-button').text("Recalculer");
         } else {
             $('#solution-button').text("Refuser");
@@ -58,7 +68,9 @@ $(document).ready(function () {
     function getPlaneParkingPair()
     {
         //update parking (with right category) from plane immatriculation
-        $.when(updatePlaneFront()).then(updateParkingSolutionFront())
+        updatePlaneFront(updateParkingSolutionFront);
+        //$.when(updatePlaneFront()).then(updateParkingSolutionFront())
+        //.then(updateButtonFront(0));
     }
 
     function assignParking(plane, parking) {
@@ -70,6 +82,51 @@ $(document).ready(function () {
 
         });
     }
+
+    function getPathCoords(path) //path is an array of waypoints in str form
+    {
+        let pathOrderBy = ["idWaypoint"];
+        pathOrderBy.push(path);
+
+        /* Requete chemin -> coordonnées GPS
+        SELECT coordonnes from waypoint
+        WHERE idWaypoint IN {}.format(path)
+        ORDER BY FIELD({}).format(pathOrderBy)
+         */
+        /*
+        TRAITEMENT coordonnées Base de données -> coordonnées en array d'array[2] JS
+         */
+
+    }
+    function getPathLanding(waypoint="C1", parking="P1")
+    {
+        //SELECT path from WAYPOINT WHERE WaypointBegin = %s (-> waypoint)
+        /*
+        Requete 'parking waypoint' du parking:
+        SELECT waypointProche from parking
+        WHERE idParking = %s (-> parking) //check  waypointProche ou waypointproche
+         */
+        let pathToTerminal = "resultat premiere requete";
+        let terminalWaypoint = "result requete dessus";
+        let pathStr = pathToTerminal +"-" + terminalWaypoint+ "-" + parking; //resultat DB + parking waypoint + parking
+        let path = path.split("-");
+
+        return getPathCoords(path);
+
+    }
+
+    function getPathDeparture(parking, runway=NaN)
+    {
+        /*
+        SQL Parking -> trouver le terminal area
+         */
+    }
+
+    function planeMovement() //cycle complet visuellement
+    {
+        /* TODO */
+    }
+
 
 
     /* fin fonctions */
