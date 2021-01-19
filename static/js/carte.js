@@ -115,6 +115,18 @@ $(document).ready(function () {
 
     }
 
+    function getPathDeparture(parking, runway=NaN)
+    {
+        /*
+        SQL Parking -> trouver le terminal area
+         */
+    }
+
+    function planeMovement() //cycle complet visuellement
+    {
+        /* TODO */
+    }
+
 
 
     /* fin fonctions */
