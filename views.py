@@ -1,6 +1,7 @@
 from flask import Flask, url_for, render_template, request, redirect, session, jsonify
 from Server.Data import db
 from Server.controller import Auth
+from Server.controller import form
 
 app = Flask(__name__)
 app.static_folder = "../static"
@@ -71,5 +72,46 @@ def getPlaneFree():
 
 @app.route('/getParkingLibre', methods=['GET', 'POST'])
 def getParkingFree():
-    data = db.get_parking_free(3)
+    data = form.get_free_park(request)
+    return jsonify(data)
+
+@app.route('/getAvionCategorie', methods=['POST'])
+def getPlaneCat():
+    data = db.get_plane_cat(request.form['immat'])
+    return jsonify(data)
+
+@app.route("/assignerAvion", methods=['POST'])
+def assignPlane():
+    #TODO : validation des données dans form
+    ids = form.select_parking_with_session(request)
+    return db.set_parking_choice(*ids)
+
+@app.route("/supprimerAssociationsAvions", methods=['POST'])
+def deletePlanes():
+    print(db.reset_planes())
+    return redirect(url_for('vigie'))
+
+@app.route('/getPlane', methods=['POST'])
+def getPlane():
+    data = db.get_plane_free()
+    return jsonify(data)
+
+@app.route('/flightplan', methods=['POST'])
+def flightplan():
+    msg = "Yoh"
+    return msg
+
+@app.route('/getPathWaypoints', methods=['POST'])
+def getPathWaypoints():
+    data = db.get_path(request.form['waypoint']) #TODO : changer C1 avec des params dépendant de l'avion
+    return jsonify(data)
+
+@app.route('/getParkingTerminalWaypoint', methods=['POST'])
+def getParkingTerminal():
+    data = db.get_parking_terminal_waypoint(request.form['parking'])
+    return jsonify(data)
+
+@app.route('/getCoordsGPS', methods=['POST'])
+def getGpsCoordsFromPath():
+    data = db.get_gps_coordinates(request.form['path'])
     return jsonify(data)

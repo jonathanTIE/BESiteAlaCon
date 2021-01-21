@@ -13,11 +13,13 @@ config = {
         'raise_on_warnings': True,
 }
 
+#TODO : path départ et arrivé avion dans DB
+
 """
-CREATE OR REPLACE VIEW vueParkingLibre AS
-SELECT parking.idParking FROM parking
+CREATE OR REPLACE VIEW vueparkinglibre AS
+SELECT parking.idParking, parking.categorie FROM parking
 	LEFT JOIN asso_avionparking ON parking.idParking = asso_avionparking.idParking
-WHERE asso_avionparking.dateDepart IS NULL
+WHERE asso_avionparking.dateArrivee IS NULL
 
 CREATE OR REPLACE VIEW vueAvionLibre AS
 SELECT avions.idAvion FROM avions
@@ -207,15 +209,28 @@ def get_parkingData():
 
     return res
 
-def get_parking_free(nb=3):
+def get_parking_free(nb=3, cat=None):
+    """
+
+    :param nb:
+    :param cat: array/list of the authorized categories
+    :return:
+    """
+    if cat is None or len(cat)==1:
+        cat = ["A"]
+    if len(cat) == 1:
+        cat.append("Z") #problem when formatting below if array/list is length 1
+    cat = tuple(cat)
+    #sql_cat = ', '.join('"{0}"'.format(w) for w in cat)#https://stackoverflow.com/questions/27882402/give-parameterlist-or-array-to-in-operator-python-sql
     try:
         cnx = connexion()
         cursor = cnx.cursor()
         sql = """
             SELECT * FROM vueparkinglibre
+            WHERE categorie IN {}
             ORDER BY RAND() LIMIT %s;
-        """
-        params=(nb,)
+        """.format(cat) #TODO : éviter de passer par un format pour la sanitation
+        params=(nb, )
         cursor.execute(sql, params)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
@@ -258,17 +273,134 @@ def get_plane_free():
 
 
 
-def choice_parking():
+def set_parking_choice(planeId, parkingId, userId):
+    """
+    set automatically landing date with date of calling this function/sql request
+    :param planeId:
+    :param parkingId:
+    :param userId:
+    :return: true or false if request got executed or not
+    """
+ #return
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "UPDATE asso_avionParking SET dateDepart = %s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
-        param = ("NULL")
-        cursor.execute(sql)
-        res = convert_dictionnary(cursor)
+        sql = """
+            INSERT INTO asso_avionParking (idAvion, idParking, dateArrivee, dateDepart, idUserValidation)
+            VALUES 
+            (%s, %s, NOW(), NULL, %s);
+            """  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        params = (planeId, parkingId, userId)
+        cursor.execute(sql, params)
+        cnx.commit()
+        res = "insertion in asso_avionParking executed"
         close_bd(cursor,cnx)
 
     except mysql.connector.Error as err:
-        res = "Failed get Parking of Agent: {}".format(err)
+        res = "Failed assign to Parking of Agent: {}".format(err)
+
+    return res
+
+def get_plane_id(planeImmat):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT idAvion from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        params = (planeImmat, )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get plane ID: {}".format(err)
+
+    return res
+
+def get_plane_cat(planeImmat):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT categorie from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        params = (planeImmat, )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get plane category: {}".format(err)
+
+    return res
+
+def reset_planes():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "DELETE FROM asso_avionparking"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        cursor.execute(sql)
+        res = "Supression asso_avionparking"
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to reset asso_parkingavion: {}".format(err)
+
+    return res
+
+def get_path(waypointBegin):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = 'SELECT asso_waypoint.Path from asso_waypoint WHERE asso_waypoint.WaypointBegin = %s LIMIT 1'
+        params = (waypointBegin , )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to get from db path from waypoint: {}".format(err)
+
+    return res
+
+def get_parking_terminal_waypoint(parking):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = """
+            SELECT waypointProche from parking
+            WHERE idParking = %s; 
+            """
+        params = (parking , )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to get terminal waypoint for parking : {}".format(err)
+
+    return res
+
+def get_gps_coordinates(path): #path should be an array
+    pathOrderBy = ["`waypoint`.`idWaypoint`"] + path
+    print('pathorderby', pathOrderBy)
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+
+        sql = """
+        SELECT * from `waypoint`
+        WHERE `waypoint`.`idWaypoint` IN  {}
+        ORDER BY FIELD({})
+        """.format(path, pathOrderBy)
+
+        params = (parking , )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to get gps coordinates for path : {}".format(err)
 
     return res

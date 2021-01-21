@@ -83,13 +83,75 @@ $(document).ready(function () {
         });
     }
 
-    function getPathLanding(waypoint="C1")
+    function getPathCoords(path, cbk) //path is an array of waypoints in str form
     {
-    //SELECT path from WAYPOINT WHERE WaypointBegin = %s
-    //SELECT * from WAYPOINT WHERE (LIKE)
-    //SELECT * from games WHERE (lower(title) LIKE '%age of empires III%');
-    //C1 -> base de données -> avec les rangs après en incrémentant l'ID
+        console.log("getPatthCoords begin");
+        /*
+        $.ajax({
+          type: "POST",
+          url: "/getCoordsGPS",
+          data: JSON.stringify({"path": path}),
+          async: false,
+          complete: function (data)
+          {
+                console.log(data);
+          }
+        });
+        */
+        $.post("/getCoordsGPS", {path:path}, function (data) {
+            console.log(data);
+            console.log("fin getPathCoords");
+            cbk()
+
+        }, 'json');
+        /*
+        SELECT * from `waypoint`
+        WHERE `waypoint`.`idWaypoint` IN ("C1", "ARR1", "ARR2", "A1", "A2")
+        ORDER BY FIELD(`waypoint`.`idWaypoint`, "C1", "ARR1", "ARR2", "A1", "A2")
+        TRAITEMENT coordonnées Base de données -> coordonnées en array d'array[2] JS
+         */
     }
+
+    function getPathLanding(waypoint="C1", parking="P1")
+    {
+
+        var getData = function () {
+            $.post("/getPathWaypoints", {waypoint:waypoint}, function (data) {
+                console.log(waypoint);
+                let pathToTerminal = data.Path;
+                let terminalWaypoint = "erreur SQL";
+
+               $.post("/getParkingTerminalWaypoint", {parking:parking}, function (data) {
+                    terminalWaypoint = data.waypointProche;
+                    let pathStr = waypoint + "-" + pathToTerminal +"-" + terminalWaypoint+ "-" + parking; //resultat DB + parking waypoint + parking
+                    let path = pathStr.split("-");
+                    return path;
+                }, 'json');
+            }, 'json');
+        };
+        console.log("aaaa");
+        console.log(getData());
+        console.log("bbbb");
+        getData().then(function(path){
+            console.log("path");
+            console.log(path);
+            return getPathCoords(path);
+        });
+    }
+    alert(getPathLanding());
+
+    function getPathDeparture(parking, runway=NaN)
+    {
+        /*
+        SQL Parking -> trouver le terminal area
+         */
+    }
+
+    function planeMovement() //cycle complet visuellement
+    {
+        /* TODO */
+    }
+
 
 
     /* fin fonctions */
@@ -326,7 +388,10 @@ $(document).ready(function () {
         });
 
     }
+
+
 });
+
 
 /*alert(getAvion())*/
 
