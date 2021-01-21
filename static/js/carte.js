@@ -157,67 +157,62 @@ $(document).ready(function () {
 
     /*
 
-        var listeLayerParking=[];
-        $.each(dataP,function (i,park) {
-            let xy = park.coordonnees.split(',');
-            let latitude = xy[0];
-            longitude = xy[1];
-            let nomParking = park.idParking;
-                 alert("2");
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurParking, rotation, map);
-        });
 
-    */
-
-
-    /*
-    // trajectoire vers l'homme Parking
-    let lineBleue=[
-        [1.4793492845952274, 43.56520767508311],
-        [1.4806045583782506, 43.56396382024834],
-        [1.4824928334706613, 43.56499000234101],
-        [1.4821709683980915, 43.56532428515708],
-        [1.4818169168182642, 43.5658218189366]];
-
-    // trajectoire vers l'homme Décollage/Atterrissae
-    let lineRouge=[
-        [1.4818169168182642, 43.5658218189366],
-        [1.4821709683980915, 43.56532428515708],
-        [1.4824928334706613, 43.56499000234101],
-        [1.4838983109542172, 43.56369172357968]];
-*/
-
-    //Affichage des avions
 
     /*DEBUT Parking*/
 
     $.post("/getParking", "", function (dataP) {
-        var couleur = "#66ffff"
+        var couleurOcc = "#D9521A"
         var rotation = 0.0
         var listeLayerParking = [];
-        $.each(dataP, function (i, park) {
+            $.each(dataP, function (i, park) {
             let xy = park.coordonnees.split(',');
             let latitude = xy[1];
             longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
             let nomParking = park.idParking;
-
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleur, rotation, map);
-            /*Ajout sur principe du pacman*/
+            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurOcc, rotation, map);
             map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+
+            $.post("/getParkingLibre", {qtPark: 3, category:'C'}, function (dataPF)
+                {
+                        changeCouleurParking(nomParking,"#0FD757",listeLayerParking) //Parking Free Classe C/B/A
+                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                }, 'json')
+
+            $.post("/getParkingLibre", {qtPark: 3, category:'B'}, function (dataPF)
+                {
+                        changeCouleurParking(nomParking,"#0FD7EB",listeLayerParking) //Parking Free Classe B/A
+                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                }, 'json')
+
+            $.post("/getParkingLibre", {qtPark: 3, category:'A'}, function (dataPF)
+                {
+                        changeCouleurParking(nomParking,"#F9F539",listeLayerParking) //Parking Free Classe A
+                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                }, 'json')
+
             listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
 
 
             $('button').on('click', function () { // click sur bouton "en route"
                 let stepMarker = 100;
             });
-
-
         });
 
     }, 'json');
 
 
+
+        // var couleurFreeC= "#0FD757" -C
+        // var couleurFreeB= "#0FD7EB" -B
+        // var couleurFreeA= "#F9F539" -A
+
+
+
+
     /*FIN Parking*/
+
+
 
     /* DEBUT Waypoint */
 
@@ -271,6 +266,9 @@ $(document).ready(function () {
 
     /* DEBUT Avion */
 
+
+    /*Avion Arrivée*/
+
     var routeArrivee = [
         [139.84302, 35.55940],
         [139.82198, 35.54049],
@@ -281,13 +279,11 @@ $(document).ready(function () {
         [139.80132, 35.53793],
         [139.79304, 35.54988]];
 
-
     $.post("/getPlane", "", function (dataA) {
 
-        var rotation = 0.0
         var listeAvion = [];
         $.each(dataA, function (i, avion) {
-            let nomMarker = "FSEXE";
+            let nomMarker = avion.immatAvion;
             let echelle = 0.03;
 
 
@@ -298,7 +294,7 @@ $(document).ready(function () {
             let Avion3 = listeAvion[2];
 
 
-            $('button#depart').on('click', function () { // click sur bouton "en route"
+            $('button#approach').on('click', function () { // click sur bouton "en route"
                 let stepMarker = 100;
                 map.addLayer(listeAvion[0]);
                 let routeArr = new ol.geom.LineString(routeArrivee);
@@ -320,6 +316,49 @@ $(document).ready(function () {
         });
     }, 'json');
 
+        /*Avion Départ*/
+
+
+    var routeDepart = [
+        [139.79304, 35.54988],
+        [139.80132, 35.53793],
+        [139.80679, 35.53006],
+        [139.80556, 35.52920],
+        [139.80143, 35.52579],
+        [139.80383, 35.52428],
+        [139.82198, 35.54049],
+        [139.84302, 35.55940]];
+
+    $.post("/getPlane", "", function (dataA) {
+
+        var listeAvion = [];
+        $.each(dataA, function (i, avion) {
+            let nomMarker = avion.immatAvion;
+            let echelle = 0.03;
+
+
+            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
+
+
+
+            let Avion3 = listeAvion[2];
+
+
+            $('button#depart').on('click', function () { // click sur bouton "en route"
+                let stepMarker = 100;
+                map.addLayer(listeAvion[0]);
+                let routeDep = new ol.geom.LineString(routeDepart);
+                var callb1 = function () { // function de callback
+                };
+
+                var callb = function () { // function de callback
+                    map.removeLayer(listeAvion[i]); // suppression du layer de l'avion
+                };
+                move_marker(listeAvion[0], routeDep, stepMarker, callb);//déplacement de l'avion hors du champ de vision donc disparition
+            });
+
+        });
+    }, 'json');
 
     /* FIN Avion */
 
@@ -364,7 +403,7 @@ $(document).ready(function () {
 /*alert(getAvion())*/
 
 /*
-Parcours test Séance 8 Avion 1
+Parcours test::
 Parking :
     P3
 Parking Nord 3       [139.78786, 35.55411],

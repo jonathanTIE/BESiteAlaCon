@@ -132,7 +132,11 @@ function move_marker(marker, line, stepMarker, callb)
 
         let newPoint=new ol.geom.Point(ol.proj.fromLonLat(coord)); // formatage des coordonnées géographiques
         featureToUpdate.setGeometry(newPoint); // deplacement du marker
-        marker.getStyle()[0].getImage().setRotation(calculeAngle(coord1[0], coord1[1], coord2[0], coord2[1])); //désactiver la ligne à la dernière étape ou boucle *- TO DO -*
+        if (step/stepMarker <= 0.99)
+        {
+                    marker.getStyle()[0].getImage().setRotation(calculeAngle(coord1[0], coord1[1], coord2[0], coord2[1])); //désactiver la ligne à la dernière étape ou boucle *- TO DO -*
+        //TO DO - le dernier chemin n'est pas totalement bon en orientation pour l'avion
+        }
 
     } else {
         clearInterval(key); // fin du déplacement
@@ -165,13 +169,27 @@ function calculeAngle(long1,lat1, long2,lat2) {
      let y = Math.sin(Long) * Math.cos(lat2);
      let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)* Math.cos(lat2) * Math.cos(Long);
 
-     let brng = Math.atan2(y, x) - Math.PI/2;
+     let brng = Math.atan2(y, x) - Math.PI/2 + Math.PI/16;
 
     return brng;
+
 }
 
 
-function assignPlane()
+function changeCouleurParking (idParking, newCouleur, listeLayerParking)
 {
-    //dans la table asso_avionParking, mettre le champ dateDepart à NULL.
+    $.each(listeLayerParking, function (i, LayPark) {
+        if (LayPark.get('name') === idParking) { // on cherche le bon layer du parking
+
+            let oldText=LayPark.getStyle()[0].getText(); // texte sur le rectangle
+            let oldImage=LayPark.getStyle()[0].getImage(); //image du rectangle
+            oldImage.getFill().setColor(newCouleur); // changement de couleur
+            let newImage=oldImage.clone(); // duplication vers une nouvelle image
+
+            LayPark.setStyle([new ol.style.Style({image: newImage,text:oldText})]); // application du nouveau style
 }
+    });
+
+
+}
+
