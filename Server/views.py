@@ -100,3 +100,19 @@ def getPlane():
 def flightplan():
     msg = "Yoh"
     return msg
+
+@app.route('/getPathWaypoints', methods=['POST'])
+def getPathWaypoints():
+    #print("get path waypoints")
+    data = db.get_path(request.form['waypoint']) #TODO : changer C1 avec des params dépendant de l'avion
+    return jsonify(data)
+
+@app.route('/getParkingTerminalWaypoint', methods=['POST'])
+def getParkingTerminal():
+    data = db.get_parking_terminal_waypoint(request.form['parking'])
+    return jsonify(data)
+
+@app.route('/getCoordsGPS', methods=['POST'])
+def getGpsCoordsFromPath():
+    data = db.get_gps_coordinates(request.form.getlist('path[]'))
+    return jsonify(data)

@@ -13,6 +13,8 @@ config = {
         'raise_on_warnings': True,
 }
 
+#TODO : path départ et arrivé avion dans DB
+
 """
 CREATE OR REPLACE VIEW vueparkinglibre AS
 SELECT parking.idParking, parking.categorie FROM parking
@@ -341,5 +343,65 @@ def reset_planes():
 
     except mysql.connector.Error as err:
         res = "Failed to reset asso_parkingavion: {}".format(err)
+
+    return res
+
+def get_path(waypointBegin):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = 'SELECT asso_waypoint.Path from asso_waypoint WHERE asso_waypoint.WaypointBegin = %s LIMIT 1'
+        params = (waypointBegin , )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to get from db path from waypoint: {}".format(err)
+
+    return res
+
+def get_parking_terminal_waypoint(parking):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = """
+            SELECT waypointProche from parking
+            WHERE idParking = %s; 
+            """
+        params = (parking , )
+        cursor.execute(sql, params)
+        res = convert_dictionnary(cursor)[0]
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to get terminal waypoint for parking : {}".format(err)
+
+    return res
+
+def get_gps_coordinates(path): #path should be an array
+    pathOrderBy = ["`waypoint`.`idWaypoint`"] + path
+    pathOrderBy = tuple(pathOrderBy)
+    path = tuple(path)
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+
+        sql = """
+        SELECT * from `waypoint`
+        WHERE `waypoint`.`idWaypoint` IN  {}
+        ORDER BY FIELD{}
+        """.format(path, pathOrderBy)
+        sql = sql.replace("\'`", "`")
+        sql = sql.replace("`\'", "`")
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        cnx.commit()
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed to get gps coordinates for path : {}".format(err)
 
     return res
