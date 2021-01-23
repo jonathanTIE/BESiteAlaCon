@@ -76,6 +76,8 @@ $(document).ready(function () {
 
     function assignParking(plane, parking) {
         $.post("/assignerAvion", {plane: plane, parking: parking}, function (isExecuted) {
+            console.log("plane");
+            console.log(plane);
             //getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
             getPlaneParkingPair();
             console.log("parking assigné & front end updaté !");
@@ -143,9 +145,15 @@ $(document).ready(function () {
     {
         let spawn = "C1";//plane.waypoint;
         let despawn = "05";//parking.runway;
-        getPathLanding(spawn, parking.idParking, planeMvt)
+        $.when(getPathLanding(spawn, "P3"),//parking.idParking)
+        getPathDeparture("P3", "05")).done(function(pathLand, pathDep)
+        {
+            console.log(pathLand);
+            console.log(pathDep);
+        });
 
     }
+    getFullPlanePath("a","a");
     /* fin mouvement et obtention coordonnes avion */
 
     /* fin fonctions */
