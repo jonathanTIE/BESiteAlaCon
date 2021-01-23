@@ -213,8 +213,75 @@ function changeCouleurParking (idParking, newCouleur, listeLayerParking)
     //     [139.82198, 35.54049],
     //     [139.84302, 35.55940]];
 
-function deplacerAvion(routeArrivee)
+function deplacerAvion(routeArrivee, routeDepart)
 {
+
+        var listeAvion = [];
+        $.each(routeArrivee, function (i, avion) {
+            let nomMarker = avion.immatAvion;
+            let echelle = 0.03;
+
+
+            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
+
+
+
+            let Avion3 = listeAvion[2];
+
+
+            $('button#approach').on('click', function () { // click sur bouton "en route"
+                let stepMarker = 100;
+                map.addLayer(listeAvion[0]);
+                let routeArr = new ol.geom.LineString(routeArrivee);
+                var callb = function () { // function de callback
+                    /*map.removeLayer(Avion3); // suppression du layer Homme Décollage/Atterrissage
+                     insertFlightPlan(3);*/
+                };
+
+                /*var callb = function () { // function de callback
+                    map.removeLayer(HomPark); // suppression du layer Homme Parking
+                    insertRepasBDD(2);
+                    let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
+                    move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
+                };
+                */
+                move_marker(listeAvion[0], routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
+            });
+
+        });
+
+        /*Avion Départ*/
+
+
+        $.each(routeDepart, function (i, avion) {
+            let nomMarker = avion.immatAvion;
+            let echelle = 0.03;
+
+
+            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
+
+
+
+            let Avion3 = listeAvion[2];
+
+
+            $('button#depart').on('click', function () { // click sur bouton "en route"
+                let stepMarker = 100;
+                map.addLayer(listeAvion[0]);
+                let routeDep = new ol.geom.LineString(routeDepart);
+                var callb1 = function () { // function de callback
+                };
+
+                var callb = function () { // function de callback
+                    map.removeLayer(listeAvion[i]); // suppression du layer de l'avion
+                };
+                move_marker(listeAvion[0], routeDep, stepMarker, callb);//déplacement de l'avion hors du champ de vision donc disparition
+            });
+
+        });
+
+
+
 
 }
 

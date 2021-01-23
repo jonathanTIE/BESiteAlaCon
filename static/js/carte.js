@@ -426,7 +426,8 @@ $(document).ready(function () {
 
         let dataC = donnees.map(function (e)
         {
-            return e.y
+            alert((e.y))
+            return (14-e.y)/14
         });
 
 
