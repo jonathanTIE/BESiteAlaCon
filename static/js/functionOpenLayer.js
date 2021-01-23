@@ -213,74 +213,35 @@ function changeCouleurParking (idParking, newCouleur, listeLayerParking)
     //     [139.82198, 35.54049],
     //     [139.84302, 35.55940]];
 
-function deplacerAvion(routeArrivee, routeDepart)
+function deplacerAvion(routeArrivee, routeDepart,immatAvion,images)
 {
-
-        var listeAvion = [];
-        $.each(routeArrivee, function (i, avion) {
-            let nomMarker = avion.immatAvion;
-            let echelle = 0.03;
+//Avion Approche
+        let nomMarker = immatAvion;
+        let echelle = 0.03;
 
 
-            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
+        var AjustAvion = draw_marker(nomMarker, 139.84302, 35.55940, images, echelle);
 
 
+        // let Avion3 = listeAvion[2];
 
-            // let Avion3 = listeAvion[2];
+        let stepMarker = 100;
+        map.addLayer(AjustAvion);
+        let routeArr = new ol.geom.LineString(routeArrivee);
+        var callb = function () { // function de callback
+        };
 
+        move_marker(AjustAvion, routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
 
-            $('button#approach').on('click', function () { // click sur bouton "en route"
-                let stepMarker = 100;
-                map.addLayer(listeAvion[0]);
-                let routeArr = new ol.geom.LineString(routeArrivee);
-                var callb = function () { // function de callback
-                    /*map.removeLayer(Avion3); // suppression du layer Homme Décollage/Atterrissage
-                     insertFlightPlan(3);*/
-                };
+        setTimeout()
 
-                /*var callb = function () { // function de callback
-                    map.removeLayer(HomPark); // suppression du layer Homme Parking
-                    insertRepasBDD(2);
-                    let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
-                    move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
-                };
-                */
-                move_marker(listeAvion[0], routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
-            });
+        map.addLayer(AjustAvion);
+        let routeDep = new ol.geom.LineString(routeDepart);
 
-        });
-
-        /*Avion Départ*/
-
-
-        $.each(routeDepart, function (i, avion) {
-            let nomMarker = avion.immatAvion;
-            let echelle = 0.03;
-
-
-            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
-
-
-
-            // let Avion3 = listeAvion[2];
-
-
-            $('button#depart').on('click', function () { // click sur bouton "en route"
-                let stepMarker = 100;
-                map.addLayer(listeAvion[0]);
-                let routeDep = new ol.geom.LineString(routeDepart);
-                var callb1 = function () { // function de callback
-                };
-
-                var callb = function () { // function de callback
-                    map.removeLayer(listeAvion[i]); // suppression du layer de l'avion
-                };
-                move_marker(listeAvion[0], routeDep, stepMarker, callb);//déplacement de l'avion hors du champ de vision donc disparition
-            });
-
-        });
-
-
+        var callb2 = function () { // function de callback
+            map.removeLayer(AjustAvion); // suppression du layer de l'avion
+        };
+        move_marker(AjustAvion, routeDep, stepMarker, callb2);//déplacement de l'avion hors du champ de vision donc disparition
 
 
 }

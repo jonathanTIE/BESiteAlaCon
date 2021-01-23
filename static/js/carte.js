@@ -175,6 +175,7 @@ $(document).ready(function () {
     /*DEBUT Parking*/
 
     $.post("/getParking", "", function (dataP) {
+        console.log(dataP);
         var couleurOcc = "#D9521A"
         var rotation = 0.0
         var listeLayerParking = [];
