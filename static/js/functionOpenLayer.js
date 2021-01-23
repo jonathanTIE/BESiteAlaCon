@@ -213,8 +213,36 @@ function changeCouleurParking (idParking, newCouleur, listeLayerParking)
     //     [139.82198, 35.54049],
     //     [139.84302, 35.55940]];
 
-function deplacerAvion(routeArrivee)
+function deplacerAvion(routeArrivee, routeDepart,immatAvion,images)
 {
+//Avion Approche
+        let nomMarker = immatAvion;
+        let echelle = 0.03;
+
+
+        var AjustAvion = draw_marker(nomMarker, 139.84302, 35.55940, images, echelle);
+
+
+        // let Avion3 = listeAvion[2];
+
+        let stepMarker = 100;
+        map.addLayer(AjustAvion);
+        let routeArr = new ol.geom.LineString(routeArrivee);
+        var callb = function () { // function de callback
+        };
+
+        move_marker(AjustAvion, routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
+
+        setTimeout()
+
+        map.addLayer(AjustAvion);
+        let routeDep = new ol.geom.LineString(routeDepart);
+
+        var callb2 = function () { // function de callback
+            map.removeLayer(AjustAvion); // suppression du layer de l'avion
+        };
+        move_marker(AjustAvion, routeDep, stepMarker, callb2);//déplacement de l'avion hors du champ de vision donc disparition
+
 
 }
 

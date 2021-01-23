@@ -87,25 +87,6 @@ def getAuthData(login,mdp):
 
     return res
 
-"""""
-def del_membreData(idUser):
-    try:
-        cnx = connexion()
-        cursor = cnx.cursor()
-        sql = "DELETE FROM membre WHERE idUser=%s"
-        param = (idUser,)
-        cursor.execute(sql, param)
-        cnx.commit()
-        msg = "suppOK"
-        close_bd(cursor,cnx)
-
-    except mysql.connector.Error as err:
-        msg = "Failed delete membre Data: {}".format(err)
-
-    return msg
-    
-"""
-
 
 
 def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
@@ -162,21 +143,6 @@ def update_membreData(champ,idUser,newvalue,hash=False):
 
     return msg
 
-
-def getLoginMdp(login,mdp):
-    try:
-        cnx = connexion()
-        cursor = cnx.cursor()
-        sql = "SELECT motPasse,login FROM identification WHERE login=%s and motPasse=%s"
-        param = (login, mdp)
-        cursor.execute(sql, param)
-        res = convert_dictionnary(cursor)
-        close_bd(cursor,cnx)
-
-    except mysql.connector.Error as err:
-        res = "Failed get verifAuth Data: {}".format(err)
-
-    return res
 
 """
 import smtplib, ssl
@@ -411,7 +377,7 @@ def get_ChartData():
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT DISTINCT(idParking) as x, COUNT(idParking) as y from vueparkinglibre GROUP BY idParking"
+        sql = "SELECT DISTINCT(idParking) as x, COUNT(idParking) as y from asso_avionparking GROUP BY idParking"
         cursor.execute(sql)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
