@@ -405,3 +405,19 @@ def get_gps_coordinates(path): #path should be an array
         res = "Failed to get gps coordinates for path : {}".format(err)
 
     return res
+
+def get_ChartData():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = "SELECT DISTINCT(idParking) as x, COUNT(idParking) as y from vueparkinglibre GROUP BY idParking"
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get chartData Data: {}".format(err)
+
+    return res
+
+# [{x:"Parking 1",y :3},{x:"Parking 2",y :3}]

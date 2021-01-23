@@ -169,7 +169,7 @@ function calculeAngle(long1,lat1, long2,lat2) {
      let y = Math.sin(Long) * Math.cos(lat2);
      let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)* Math.cos(lat2) * Math.cos(Long);
 
-     let brng = Math.atan2(y, x) - Math.PI/2 + Math.PI/16;
+     let brng = Math.atan2(y, x) + Math.PI/16;
 
     return brng;
 
@@ -190,6 +190,31 @@ function changeCouleurParking (idParking, newCouleur, listeLayerParking)
 }
     });
 
+
+}
+
+    // var routeArrivee = [
+    //     [139.84302, 35.55940],
+    //     [139.82198, 35.54049],
+    //     [139.80383, 35.52428],
+    //     [139.80143, 35.52579],
+    //     [139.80556, 35.52920],
+    //     [139.80679, 35.53006],
+    //     [139.80132, 35.53793],
+    //     [139.79304, 35.54988]];
+    //
+    // var routeDepart = [
+    //     [139.79304, 35.54988],
+    //     [139.80132, 35.53793],
+    //     [139.80679, 35.53006],
+    //     [139.80556, 35.52920],
+    //     [139.80143, 35.52579],
+    //     [139.80383, 35.52428],
+    //     [139.82198, 35.54049],
+    //     [139.84302, 35.55940]];
+
+function deplacerAvion(routeArrivee)
+{
 
 }
 

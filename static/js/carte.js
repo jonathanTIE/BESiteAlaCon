@@ -170,67 +170,62 @@ $(document).ready(function () {
 
     /*
 
-        var listeLayerParking=[];
-        $.each(dataP,function (i,park) {
-            let xy = park.coordonnees.split(',');
-            let latitude = xy[0];
-            longitude = xy[1];
-            let nomParking = park.idParking;
-                 alert("2");
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurParking, rotation, map);
-        });
 
-    */
-
-
-    /*
-    // trajectoire vers l'homme Parking
-    let lineBleue=[
-        [1.4793492845952274, 43.56520767508311],
-        [1.4806045583782506, 43.56396382024834],
-        [1.4824928334706613, 43.56499000234101],
-        [1.4821709683980915, 43.56532428515708],
-        [1.4818169168182642, 43.5658218189366]];
-
-    // trajectoire vers l'homme Décollage/Atterrissae
-    let lineRouge=[
-        [1.4818169168182642, 43.5658218189366],
-        [1.4821709683980915, 43.56532428515708],
-        [1.4824928334706613, 43.56499000234101],
-        [1.4838983109542172, 43.56369172357968]];
-*/
-
-    //Affichage des avions
 
     /*DEBUT Parking*/
 
     $.post("/getParking", "", function (dataP) {
-        var couleur = "#66ffff"
+        var couleurOcc = "#D9521A"
         var rotation = 0.0
         var listeLayerParking = [];
-        $.each(dataP, function (i, park) {
+            $.each(dataP, function (i, park) {
             let xy = park.coordonnees.split(',');
             let latitude = xy[1];
             longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
             let nomParking = park.idParking;
-
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleur, rotation, map);
-            /*Ajout sur principe du pacman*/
+            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurOcc, rotation, map);
             map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+
+            $.post("/getParkingLibre", {qtPark: 3, category:'C'}, function (dataPF)
+                {
+                        changeCouleurParking(nomParking,"#0FD757",listeLayerParking) //Parking Free Classe C/B/A
+                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                }, 'json')
+
+            $.post("/getParkingLibre", {qtPark: 3, category:'B'}, function (dataPF)
+                {
+                        changeCouleurParking(nomParking,"#0FD7EB",listeLayerParking) //Parking Free Classe B/A
+                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                }, 'json')
+
+            $.post("/getParkingLibre", {qtPark: 3, category:'A'}, function (dataPF)
+                {
+                        changeCouleurParking(nomParking,"#F9F539",listeLayerParking) //Parking Free Classe A
+                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                }, 'json')
+
             listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
 
 
             $('button').on('click', function () { // click sur bouton "en route"
                 let stepMarker = 100;
             });
-
-
         });
 
     }, 'json');
 
 
+
+        // var couleurFreeC= "#0FD757" -C
+        // var couleurFreeB= "#0FD7EB" -B
+        // var couleurFreeA= "#F9F539" -A
+
+
+
+
     /*FIN Parking*/
+
+
 
     /* DEBUT Waypoint */
 
@@ -284,39 +279,36 @@ $(document).ready(function () {
 
     /* DEBUT Avion */
 
+
+    /*Avion Arrivée*/
+
     var routeArrivee = [
         [139.84302, 35.55940],
+        [139.82198, 35.54049],
         [139.80383, 35.52428],
         [139.80143, 35.52579],
+        [139.80556, 35.52920],
         [139.80679, 35.53006],
         [139.80132, 35.53793],
         [139.79304, 35.54988]];
 
-
     $.post("/getPlane", "", function (dataA) {
 
-        var rotation = 0.0
         var listeAvion = [];
         $.each(dataA, function (i, avion) {
-            let nomMarker = "FSEXE";
-            // let xy = avion.coordonnees.split(',');
+            let nomMarker = avion.immatAvion;
             let echelle = 0.03;
-            // let latitude = xy[1]; longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
 
 
             listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
-            // map.addLayer(listeAvion[i]); // affichage sur la carte des markers
-            //alert(calculeAngle(0, 139.84302, 0, 35.55940));
-            listeAvion[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
 
 
-            /*let Avion2=listeAvion[1];*/
+
             let Avion3 = listeAvion[2];
 
 
-            $('button#depart').on('click', function () { // click sur bouton "en route"
+            $('button#approach').on('click', function () { // click sur bouton "en route"
                 let stepMarker = 100;
-                alert(listeAvion);
                 map.addLayer(listeAvion[0]);
                 let routeArr = new ol.geom.LineString(routeArrivee);
                 var callb = function () { // function de callback
@@ -337,6 +329,49 @@ $(document).ready(function () {
         });
     }, 'json');
 
+        /*Avion Départ*/
+
+
+    var routeDepart = [
+        [139.79304, 35.54988],
+        [139.80132, 35.53793],
+        [139.80679, 35.53006],
+        [139.80556, 35.52920],
+        [139.80143, 35.52579],
+        [139.80383, 35.52428],
+        [139.82198, 35.54049],
+        [139.84302, 35.55940]];
+
+    $.post("/getPlane", "", function (dataA) {
+
+        var listeAvion = [];
+        $.each(dataA, function (i, avion) {
+            let nomMarker = avion.immatAvion;
+            let echelle = 0.03;
+
+
+            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
+
+
+
+            let Avion3 = listeAvion[2];
+
+
+            $('button#depart').on('click', function () { // click sur bouton "en route"
+                let stepMarker = 100;
+                map.addLayer(listeAvion[0]);
+                let routeDep = new ol.geom.LineString(routeDepart);
+                var callb1 = function () { // function de callback
+                };
+
+                var callb = function () { // function de callback
+                    map.removeLayer(listeAvion[i]); // suppression du layer de l'avion
+                };
+                move_marker(listeAvion[0], routeDep, stepMarker, callb);//déplacement de l'avion hors du champ de vision donc disparition
+            });
+
+        });
+    }, 'json');
 
     /* FIN Avion */
 
@@ -379,8 +414,94 @@ $(document).ready(function () {
     }
 
 
+
+
+    /* Graphique Statistiques*/
+    $.post('/getChart',{},function(donnees)
+    {
+        let labelsC = donnees.map(function (e)
+        {
+            return "Parking"+e.x
+        });
+
+        let dataC = donnees.map(function (e)
+        {
+            return e.y
+        });
+
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labelsC, //dataC.label (x)
+                datasets: [{
+                    label: "Taux d'occupation des parkings",
+                    data: dataC, //dataC.data (y)
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    },'json');
+
+
+
 });
 
 
 /*alert(getAvion())*/
 
+/*
+Parcours test::
+Parking :
+    P3
+Parking Nord 3       [139.78786, 35.55411],
+Wayppint proche :
+T1 :
+Prévoir un waypoint en plus pour pour la sorti des parkings. Coordonnées possibles :
+[35.5545813706495, 139.79057567546323] devant le point T1
+[35.552780402431665, 139.7919959993632] devant le point T2
+[35.5509169303004, 139.7933907318415] devant le point T3
+
+[35.54766161885484, 139.79555994293432]
+[35.54653828179949, 139.7929574565983]
+
+Taxiway :
+A4 : [139.80004, 35.53732]
+A5 : [139.80556, 35.52920]
+A6 : [139.80143, 35.52579]
+
+
+Piste de décollage :
+DEP1 : [139.80376, 35.52421]
+
+Circuit de départ :
+DEP 2 : [139.84302, 35.55940]
+
+
+ */

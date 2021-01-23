@@ -1,5 +1,78 @@
 {% extends 'layout.html' %}
 
 {% block title_2 %}
-    Statistiques
+    {% if session.idUser %}
+    <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
+    {% endif %}
+    <h2>Statistique</h2>
+
+
+
+    <div class="row">
+        <div class="col-8">
+            <canvas id="myChart" ></canvas>
+            <script>
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: "Taux d'occupation de chaque parking",
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+            </script>
+
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}
+
+
+{% block CSSlink %}
+
+<link rel="stylesheet" href="../static/library/openlayers_v6.4.3/ol.css" />
+<link rel="stylesheet" href="../static/library/Chart.js-2.9.4/dist/Chart.css" />
+
+{% endblock %}
+
+
+{% block JSscript %}
+<script type="text/javascript" src="../static/library/openlayers_v6.4.3/ol.js"></script>
+<script type="text/javascript" src="../static/js/functionOpenLayer.js"></script>
+<script type="text/javascript" src="../static/js/carte.js"></script>
+<script src="../static/js/functionOpenLayer.js"></script>
+<script src="../static/library/Chart.js-2.9.4/dist/Chart.js"></script>
 {% endblock %}

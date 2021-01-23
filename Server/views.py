@@ -116,3 +116,8 @@ def getParkingTerminal():
 def getGpsCoordsFromPath():
     data = db.get_gps_coordinates(request.form.getlist('path[]'))
     return jsonify(data)
+
+@app.route('/getChart',methods=['POST'])
+def getChart():
+    liste = db.get_ChartData()
+    return jsonify(liste)
