@@ -74,17 +74,7 @@ $(document).ready(function () {
         //.then(updateButtonFront(0));
     }
 
-    function assignParking(plane, parking) {
-        $.post("/assignerAvion", {plane: plane, parking: parking}, function (isExecuted) {
-            console.log("plane");
-            console.log(plane);
-            //getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
-            getPlaneParkingPair();
-            console.log("parking assigné & front end updaté !");
 
-
-        });
-    }
     /* fin interface affectation parking */
     /* debut mouvement et obtention coordonnes avion */
     function getPathCoords(path) //path is an array of waypoints in str form
@@ -141,19 +131,72 @@ $(document).ready(function () {
             },'json');
     });
     }
-    function getFullPlanePath(plane, parking)
+
+    function deplacerAvion(routeArrivee, routeDepart,immatAvion,images)
     {
-        let spawn = "C1";//plane.waypoint;
-        let despawn = "05";//parking.runway;
-        $.when(getPathLanding(spawn, "P3"),//parking.idParking)
-        getPathDeparture("P3", "05")).done(function(pathLand, pathDep)
-        {
-            console.log(pathLand);
-            console.log(pathDep);
-        });
+    //Avion Approche
+        let nomMarker = immatAvion;
+        let echelle = 0.03;
+
+
+        var AjustAvion = draw_marker(nomMarker, 139.84302, 35.55940, images, echelle);
+
+
+        // let Avion3 = listeAvion[2];
+
+        let stepMarker = 100;
+        map.addLayer(AjustAvion);
+        let routeArr = new ol.geom.LineString(routeArrivee);
+        var callb = function () { // function de callback
+        };
+
+        move_marker(AjustAvion, routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
+
+        setTimeout(
+            function()
+            {
+                let routeDep = new ol.geom.LineString(routeDepart);
+                var callb2 = function () { // function de callback
+                    map.removeLayer(AjustAvion); // suppression du layer de l'avion
+                };
+            move_marker(AjustAvion, routeDep, stepMarker, callb2);//déplacement de l'avion hors du champ de vision donc disparition
+
+            }, 10000);
+
+
 
     }
-    getFullPlanePath("a","a");
+
+
+    async function getPlanePic (plane) //TODO : plane obj or plane id
+    {
+        console.log("a implementer ");
+        return new Promise(function(resolve, reject) {
+            resolve("NOT IMPLEMENTED PLANE IMAGE");
+        });
+    }
+    async function assignParking(planeId, parking) {
+        $.post("/assignerAvion", {plane: planeId, parking: parking}, function (planeInfo) {
+            let spawn = "C1";//plane.waypoint;
+            let despawn = "05";//parking.runway;
+
+            $.when(getPathLanding(spawn, "P3"),//parking.idParking)
+            getPathDeparture("P3", "05"),
+            getPlanePic(planeId))
+                .done(function(pathLand, pathDep, planePic)
+                {
+                    console.log(pathLand);
+                    console.log(pathDep);
+                    planePic="Avion_1.png";
+                    console.log(planePic);
+                    //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
+                    deplacerAvion(pathLand, pathDep, planeId, planePic);
+                });
+                //getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
+                getPlaneParkingPair();
+                console.log("parking assigné & front end updaté !");
+        });
+    }
     /* fin mouvement et obtention coordonnes avion */
 
     /* fin fonctions */
