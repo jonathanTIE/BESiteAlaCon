@@ -314,6 +314,7 @@ def get_plane_id(planeImmat):
     except mysql.connector.Error as err:
         res = "Failed get plane ID: {}".format(err)
 
+
     return res
 
 def get_plane_cat(planeImmat):

@@ -76,8 +76,9 @@ $(document).ready(function () {
 
     function assignParking(plane, parking) {
         $.post("/assignerAvion", {plane: plane, parking: parking}, function (isExecuted) {
-            getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
+            //getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
             getPlaneParkingPair();
+            console.log("parking assigné & front end updaté !");
 
 
         });
@@ -134,12 +135,14 @@ $(document).ready(function () {
             }, 'json')
         },'json');
     }
-
-    function planeMovement() //cycle complet visuellement
+    function getFullPlanePath(plane, parking)
     {
-        /* TODO */
-    }
+        let spawn = "C1";//plane.waypoint;
+        let despawn = "05";//parking.runway;
+        getPathLanding(spawn, parking.idParking, planeMvt)
 
+    }
+    function planeMvt(routeDepart, routeArrivee)
     /* fin mouvement et obtention coordonnes avion */
 
     /* fin fonctions */
@@ -189,19 +192,19 @@ $(document).ready(function () {
             $.post("/getParkingLibre", {qtPark: 3, category:'C'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#0FD757",listeLayerParking) //Parking Free Classe C/B/A
-                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                        //map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
                 }, 'json')
 
             $.post("/getParkingLibre", {qtPark: 3, category:'B'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#0FD7EB",listeLayerParking) //Parking Free Classe B/A
-                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                        //map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
                 }, 'json')
 
             $.post("/getParkingLibre", {qtPark: 3, category:'A'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#F9F539",listeLayerParking) //Parking Free Classe A
-                        map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                        //map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
                 }, 'json')
 
             listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
@@ -322,6 +325,8 @@ $(document).ready(function () {
                     let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
                     move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
                 };
+                //fonction qui execute l'arrivée(fonctionDeSupression)
+
                 */
                 move_marker(listeAvion[0], routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
             });
@@ -345,8 +350,11 @@ $(document).ready(function () {
     $.post("/getPlane", "", function (dataA) {
 
         var listeAvion = [];
+        console.log("get plane");
+        console.log(dataA);
         $.each(dataA, function (i, avion) {
             let nomMarker = avion.immatAvion;
+
             let echelle = 0.03;
 
 
