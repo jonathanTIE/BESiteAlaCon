@@ -387,4 +387,25 @@ def get_ChartData():
 
     return res
 
+def set_departure_date_to_now(planeId):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = """
+        UPDATE asso_avionparking
+        SET dateDepart = NOW()
+        WHERE idAvion = %s;
+        """
+        params = (planeId, )
+        cursor.execute(sql, params)
+        cnx.commit()
+        res = "update in asso_avionParking executed"
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed update to Parking  {}".format(err)
+
+    return res
+
+
 # [{x:"Parking 1",y :3},{x:"Parking 2",y :3}]

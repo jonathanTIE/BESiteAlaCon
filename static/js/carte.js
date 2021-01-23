@@ -6,7 +6,6 @@ $(document).ready(function () {
     function updateParkingSolutionFront() {
         var parkings = [];
         var category = $("#plane").attr("categorie");
-        console.log(category);
         $.post("/getParkingLibre", {qtPark: 3, category:category}, function (data) {
             $.each(data, function (i, park) {
                 parkings[i] = park.idParking;
@@ -42,7 +41,6 @@ $(document).ready(function () {
             {
                 $("#plane").text(planes[0][1])
                     .attr('categorie', planes[0][2]);
-                   console.log("fin update category");
             } else {
                 $("#plane").text("PLUS D'AVION !");
             }
@@ -58,7 +56,6 @@ $(document).ready(function () {
     }
 
     function updateButtonFront() {
-        console.log(parseInt($("#plane").attr("nbParkings"),10));
         if (parseInt($("#plane").attr("nbParkings"),10) === 0) {
             $('#solution-button').text("Recalculer");
         } else {
@@ -74,9 +71,9 @@ $(document).ready(function () {
         //.then(updateButtonFront(0));
     }
 
-
     /* fin interface affectation parking */
     /* debut mouvement et obtention coordonnes avion */
+
     function getPathCoords(path) //path is an array of waypoints in str form
     {
       return new Promise(function(resolve, reject) {
@@ -132,7 +129,12 @@ $(document).ready(function () {
     });
     }
 
-    function deplacerAvion(routeArrivee, routeDepart,immatAvion,images)
+    function updateDepartureTime(planeImmat)
+    {
+        $.post("/departAvion", {planeImmat:planeImmat}, function (data) {
+            },'json');
+    }
+    function deplacerAvion(routeArrivee, routeDepart,immatAvion,images, cbk= function(){})
     {
     //Avion Approche
         let nomMarker = immatAvion;
@@ -160,7 +162,7 @@ $(document).ready(function () {
                     map.removeLayer(AjustAvion); // suppression du layer de l'avion
                 };
             move_marker(AjustAvion, routeDep, stepMarker, callb2);//déplacement de l'avion hors du champ de vision donc disparition
-
+            cbk(immatAvion)
             }, 10000);
 
 
@@ -185,12 +187,13 @@ $(document).ready(function () {
             getPlanePic(planeId))
                 .done(function(pathLand, pathDep, planePic)
                 {
+                    console.log(planeId);
                     console.log(pathLand);
                     console.log(pathDep);
                     planePic="Avion_1.png";
                     console.log(planePic);
                     //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
-                    deplacerAvion(pathLand, pathDep, planeId, planePic);
+                    deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);
                 });
                 //getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
                 getPlaneParkingPair();

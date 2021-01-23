@@ -86,6 +86,11 @@ def assignPlane():
     ids = form.select_parking_with_session(request)
     return db.set_parking_choice(*ids)
 
+@app.route("/departAvion", methods=['POST']) #take plane immatriculation as input
+def departurePlane():
+    idAvion = int(db.get_plane_id(request.form['planeImmat'])['idAvion'])
+    return db.set_departure_date_to_now(idAvion)
+
 @app.route("/supprimerAssociationsAvions", methods=['POST'])
 def deletePlanes():
     print(db.reset_planes())
