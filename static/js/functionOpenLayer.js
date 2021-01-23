@@ -226,7 +226,7 @@ function deplacerAvion(routeArrivee, routeDepart)
 
 
 
-            let Avion3 = listeAvion[2];
+            // let Avion3 = listeAvion[2];
 
 
             $('button#approach').on('click', function () { // click sur bouton "en route"
@@ -262,7 +262,7 @@ function deplacerAvion(routeArrivee, routeDepart)
 
 
 
-            let Avion3 = listeAvion[2];
+            // let Avion3 = listeAvion[2];
 
 
             $('button#depart').on('click', function () { // click sur bouton "en route"
