@@ -85,8 +85,9 @@ $(document).ready(function () {
     }
     /* fin interface affectation parking */
     /* debut mouvement et obtention coordonnes avion */
-    function getPathCoords(path, callback) //path is an array of waypoints in str form
+    function getPathCoords(path) //path is an array of waypoints in str form
     {
+      return new Promise(function(resolve, reject) {
         let coords = [];
         $.post("/getCoordsGPS", {'path':path}, function (data) {
             $.each(data, function (i, item) {
@@ -96,44 +97,47 @@ $(document).ready(function () {
                     })
                 );
             });
-            
-        }, 'json').then(function() {
-            console.log(coords);
-            callback(coords);
-        });
+            resolve(coords)
+        },'json');
+    });
     }
 
     function getPathLanding(waypoint="C1", parking="P1", callback=function(){})
     {
-        $.post("/getPathWaypoints", {waypoint:waypoint}, function (data) {
-            let pathToTerminal = data.Path;
-            let terminalWaypoint = "erreur SQL";
+        return new Promise(function(resolve, reject) {
+            $.post("/getPathWaypoints", {waypoint: waypoint}, function (data) {
+                let pathToTerminal = data.Path;
+                let terminalWaypoint = "erreur SQL";
 
-            $.post("/getParkingTerminalWaypoint", {parking: parking}, function (data) {
-                terminalWaypoint = data.waypointProche;
-                let pathStr = waypoint + "-" + pathToTerminal + "-" + terminalWaypoint + "-" + parking; //resultat DB + parking waypoint + parking
-                path = pathStr.split("-");
-                getPathCoords(path, callback);
-            }, 'json')
-        },'json');
+                $.post("/getParkingTerminalWaypoint", {parking: parking}, async function (data) {
+                    terminalWaypoint = data.waypointProche;
+                    let pathStr = waypoint + "-" + pathToTerminal + "-" + terminalWaypoint + "-" + parking; //resultat DB + parking waypoint + parking
+                    path = pathStr.split("-");
+                    let coords = await getPathCoords(path);
+                    resolve(coords);
+                }, 'json')
+            }, 'json');
 
-
+        });
     }
-    //getPathLanding("C1", "P1", alert);
 
-    function getPathDeparture(parking, runway=NaN, callback=function(){})
+
+    function getPathDeparture(parking, runway=NaN)
     {
-        $.post("/getPathWaypoints", {waypoint:runway}, function (data) {
-            let pathToRunway = data.Path;
-            let terminalWaypoint = "erreur SQL";
+        return new Promise(function(resolve, reject) {
+            $.post("/getPathWaypoints", {waypoint:runway}, function (data) {
+                let pathToRunway = data.Path;
+                let terminalWaypoint = "erreur SQL";
 
-            $.post("/getParkingTerminalWaypoint", {parking: parking}, function (data) {
-                terminalWaypoint = data.waypointProche;
-                let pathStr = parking + "-" + terminalWaypoint + "-" + pathToRunway; //resultat DB + parking waypoint + parking
-                path = pathStr.split("-");
-                getPathCoords(path, callback);
-            }, 'json')
-        },'json');
+                $.post("/getParkingTerminalWaypoint", {parking: parking}, async function (data) {
+                    terminalWaypoint = data.waypointProche;
+                    let pathStr = parking + "-" + terminalWaypoint + "-" + pathToRunway; //resultat DB + parking waypoint + parking
+                    path = pathStr.split("-");
+                    let coords = await getPathCoords(path);
+                    resolve(coords);
+                }, 'json')
+            },'json');
+    });
     }
     function getFullPlanePath(plane, parking)
     {
@@ -142,7 +146,6 @@ $(document).ready(function () {
         getPathLanding(spawn, parking.idParking, planeMvt)
 
     }
-    function planeMvt(routeDepart, routeArrivee)
     /* fin mouvement et obtention coordonnes avion */
 
     /* fin fonctions */
