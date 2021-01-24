@@ -240,8 +240,6 @@ $(document).ready(function () {
     /* fin fonctions */
 
 
-
-
     /*DEBUT Parking*/
 
     $.post("/getParking", "", function (dataP) {
@@ -250,40 +248,56 @@ $(document).ready(function () {
         var rotation = 0.0
         var listeLayerParking = [];
             $.each(dataP, function (i, park) {
-            let xy = park.coordonnees.split(',');
-            let latitude = xy[1];
-            longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
-            let nomParking = park.idParking;
-            listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurOcc, rotation, map);
-            map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
-
-            $.post("/getParkingLibre", {qtPark: 3, category:'C'}, function (dataPF)
-                {
-                        changeCouleurParking(nomParking,"#0FD757",listeLayerParking) //Parking Free Classe C/B/A
-                        map.addLayer(listeLayerParking[i]);
-                }, 'json')
-
-            $.post("/getParkingLibre", {qtPark: 3, category:'B'}, function (dataPF)
-                {
-                        changeCouleurParking(nomParking,"#0FD7EB",listeLayerParking) //Parking Free Classe B/A
-                        map.addLayer(listeLayerParking[i]);
-                }, 'json')
-
-            $.post("/getParkingLibre", {qtPark: 3, category:'A'}, function (dataPF)
-                {
-                        changeCouleurParking(nomParking,"#F9F539",listeLayerParking) //Parking Free Classe A
-                        map.addLayer(listeLayerParking[i]);
-                }, 'json')
-
-            listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
+                let xy = park.coordonnees.split(',');
+                let latitude = xy[1];
+                longitude = xy[0]; /*inversion parce qu'on est con sur la base de données*/
+                let nomParking = park.idParking;
+                listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurOcc, rotation, map);
+                map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
 
 
-            $('button').on('click', function () { // click sur bouton "en route"
-                let stepMarker = 100;
+                function OrderParkingC_B_A() {
+
+                    $.post("/getParkingLibre", {qtPark: 3, category: 'C'}, function (dataAF) {
+                        let nomParking = dataAF.idParking;
+                        console.log(dataAF);
+                        $.each(dataAF, function () {
+                            console.log(dataAF);
+                            changeCouleurParking(nomParking, "#0FD757", listeLayerParking); //Parking Free Classe C/B/A
+                        });
+                        OrderParkingB_A();
+                        }, 'json');
+                }
+
+                function OrderParkingB_A() {
+
+                    $.post("/getParkingLibre", {qtPark: 3, category: 'B'}, function (dataPF) {
+                        let nomParking = dataPF.idParking;
+                        changeCouleurParking(nomParking, "#0FD7EB", listeLayerParking); //Parking Free Classe B/A
+                    OrderParkingA();
+                    }, 'json');
+                }
+
+                function OrderParkingA() {
+
+                    $.post("/getParkingLibre", {qtPark: 3, category: 'A'}, function (dataPF) {
+                        let nomParking = dataPF.idParking;
+                        changeCouleurParking(nomParking, "#F9F539", listeLayerParking);//Parking Free Classe A
+                    }, 'json');
+                    }
+
+                OrderParkingC_B_A();
+                    listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
+
+
+                    $('button').on('click', function () { // click sur bouton "en route"
+                        let stepMarker = 100;
+                    });
             });
-        });
-
     }, 'json');
+
+
+
 
 
 
