@@ -207,8 +207,7 @@ $(document).ready(function () {
     {
         return new Promise(function(resolve, reject) {
             $.post("/getPlaneData", {immat: planeID}, function (planeInfo) {
-                console.log(planeInfo);
-                resolve(console.log(planeInfo));
+                resolve(planeInfo['images']);
             });
         });
     }
