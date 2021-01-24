@@ -259,20 +259,18 @@ $(document).ready(function () {
 
             $.post("/getParkingLibre", {qtPark: 3, category:'C'}, function (dataPF)
                 {
+                    console.log(dataPF);
                         changeCouleurParking(nomParking,"#0FD757",listeLayerParking) //Parking Free Classe C/B/A
-                        map.addLayer(listeLayerParking[i]);
                 }, 'json')
 
             $.post("/getParkingLibre", {qtPark: 3, category:'B'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#0FD7EB",listeLayerParking) //Parking Free Classe B/A
-                        map.addLayer(listeLayerParking[i]);
                 }, 'json')
 
             $.post("/getParkingLibre", {qtPark: 3, category:'A'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#F9F539",listeLayerParking) //Parking Free Classe A
-                        map.addLayer(listeLayerParking[i]);
                 }, 'json')
 
             listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
