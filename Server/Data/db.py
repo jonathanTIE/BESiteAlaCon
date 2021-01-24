@@ -165,7 +165,7 @@ def get_parkingData():
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT * FROM parking"
+        sql = """SELECT * FROM parking"""
         cursor.execute(sql)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)

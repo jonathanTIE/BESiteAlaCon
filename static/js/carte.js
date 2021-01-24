@@ -1,6 +1,35 @@
 $(document).ready(function () {
 
+
+        //affiche de la carte dur l'Haneda
+
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                //source: new ol.source.OSM()
+                source: new ol.source.XYZ({
+                    attributions: ['Powered by Esri',
+                        'Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'],
+                    attributionsCollapsible: false,
+                    url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                    maxZoom: 23
+                })
+            })
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([139.78577, 35.54905]),
+            zoom: 13.5
+        })
+    });
+
+    map.set('name', 'mapName');
+
+
+
     /* debut fonctions */
+
+
     /* debut interface affectation parking */
 
     function updateParkingSolutionFront() {
@@ -72,6 +101,8 @@ $(document).ready(function () {
     }
 
     /* fin interface affectation parking */
+
+
     /* debut mouvement et obtention coordonnes avion */
 
     function getPathCoords(path) //path is an array of waypoints in str form
@@ -205,33 +236,9 @@ $(document).ready(function () {
     }
     /* fin mouvement et obtention coordonnes avion */
 
+
     /* fin fonctions */
 
-    //affiche de la carte dur l'Haneda
-    var map = new ol.Map({
-        target: 'map',
-        layers: [
-            new ol.layer.Tile({
-                //source: new ol.source.OSM()
-                source: new ol.source.XYZ({
-                    attributions: ['Powered by Esri',
-                        'Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'],
-                    attributionsCollapsible: false,
-                    url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                    maxZoom: 23
-                })
-            })
-        ],
-        view: new ol.View({
-            center: ol.proj.fromLonLat([139.78577, 35.54905]),
-            zoom: 13.5
-        })
-    });
-
-    map.set('name', 'mapName');
-
-
-    /*
 
 
 
@@ -253,19 +260,19 @@ $(document).ready(function () {
             $.post("/getParkingLibre", {qtPark: 3, category:'C'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#0FD757",listeLayerParking) //Parking Free Classe C/B/A
-                        //map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                        map.addLayer(listeLayerParking[i]);
                 }, 'json')
 
             $.post("/getParkingLibre", {qtPark: 3, category:'B'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#0FD7EB",listeLayerParking) //Parking Free Classe B/A
-                        //map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                        map.addLayer(listeLayerParking[i]);
                 }, 'json')
 
             $.post("/getParkingLibre", {qtPark: 3, category:'A'}, function (dataPF)
                 {
                         changeCouleurParking(nomParking,"#F9F539",listeLayerParking) //Parking Free Classe A
-                        //map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                        map.addLayer(listeLayerParking[i]);
                 }, 'json')
 
             listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
@@ -341,108 +348,7 @@ $(document).ready(function () {
 
     /* FIN Waypoint */
 
-    /* DEBUT Avion */
 
-
-    /*Avion Arrivée*/
-
-    var routeArrivee = [
-        [139.84302, 35.55940],
-        [139.82198, 35.54049],
-        [139.80383, 35.52428],
-        [139.80143, 35.52579],
-        [139.80556, 35.52920],
-        [139.80679, 35.53006],
-        [139.80132, 35.53793],
-        [139.79304, 35.54988]];
-
-    $.post("/getPlane", "", function (dataA) {
-
-        var listeAvion = [];
-        $.each(dataA, function (i, avion) {
-            let nomMarker = avion.immatAvion;
-            let echelle = 0.03;
-
-
-            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
-
-
-
-            let Avion3 = listeAvion[2];
-
-
-            $('button#approach').on('click', function () { // click sur bouton "en route"
-                let stepMarker = 100;
-                map.addLayer(listeAvion[0]);
-                let routeArr = new ol.geom.LineString(routeArrivee);
-                var callb = function () { // function de callback
-                    /*map.removeLayer(Avion3); // suppression du layer Homme Décollage/Atterrissage
-                     insertFlightPlan(3);*/
-                };
-
-                /*var callb = function () { // function de callback
-                    map.removeLayer(HomPark); // suppression du layer Homme Parking
-                    insertRepasBDD(2);
-                    let lineR = new ol.geom.LineString(lineRouge);  // formatage de la ligne
-                    move_marker(Avion1, lineR, stepMarker, callb1);  //déplacement de l'avion 1 vers parking
-                };
-                //fonction qui execute l'arrivée(fonctionDeSupression)
-
-                */
-                move_marker(listeAvion[0], routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
-            });
-
-        });
-    }, 'json');
-
-        /*Avion Départ*/
-
-
-    var routeDepart = [
-        [139.79304, 35.54988],
-        [139.80132, 35.53793],
-        [139.80679, 35.53006],
-        [139.80556, 35.52920],
-        [139.80143, 35.52579],
-        [139.80383, 35.52428],
-        [139.82198, 35.54049],
-        [139.84302, 35.55940]];
-
-    $.post("/getPlane", "", function (dataA) {
-
-        var listeAvion = [];
-        console.log("get plane");
-        console.log(dataA);
-        $.each(dataA, function (i, avion) {
-            let nomMarker = avion.immatAvion;
-
-            let echelle = 0.03;
-
-
-            listeAvion[i] = draw_marker(nomMarker, 139.84302, 35.55940, avion.images, echelle);
-
-
-
-            let Avion3 = listeAvion[2];
-
-
-            $('button#depart').on('click', function () { // click sur bouton "en route"
-                let stepMarker = 100;
-                map.addLayer(listeAvion[0]);
-                let routeDep = new ol.geom.LineString(routeDepart);
-                var callb1 = function () { // function de callback
-                };
-
-                var callb = function () { // function de callback
-                    map.removeLayer(listeAvion[i]); // suppression du layer de l'avion
-                };
-                move_marker(listeAvion[0], routeDep, stepMarker, callb);//déplacement de l'avion hors du champ de vision donc disparition
-            });
-
-        });
-    }, 'json');
-
-    /* FIN Avion */
 
 
     //tooltip sur chacun des layers
@@ -482,62 +388,6 @@ $(document).ready(function () {
 
     }
 
-
-
-
-    /* Graphique Statistiques*/
-    $.post('/getChart',{},function(donnees)
-    {
-        let labelsC = donnees.map(function (e)
-        {
-            return "Parking"+e.x
-        });
-
-        let dataC = donnees.map(function (e)
-        {
-            alert((e.y))
-            return (14-e.y)/14
-        });
-
-
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labelsC, //dataC.label (x)
-                datasets: [{
-                    label: "Taux d'occupation des parkings",
-                    data: dataC, //dataC.data (y)
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    },'json');
 
 
 
