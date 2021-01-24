@@ -8,7 +8,8 @@ $(document).ready(function () {
     {
         let labelsC = donnees.map(function (e)
         {
-            return "Parking"+e.x
+            alert(e.x)
+            return "Parking" + e.x
         });
 
         let dataC = donnees.map(function (e)
@@ -16,6 +17,19 @@ $(document).ready(function () {
             alert((e.y))
             return (14-e.y)/14
         });
+
+        let dataArr = donnees.map(function (e)
+        {
+            return (e.A)
+        });
+
+
+        let dataDep = donnees.map(function (e)
+        {
+            return (e.D)
+        });
+
+
 
 
         var ctx = document.getElementById('myChart').getContext('2d');
