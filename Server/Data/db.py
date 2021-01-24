@@ -290,7 +290,7 @@ def get_plane_data(planeImmat):
         sql = "SELECT * from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
         params = (planeImmat, )
         cursor.execute(sql, params)
-        res = convert_dictionnary(cursor)
+        res = convert_dictionnary(cursor)[0]
         close_bd(cursor,cnx)
 
     except mysql.connector.Error as err:
