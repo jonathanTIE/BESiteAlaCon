@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jan 24, 2021 at 03:28 PM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.10
+-- Hôte : 127.0.0.1:3306
+-- Généré le : Dim 24 jan. 2021 à 18:27
+-- Version du serveur :  10.4.14-MariaDB
+-- Version de PHP : 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `gsea19b_jonathan_corentin`
+-- Base de données : `gsea19b_jonathan_corentin`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `asso_avionparking`
+-- Structure de la table `asso_avionparking`
 --
 
 CREATE TABLE `asso_avionparking` (
@@ -37,17 +37,16 @@ CREATE TABLE `asso_avionparking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `asso_avionparking`
+-- Déchargement des données de la table `asso_avionparking`
 --
 
 INSERT INTO `asso_avionparking` (`idAsso`, `idAvion`, `idParking`, `dateArrivee`, `dateDepart`, `idUserValidation`) VALUES
-(51, 1, 'P3', '2021-01-24 15:13:16', NULL, 1),
-(52, 2, 'P4', '2021-01-24 15:13:58', NULL, 1);
+(55, 1, 'P4', '2021-01-24 16:47:23', '2021-01-24 16:47:38', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `asso_waypoint`
+-- Structure de la table `asso_waypoint`
 --
 
 CREATE TABLE `asso_waypoint` (
@@ -56,7 +55,7 @@ CREATE TABLE `asso_waypoint` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `asso_waypoint`
+-- Déchargement des données de la table `asso_waypoint`
 --
 
 INSERT INTO `asso_waypoint` (`WaypointBegin`, `Path`) VALUES
@@ -67,7 +66,7 @@ INSERT INTO `asso_waypoint` (`WaypointBegin`, `Path`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `avions`
+-- Structure de la table `avions`
 --
 
 CREATE TABLE `avions` (
@@ -80,17 +79,28 @@ CREATE TABLE `avions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `avions`
+-- Déchargement des données de la table `avions`
 --
 
 INSERT INTO `avions` (`idAvion`, `typeAvion`, `immatAvion`, `categorie`, `idCompagnie`, `images`) VALUES
 (1, 'A380', 'F-GAFT', 'A', 1, 'Avion_1.png'),
-(2, 'B787', 'JA0011', 'A', 2, 'Avion_2.png');
+(2, 'B777', 'HL7534', 'A', 8, 'Avion_5.png'),
+(3, 'TB-10', 'F-EVIL', 'C', 9, 'Avion_4.png'),
+(4, 'TB-20', 'F-GOOD', 'C', 9, 'Avion_4.png'),
+(5, 'PZL-104 Wilga', 'N123T', 'C', 9, 'Avion_4.png'),
+(6, 'B727', 'JA73NM', 'A', 2, 'Avion_7.png'),
+(7, 'B737', 'JA56AN', 'A', 7, 'Avion_7.png'),
+(8, 'Boeing 747 Supertanker', 'N470EV', 'B', 10, 'Avion_2.png'),
+(9, 'Douglas DC-10 Air Tanker', 'N17085', 'B', 11, 'Avion_6.png'),
+(10, 'Douglas DC-8', 'JA8003', 'A', 2, 'Avion_2.png'),
+(11, 'A300', 'JA8377', 'A', 6, 'Avion_6.png'),
+(12, 'NAMC YS-11', 'JAUNKW', 'A', 4, 'Avion_5.png'),
+(13, 'Lockheed L-1011 TriStar', 'JAUNKW', 'A', 4, 'Avion_3.png');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `compagnie`
+-- Structure de la table `compagnie`
 --
 
 CREATE TABLE `compagnie` (
@@ -99,17 +109,26 @@ CREATE TABLE `compagnie` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `compagnie`
+-- Déchargement des données de la table `compagnie`
 --
 
 INSERT INTO `compagnie` (`idCompagnie`, `nomCompagnie`) VALUES
 (1, 'Air France'),
-(2, 'Japan AIrlines');
+(2, 'Japan AIrlines'),
+(3, 'Philippine Air Lines	'),
+(4, 'All Nippon Airways'),
+(5, 'JASDF'),
+(6, 'Japan Air System'),
+(7, 'Skymark Airlines'),
+(8, 'Korean Air	'),
+(9, 'Vol de courses/plaisance'),
+(10, 'Evergreen International Airlines'),
+(11, '10 Tanker Air Carrier');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `identification`
+-- Structure de la table `identification`
 --
 
 CREATE TABLE `identification` (
@@ -124,7 +143,7 @@ CREATE TABLE `identification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `identification`
+-- Déchargement des données de la table `identification`
 --
 
 INSERT INTO `identification` (`idUser`, `nom`, `prenom`, `mail`, `login`, `motPasse`, `statut`, `newMdp`) VALUES
@@ -134,7 +153,7 @@ INSERT INTO `identification` (`idUser`, `nom`, `prenom`, `mail`, `login`, `motPa
 -- --------------------------------------------------------
 
 --
--- Table structure for table `parking`
+-- Structure de la table `parking`
 --
 
 CREATE TABLE `parking` (
@@ -146,7 +165,7 @@ CREATE TABLE `parking` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `parking`
+-- Déchargement des données de la table `parking`
 --
 
 INSERT INTO `parking` (`idParking`, `nomParking`, `categorie`, `coordonnees`, `waypointProche`) VALUES
@@ -168,8 +187,8 @@ INSERT INTO `parking` (`idParking`, `nomParking`, `categorie`, `coordonnees`, `w
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `vueavionlibre`
--- (See below for the actual view)
+-- Doublure de structure pour la vue `vueavionlibre`
+-- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vueavionlibre` (
 `idAvion` int(11)
@@ -181,8 +200,8 @@ CREATE TABLE `vueavionlibre` (
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `vueparkinglibre`
--- (See below for the actual view)
+-- Doublure de structure pour la vue `vueparkinglibre`
+-- (Voir ci-dessous la vue réelle)
 --
 CREATE TABLE `vueparkinglibre` (
 `idParking` varchar(5)
@@ -192,7 +211,7 @@ CREATE TABLE `vueparkinglibre` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `waypoint`
+-- Structure de la table `waypoint`
 --
 
 CREATE TABLE `waypoint` (
@@ -203,7 +222,7 @@ CREATE TABLE `waypoint` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `waypoint`
+-- Déchargement des données de la table `waypoint`
 --
 
 INSERT INTO `waypoint` (`idWaypoint`, `coordonnees`, `type`, `rang`) VALUES
@@ -225,7 +244,7 @@ INSERT INTO `waypoint` (`idWaypoint`, `coordonnees`, `type`, `rang`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure for view `vueavionlibre`
+-- Structure de la vue `vueavionlibre`
 --
 DROP TABLE IF EXISTS `vueavionlibre`;
 
@@ -234,18 +253,18 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
--- Structure for view `vueparkinglibre`
+-- Structure de la vue `vueparkinglibre`
 --
 DROP TABLE IF EXISTS `vueparkinglibre`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join `asso_avionparking` on(`parking`.`idParking` = `asso_avionparking`.`idParking`)) where `asso_avionparking`.`dateArrivee` is null ;
 
 --
--- Indexes for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `asso_avionparking`
+-- Index pour la table `asso_avionparking`
 --
 ALTER TABLE `asso_avionparking`
   ADD PRIMARY KEY (`idAsso`),
@@ -254,77 +273,77 @@ ALTER TABLE `asso_avionparking`
   ADD KEY `FKUser` (`idUserValidation`);
 
 --
--- Indexes for table `asso_waypoint`
+-- Index pour la table `asso_waypoint`
 --
 ALTER TABLE `asso_waypoint`
   ADD KEY `WaypointBegin` (`WaypointBegin`);
 
 --
--- Indexes for table `avions`
+-- Index pour la table `avions`
 --
 ALTER TABLE `avions`
   ADD PRIMARY KEY (`idAvion`),
   ADD KEY `FKCompagnie` (`idCompagnie`);
 
 --
--- Indexes for table `compagnie`
+-- Index pour la table `compagnie`
 --
 ALTER TABLE `compagnie`
   ADD PRIMARY KEY (`idCompagnie`);
 
 --
--- Indexes for table `identification`
+-- Index pour la table `identification`
 --
 ALTER TABLE `identification`
   ADD PRIMARY KEY (`idUser`);
 
 --
--- Indexes for table `parking`
+-- Index pour la table `parking`
 --
 ALTER TABLE `parking`
   ADD PRIMARY KEY (`idParking`),
   ADD KEY `FKwaypoint` (`waypointProche`);
 
 --
--- Indexes for table `waypoint`
+-- Index pour la table `waypoint`
 --
 ALTER TABLE `waypoint`
   ADD PRIMARY KEY (`idWaypoint`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT for table `asso_avionparking`
+-- AUTO_INCREMENT pour la table `asso_avionparking`
 --
 ALTER TABLE `asso_avionparking`
-  MODIFY `idAsso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `idAsso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
--- AUTO_INCREMENT for table `avions`
+-- AUTO_INCREMENT pour la table `avions`
 --
 ALTER TABLE `avions`
-  MODIFY `idAvion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idAvion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT for table `compagnie`
+-- AUTO_INCREMENT pour la table `compagnie`
 --
 ALTER TABLE `compagnie`
-  MODIFY `idCompagnie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idCompagnie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `identification`
+-- AUTO_INCREMENT pour la table `identification`
 --
 ALTER TABLE `identification`
   MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- Constraints for dumped tables
+-- Contraintes pour les tables déchargées
 --
 
 --
--- Constraints for table `asso_avionparking`
+-- Contraintes pour la table `asso_avionparking`
 --
 ALTER TABLE `asso_avionparking`
   ADD CONSTRAINT `FKAvion` FOREIGN KEY (`idAvion`) REFERENCES `avions` (`idAvion`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -332,13 +351,13 @@ ALTER TABLE `asso_avionparking`
   ADD CONSTRAINT `FKUser` FOREIGN KEY (`idUserValidation`) REFERENCES `identification` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `avions`
+-- Contraintes pour la table `avions`
 --
 ALTER TABLE `avions`
   ADD CONSTRAINT `FKCompagnie` FOREIGN KEY (`idCompagnie`) REFERENCES `compagnie` (`idCompagnie`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `parking`
+-- Contraintes pour la table `parking`
 --
 ALTER TABLE `parking`
   ADD CONSTRAINT `FKwaypoint` FOREIGN KEY (`waypointProche`) REFERENCES `waypoint` (`idWaypoint`) ON DELETE NO ACTION ON UPDATE NO ACTION;
