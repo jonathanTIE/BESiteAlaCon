@@ -15,7 +15,7 @@ $(document).ready(function () {
         let dataC = donnees.map(function (e)
         {
             alert((e.y))
-            return (14-e.y)/14
+            return (e.y)
         });
 
 

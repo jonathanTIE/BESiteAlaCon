@@ -4,9 +4,8 @@
     {% if session.idUser %}
     <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
     {% endif %}
-    <h2>Statistique</h2>
+    <h2>Statistiques</h2>
 
-    <form method="POST">
         <label for="start">Date d'entrée:</label>
 
         <input type="date" id="start" name="trip-start"
@@ -17,7 +16,6 @@
         <input type="date" id="end" name="trip-start"
                value="2018-07-22"
                min="2018-01-01" max="2018-12-31">
-    </form>
 
 
     <div class="row">
