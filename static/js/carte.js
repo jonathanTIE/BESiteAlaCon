@@ -78,6 +78,7 @@ $(document).ready(function () {
     {
       return new Promise(function(resolve, reject) {
         let coords = [];
+
         $.post("/getCoordsGPS", {'path':path}, function (data) {
             $.each(data, function (i, item) {
                 coords.push(
@@ -151,7 +152,8 @@ $(document).ready(function () {
         let routeArr = new ol.geom.LineString(routeArrivee);
         var callb = function () { // function de callback
         };
-
+        console.log("pre move maker");
+        console.log(AjustAvion);
         move_marker(AjustAvion, routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
 
         setTimeout(
@@ -163,18 +165,20 @@ $(document).ready(function () {
                 };
             move_marker(AjustAvion, routeDep, stepMarker, callb2);//déplacement de l'avion hors du champ de vision donc disparition
             cbk(immatAvion)
-            }, 10000);
+            }, 15000);
 
 
 
     }
 
 
-    async function getPlanePic (plane) //TODO : plane obj or plane id
+    async function getPlanePic (planeID) //TODO : plane obj or plane id
     {
-        console.log("a implementer ");
         return new Promise(function(resolve, reject) {
-            resolve("NOT IMPLEMENTED PLANE IMAGE");
+            $.post("/getPlaneData", {immat: planeID}, function (planeInfo) {
+                console.log(planeInfo);
+                resolve(console.log(planeInfo));
+            });
         });
     }
     async function assignParking(planeId, parking) {
@@ -190,7 +194,6 @@ $(document).ready(function () {
                     console.log(planeId);
                     console.log(pathLand);
                     console.log(pathDep);
-                    planePic="Avion_1.png";
                     console.log(planePic);
                     //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
                     deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);

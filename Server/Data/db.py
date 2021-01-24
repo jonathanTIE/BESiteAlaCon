@@ -283,14 +283,14 @@ def get_plane_id(planeImmat):
 
     return res
 
-def get_plane_cat(planeImmat):
+def get_plane_data(planeImmat):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT categorie from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        sql = "SELECT * from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
         params = (planeImmat, )
         cursor.execute(sql, params)
-        res = convert_dictionnary(cursor)[0]
+        res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
 
     except mysql.connector.Error as err:
@@ -349,7 +349,7 @@ def get_parking_terminal_waypoint(parking):
     return res
 
 def get_gps_coordinates(path): #path should be an array
-    pathOrderBy = ["`waypoint`.`idWaypoint`"] + path
+    pathOrderBy = ["`idWaypoint`"] + path
     pathOrderBy = tuple(pathOrderBy)
     path = tuple(path)
     try:
@@ -357,10 +357,13 @@ def get_gps_coordinates(path): #path should be an array
         cursor = cnx.cursor()
 
         sql = """
-        SELECT * from `waypoint`
-        WHERE `waypoint`.`idWaypoint` IN  {}
+        (SELECT `waypoint`.`idWaypoint` AS `idWaypoint`, `waypoint`.`coordonnees` from `waypoint`
+        WHERE `waypoint`.`idWaypoint` IN  {})
+        UNION
+        (SELECT `parking`.`idParking` AS `idWaypoint`, `parking`.`coordonnees` from `parking`
+        WHERE `parking`.`idParking` IN  {})
         ORDER BY FIELD{}
-        """.format(path, pathOrderBy)
+        """.format(path, path, pathOrderBy)
         sql = sql.replace("\'`", "`")
         sql = sql.replace("`\'", "`")
         cursor.execute(sql)
