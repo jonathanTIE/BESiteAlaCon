@@ -70,7 +70,7 @@ def getPlaneFree():
     data = db.get_plane_free()
     return jsonify(data)
 
-@app.route('/getParkingLibre', methods=['GET', 'POST'])
+@app.route('/getParkingLibre', methods=['POST'])
 def getParkingFree():
     data = form.get_free_park(request)
     return jsonify(data)

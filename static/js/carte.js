@@ -254,47 +254,44 @@ $(document).ready(function () {
                 let nomParking = park.idParking;
                 listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurOcc, rotation, map);
                 map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
+                listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
+            });
 
-
-                function OrderParkingC_B_A() {
-
-                    $.post("/getParkingLibre", {qtPark: 100, category: 'C'}, function (dataAF) {
-                        let nomParking = dataAF.idParking;
-                        console.log(dataAF);
-                        $.each(dataAF, function () {
-                            console.log(dataAF);
-                            changeCouleurParking(nomParking, "#0FD757", listeLayerParking); //Parking Free Classe C/B/A
-                        });
-                        OrderParkingB_A();
-                        }, 'json');
+            function OrderParkingA() {
+                $.post("/getParkingLibre", {qtPark: 100, category: 'A'}, function (dataAF) {
+                    console.log(dataAF);
+                    $.each(dataAF, function (i,park) {
+                        let nomParking = park.idParking;
+                        changeCouleurParking(nomParking, "#F9F539", listeLayerParking); //Parking Free Classe C/B/A
+                    });
+                    }, 'json');
                 }
 
-                function OrderParkingB_A() {
-
-                    $.post("/getParkingLibre", {qtPark: 100, category: 'B'}, function (dataPF) {
-                        let nomParking = dataPF.idParking;
-                        changeCouleurParking(nomParking, "#0FD7EB", listeLayerParking); //Parking Free Classe B/A
+            function OrderParkingB_A() {
+                $.post("/getParkingLibre", {qtPark: 100, category: 'B'}, function (dataAF) {
+                    console.log(dataAF);
+                    $.each(dataAF, function (i,park) {
+                        let nomParking = park.idParking;
+                        changeCouleurParking(nomParking, "#0FD7EB", listeLayerParking); //Parking Free Classe C/B/A
+                    });
                     OrderParkingA();
                     }, 'json');
-                }
+            }
 
-                function OrderParkingA() {
+            function OrderParkingC_B_A() {
 
-                    $.post("/getParkingLibre", {qtPark: 100, category: 'A'}, function (dataPF) {
-                        console.log(dataPF);
-                        let nomParking = dataPF.idParking;
-                        changeCouleurParking(nomParking, "#F9F539", listeLayerParking);//Parking Free Classe A
-                    }, 'json');
-                    }
-
-                OrderParkingC_B_A();
-                    listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
-
-
-                    $('button').on('click', function () { // click sur bouton "en route"
-                        let stepMarker = 100;
+                $.post("/getParkingLibre", {qtPark: 100, category: 'C'}, function (dataAF) {
+                    console.log(dataAF);
+                    $.each(dataAF, function (i,park) {
+                        let nomParking = park.idParking;
+                        changeCouleurParking(nomParking, "#0FD757", listeLayerParking); //Parking Free Classe C/B/A
                     });
-            });
+                    OrderParkingB_A();
+                    }, 'json');
+            }
+            OrderParkingC_B_A();
+
+
     }, 'json');
 
 
