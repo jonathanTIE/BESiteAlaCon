@@ -258,7 +258,7 @@ $(document).ready(function () {
 
                 function OrderParkingC_B_A() {
 
-                    $.post("/getParkingLibre", {qtPark: 3, category: 'C'}, function (dataAF) {
+                    $.post("/getParkingLibre", {qtPark: 100, category: 'C'}, function (dataAF) {
                         let nomParking = dataAF.idParking;
                         console.log(dataAF);
                         $.each(dataAF, function () {
@@ -271,7 +271,7 @@ $(document).ready(function () {
 
                 function OrderParkingB_A() {
 
-                    $.post("/getParkingLibre", {qtPark: 3, category: 'B'}, function (dataPF) {
+                    $.post("/getParkingLibre", {qtPark: 100, category: 'B'}, function (dataPF) {
                         let nomParking = dataPF.idParking;
                         changeCouleurParking(nomParking, "#0FD7EB", listeLayerParking); //Parking Free Classe B/A
                     OrderParkingA();
@@ -280,7 +280,8 @@ $(document).ready(function () {
 
                 function OrderParkingA() {
 
-                    $.post("/getParkingLibre", {qtPark: 3, category: 'A'}, function (dataPF) {
+                    $.post("/getParkingLibre", {qtPark: 100, category: 'A'}, function (dataPF) {
+                        console.log(dataPF);
                         let nomParking = dataPF.idParking;
                         changeCouleurParking(nomParking, "#F9F539", listeLayerParking);//Parking Free Classe A
                     }, 'json');
