@@ -18,17 +18,6 @@ $(document).ready(function () {
             return (14-e.y)/14
         });
 
-        let dataArr = donnees.map(function (e)
-        {
-            return (e.A)
-        });
-
-
-        let dataDep = donnees.map(function (e)
-        {
-            return (e.D)
-        });
-
 
 
 

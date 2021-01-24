@@ -33,7 +33,7 @@ def build():
     return redirect(url_for('create_account'))
 
 
-@app.route('/statistiques')
+@app.route('/statistiques', methods=['POST'])
 def stats():
     return render_template("statistiques.html")
 
