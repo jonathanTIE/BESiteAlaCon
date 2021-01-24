@@ -380,7 +380,8 @@ def get_ChartData():
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT DISTINCT(idParking) as x, COUNT(idParking) as y from asso_avionparking GROUP BY idParking"
+        sql = """SELECT DISTINCT(idParking) as x, COUNT(idAvion) as y,
+              dateArrivee as A,dateDepart as D from asso_avionparking GROUP BY idParking"""
         cursor.execute(sql)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
