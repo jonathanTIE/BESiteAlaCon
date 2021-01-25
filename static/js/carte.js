@@ -214,9 +214,10 @@ $(document).ready(function () {
 
     async function assignParking(planeId, parking) {
         $.post("/assignerAvion", {plane: planeId, parking: parking}, function (insertionStatus) {
-            let spawn =  "C1";//plane.waypoint; $("#approach").text() ||
-            let despawn = "05";//parking.runway;
-            console.log(spawn);
+            var runways = $("input[name='choix-piste']:checked").val().split("-");
+            let spawn =  runways[0];//plane.waypoint; $("#approach").text() ||
+            let despawn = runways[1];//parking.runway;
+            console.log
             $.when(getPathLanding(spawn, parking),//parking.idParking)
             getPathDeparture(parking, despawn),
             getPlanePic(planeId))
