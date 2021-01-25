@@ -3,7 +3,7 @@
 {% block title_2 %}
     {% if session.idUser %}
     <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
-    {% endif %}
+
     <h2>Vigie</h2>
     <form method="POST" action="/assignerAvion" id="formParkingChoice"></form>
     <table class="table table-striped table-bordered first">
@@ -62,7 +62,7 @@
         </div>
     </div>
 
-
+{% endif %}
 {% endblock %}
 
 

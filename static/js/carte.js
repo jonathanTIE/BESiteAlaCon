@@ -228,25 +228,22 @@ $(document).ready(function () {
                     console.log(planePic);
                     //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
                     deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);
+                    color_parkings();
                 });
-                //getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
+                //color_parkings();
+                //changeCouleurParking(parking, "#D9521A", map.getLayers());
                 getPlaneParkingPair();
                 console.log("parking assigné & front end updaté !");
         });
     }
     /* fin mouvement et obtention coordonnes avion */
 
-
+    var listeLayerParking = []; //global variable
     /* fin fonctions */
-
-
-    /*DEBUT Parking*/
-
     $.post("/getParking", "", function (dataP) {
         console.log(dataP);
         var couleurOcc = "#D9521A"
         var rotation = 0.0
-        var listeLayerParking = [];
             $.each(dataP, function (i, park) {
                 let xy = park.coordonnees.split(',');
                 let latitude = xy[1];
@@ -255,11 +252,14 @@ $(document).ready(function () {
                 listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurOcc, rotation, map);
                 map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
                 listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
-            });
+    });
+    }, 'json');
 
+    /*DEBUT Parking*/
+    function color_parkings()
+    {
             function OrderParkingA() {
                 $.post("/getParkingLibre", {qtPark: 100, category: 'A'}, function (dataAF) {
-                    console.log(dataAF);
                     $.each(dataAF, function (i,park) {
                         let nomParking = park.idParking;
                         changeCouleurParking(nomParking, "#F9F539", listeLayerParking); //Parking Free Classe C/B/A
@@ -269,7 +269,6 @@ $(document).ready(function () {
 
             function OrderParkingB_A() {
                 $.post("/getParkingLibre", {qtPark: 100, category: 'B'}, function (dataAF) {
-                    console.log(dataAF);
                     $.each(dataAF, function (i,park) {
                         let nomParking = park.idParking;
                         changeCouleurParking(nomParking, "#0FD7EB", listeLayerParking); //Parking Free Classe C/B/A
@@ -289,12 +288,23 @@ $(document).ready(function () {
                     OrderParkingB_A();
                     }, 'json');
             }
-            OrderParkingC_B_A();
+
+            function OrderParking_All() {
+
+                $.post("/getParking", {qtPark: 100, category: 'C'}, function (dataAF) {
+                    console.log(dataAF);
+                    $.each(dataAF, function (i,park) {
+                        let nomParking = park.idParking;
+                        changeCouleurParking(nomParking, "#D9521A", listeLayerParking); //Parking Free Classe C/B/A
+                    });
+                    OrderParkingC_B_A();
+                    }, 'json');
+            }
+            OrderParking_All();
 
 
-    }, 'json');
-
-
+    }
+color_parkings();
 
 
 
