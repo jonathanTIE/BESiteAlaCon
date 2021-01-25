@@ -5,9 +5,8 @@
 {% endblock %}
 
 {% block content %}
+    <center><img class="align-content-center" src="{{ url_for('static', filename='images/WebTrolling.png')}}" /></center>
 
-    <img src="{{ url_for('static', filename='images/rasoir.png')}}" />
-    <img src="{{ url_for('static', filename='images/hache.jpg')}}" />
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="section-block" id="cards">
@@ -18,8 +17,11 @@
                             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h3 class="card-title">Jonathan</h3>
-                                        <p class="card-text">Un lycéen</p>
+                                        <h3 class="card-title">Jonathan
+                                        <div class="notification-list-user-img"><img src="{{ url_for('static', filename='images/rasoir.png')}}" alt="" class="user-avatar-md rounded-circle" width="40%" height="40%"></div>
+                                        </h3>
+                                        <h6 class="card-subtitle mb-2 text-muted">Un lycéen</h6>
+                                        <p class="card-text">Un prépa</p>
                                         <a href="#" class="btn btn-primary">Go somewhere</a>
                                     </div>
                                 </div>
@@ -27,11 +29,12 @@
                             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h3 class="card-title">Corentin</h3>
+                                        <h3 class="card-title">Corentin
+                                        <div class="notification-list-user-img"><img src="{{ url_for('static', filename='images/hache.jpg')}}" alt="" class="user-avatar-md rounded-circle" width="40%" height="40%"></div>
+                                        </h3>
                                         <h6 class="card-subtitle mb-2 text-muted">Un prépa</h6>
                                         <p class="card-text">Un prépa</p>
-                                        <a href="#" class="card-link">Card link</a>
-                                        <a href="#" class="card-link">Another link</a>
+                                        <a href="#" class="btn btn-primary">Go somewhere</a>
                                     </div>
                                 </div>
                             </div>

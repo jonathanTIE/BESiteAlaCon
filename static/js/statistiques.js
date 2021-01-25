@@ -8,13 +8,11 @@ $(document).ready(function () {
     {
         let labelsC = donnees.map(function (e)
         {
-            alert(e.x)
             return "Parking" + e.x
         });
 
         let dataC = donnees.map(function (e)
         {
-            alert((e.y))
             return (e.y)
         });
 

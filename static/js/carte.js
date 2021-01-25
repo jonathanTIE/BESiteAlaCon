@@ -242,7 +242,6 @@ $(document).ready(function () {
     /*DEBUT Parking*/
 
     $.post("/getParking", "", function (dataP) {
-        console.log(dataP);
         var couleurOcc = "#D9521A"
         var rotation = 0.0
         var listeLayerParking = [];
@@ -258,7 +257,6 @@ $(document).ready(function () {
 
             function OrderParkingA() {
                 $.post("/getParkingLibre", {qtPark: 100, category: 'A'}, function (dataAF) {
-                    console.log(dataAF);
                     $.each(dataAF, function (i,park) {
                         let nomParking = park.idParking;
                         changeCouleurParking(nomParking, "#F9F539", listeLayerParking); //Parking Free Classe C/B/A
@@ -268,7 +266,6 @@ $(document).ready(function () {
 
             function OrderParkingB_A() {
                 $.post("/getParkingLibre", {qtPark: 100, category: 'B'}, function (dataAF) {
-                    console.log(dataAF);
                     $.each(dataAF, function (i,park) {
                         let nomParking = park.idParking;
                         changeCouleurParking(nomParking, "#0FD7EB", listeLayerParking); //Parking Free Classe C/B/A
@@ -280,7 +277,6 @@ $(document).ready(function () {
             function OrderParkingC_B_A() {
 
                 $.post("/getParkingLibre", {qtPark: 100, category: 'C'}, function (dataAF) {
-                    console.log(dataAF);
                     $.each(dataAF, function (i,park) {
                         let nomParking = park.idParking;
                         changeCouleurParking(nomParking, "#0FD757", listeLayerParking); //Parking Free Classe C/B/A

@@ -31,11 +31,12 @@
         <!-- ============================================================== -->
         <div class="dashboard-header">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
-                <a class="navbar-brand" href="index.html">Concept</a>
+                <div class="notification-list-user-img"><img src="static/images/Vague_Jap.png" alt="" class="rounded-circle" width="40%" height="40%"></div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <h1 class="text-center">東京羽田国際空港</h1>
                     <ul class="navbar-nav ml-auto navbar-right-top">
                         <li class="nav-item">
                             <div id="custom-search" class="top-search-bar">
@@ -178,14 +179,7 @@
                                 Administrateur :
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('stats') }}" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i>Statistiques</a>
-                                <div id="submenu-3" class="collapse submenu" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ url_for('stats') }}">Stats1</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a class="nav-link" href="{{ url_for('stats') }}"><i class="fas fa-fw fa-chart-pie"></i>Statistiques</a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link" href="{{ url_for('create_account') }}"><i class="fa fa-fw fa-user-circle"></i>Création de comptes <span class="badge badge-success">6</span></a>
