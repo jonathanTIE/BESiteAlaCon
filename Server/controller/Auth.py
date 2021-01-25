@@ -7,13 +7,19 @@ import hashlib
 class Statut(object):
     pass
 
+
 def add_account(request):
+    """
+
+    :return: password (not hashed)
+    """
     user = request.form['login']
     nom = request.form['nom']
     prenom = request.form['prenom']
     statut = request.form['radio-inline']
     email = request.form["email"]
-    db.add_userdata(email, nom, prenom, statut, user)
+    return db.add_userdata(email, nom, prenom, statut, user)
+
 
 def connect_account(request):
     """

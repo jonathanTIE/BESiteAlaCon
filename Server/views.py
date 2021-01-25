@@ -25,12 +25,14 @@ def webmaster():
 
 @app.route("/creation-compte")
 def create_account():
-    return render_template("compte.html")
+    msg = request.args.get("msg") if request.args.get("msg") else None
+    print(msg)
+    return render_template("compte.html", msg=msg)
 
 @app.route("/build-account", methods=['POST'])
 def build():
-    Auth.add_account(request)
-    return redirect(url_for('create_account'))
+    pwd = Auth.add_account(request)[0]
+    return redirect(url_for('create_account', msg=pwd))
 
 
 @app.route('/statistiques')

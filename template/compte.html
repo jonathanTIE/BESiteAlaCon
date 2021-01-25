@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+{% if msg %}
+    <h4>Compte crée avec le mot de passe {{ msg }} . Veuilliez le noter, il ne sera pas redonné !</h4>
+{% endif %}
 <form class="splash-container" action="{{ url_for('build') }}" method="post">
         <div class="card">
             <div class="card-header">
