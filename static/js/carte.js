@@ -171,7 +171,8 @@ $(document).ready(function () {
     //Avion Approche
         let nomMarker = immatAvion;
         let echelle = 0.03;
-
+        let max = 90000;
+        let min = 15000; //Temps d'atterrissage jusqu'au départ entre 15s et 90s
 
         var AjustAvion = draw_marker(nomMarker, 139.84302, 35.55940, images, echelle);
 
@@ -196,14 +197,13 @@ $(document).ready(function () {
                 };
             move_marker(AjustAvion, routeDep, stepMarker, callb2);//déplacement de l'avion hors du champ de vision donc disparition
             cbk(immatAvion)
-            }, 15000);
+            }, Math.floor(Math.random()*(max-min)+min));
 
 
 
     }
 
-
-    async function getPlanePic (planeID) //TODO : plane obj or plane id
+    async function getPlanePic (planeID)
     {
         return new Promise(function(resolve, reject) {
             $.post("/getPlaneData", {immat: planeID}, function (planeInfo) {
@@ -211,13 +211,15 @@ $(document).ready(function () {
             });
         });
     }
-    async function assignParking(planeId, parking) {
-        $.post("/assignerAvion", {plane: planeId, parking: parking}, function (planeInfo) {
-            let spawn = "C1";//plane.waypoint;
-            let despawn = "05";//parking.runway;
 
-            $.when(getPathLanding(spawn, "P3"),//parking.idParking)
-            getPathDeparture("P3", "05"),
+    async function assignParking(planeId, parking) {
+        $.post("/assignerAvion", {plane: planeId, parking: parking}, function (insertionStatus) {
+            var runways = $("input[name='choix-piste']:checked").val().split("-");
+            let spawn =  runways[0];//plane.waypoint; $("#approach").text() ||
+            let despawn = runways[1];//parking.runway;
+            console.log
+            $.when(getPathLanding(spawn, parking),//parking.idParking)
+            getPathDeparture(parking, despawn),
             getPlanePic(planeId))
                 .done(function(pathLand, pathDep, planePic)
                 {
@@ -227,24 +229,21 @@ $(document).ready(function () {
                     console.log(planePic);
                     //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
                     deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);
+                    color_parkings();
                 });
-                //getPathLanding(plane.spawn, parking, movePlane) //movePlane est une fonction qui prend comme param routearrivee
+                //color_parkings();
+                //changeCouleurParking(parking, "#D9521A", map.getLayers());
                 getPlaneParkingPair();
                 console.log("parking assigné & front end updaté !");
         });
     }
     /* fin mouvement et obtention coordonnes avion */
 
-
+    var listeLayerParking = []; //global variable
     /* fin fonctions */
-
-
-    /*DEBUT Parking*/
-
     $.post("/getParking", "", function (dataP) {
         var couleurOcc = "#D9521A"
         var rotation = 0.0
-        var listeLayerParking = [];
             $.each(dataP, function (i, park) {
                 let xy = park.coordonnees.split(',');
                 let latitude = xy[1];
@@ -253,8 +252,12 @@ $(document).ready(function () {
                 listeLayerParking[i] = draw_markerParking(latitude, longitude, nomParking, couleurOcc, rotation, map);
                 map.addLayer(listeLayerParking[i]); // affichage sur la carte des markers
                 listeLayerParking[i].getStyle()[0].getImage().setRotation(rotation); // rotation en radian
-            });
+    });
+    }, 'json');
 
+    /*DEBUT Parking*/
+    function color_parkings()
+    {
             function OrderParkingA() {
                 $.post("/getParkingLibre", {qtPark: 100, category: 'A'}, function (dataAF) {
                     $.each(dataAF, function (i,park) {
@@ -284,12 +287,23 @@ $(document).ready(function () {
                     OrderParkingB_A();
                     }, 'json');
             }
-            OrderParkingC_B_A();
+
+            function OrderParking_All() {
+
+                $.post("/getParking", {qtPark: 100, category: 'C'}, function (dataAF) {
+                    console.log(dataAF);
+                    $.each(dataAF, function (i,park) {
+                        let nomParking = park.idParking;
+                        changeCouleurParking(nomParking, "#D9521A", listeLayerParking); //Parking Free Classe C/B/A
+                    });
+                    OrderParkingC_B_A();
+                    }, 'json');
+            }
+            OrderParking_All();
 
 
-    }, 'json');
-
-
+    }
+color_parkings();
 
 
 

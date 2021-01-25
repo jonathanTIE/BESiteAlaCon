@@ -89,7 +89,7 @@ def getAuthData(login,mdp):
 
 
 
-def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
+def add_userdata(email, nom:str, prenom:str, statut:int,login:str): #Return password not hashed
     try:
         cnx = connexion()
         cursor = cnx.cursor()
@@ -114,7 +114,7 @@ def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
 
         last_id = cursor.lastrowid
         cnx.commit()
-        msg = "addOK"
+        msg = Default_password
         close_bd(cursor, cnx)
 
     except mysql.connector.Error as err:

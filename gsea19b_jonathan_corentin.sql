@@ -257,7 +257,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vueparkinglibre`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join `asso_avionparking` on(`parking`.`idParking` = `asso_avionparking`.`idParking`)) where `asso_avionparking`.`dateArrivee` is null ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join `asso_avionparking` on(`parking`.`idParking` = `asso_avionparking`.`idParking`)) where `asso_avionparking`.`dateArrivee` is null OR (`asso_avionparking`.`dateArrivee` IS NOT null AND `asso_avionparking`.`dateDepart` IS NOT null);
 
 --
 -- Index pour les tables déchargées
