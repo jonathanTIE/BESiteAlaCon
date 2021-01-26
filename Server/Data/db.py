@@ -374,15 +374,16 @@ def get_gps_coordinates(path): #path should be an array
     except mysql.connector.Error as err:
         res = "Failed to get gps coordinates for path : {}".format(err)
 
-    return res
 
-def get_ChartData():
+    return res
+def get_ChartData(DateArr,DateDep):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = """SELECT DISTINCT(idParking) as x, COUNT(idAvion) as y,
-              dateArrivee as A,dateDepart as D from asso_avionparking GROUP BY idParking"""
-        cursor.execute(sql)
+        sql = """SELECT DISTINCT(idParking) as x, COUNT(idAvion) as y
+              from asso_avionparking WHERE CAST(dateArrivee AS DATE)>=%s AND CAST(dateDepart AS DATE)<=%s GROUP BY idParking """
+        param=(DateArr,DateDep)
+        cursor.execute(sql,param)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
 

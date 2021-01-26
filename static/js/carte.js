@@ -38,8 +38,7 @@ $(document).ready(function () {
         $.post("/getParkingLibre", {qtPark: 3, category:category}, function (data) {
 
             $.each(data, function (i, park) {
-            console.log(park);
-            parkings[i] = park.idParking;
+                parkings[i] = park.idParking;
             });
 
             for (i = 0; i < 3; i++) {
@@ -225,6 +224,7 @@ $(document).ready(function () {
             getPlanePic(planeId))
                 .done(function(pathLand, pathDep, planePic)
                 {
+
                     //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
                     deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);
                     color_parkings();
@@ -403,6 +403,12 @@ color_parkings();
 
     /* FIN BOUTONS */
 
+    function insertFlightPlan(idAvion) {
+        $.post("/flightplan", {idLayer: idAvion}, function (data) {
+            console.log(data);
+        });
+
+    }
 
 
 

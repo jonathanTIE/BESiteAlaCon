@@ -4,7 +4,32 @@ $(document).ready(function () {
     /* Graphique Statistiques*/
 
 
-    $.post('/getChart',{},function(donnees)
+
+function TimeUpdate(DateArr,DateDep,cbk){
+
+    //Envoyer les dates côtés serveur ->get
+
+    $.post('/getChart',{DateArr:DateArr,DateDep:DateDep},function(data){
+            console.log(data);
+            cbk(data)
+            return data;
+    //    utiliser l'occupation par parking de cette plage
+
+    },'json');
+}
+
+    $("input[name='trip-start']").change(function(){
+    // récup 2 dates :
+        let DateArr = $("#start").val();
+        let DateDep = $("#end").val();
+        console.log(DateArr);
+        TimeUpdate(DateArr,DateDep, displayStats);
+//TODO : mettre à jour le graphe
+
+    });    //installer timeupdate sur les 2 widgets
+
+
+function displayStats(donnees)
     {
         let labelsC = donnees.map(function (e)
         {
@@ -21,7 +46,7 @@ $(document).ready(function () {
 
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'polarArea',
             data: {
                 labels: labelsC, //dataC.label (x)
                 datasets: [{
@@ -72,6 +97,8 @@ $(document).ready(function () {
                 }
             }
         });
-    },'json');
-
+}
+        let DateArr = $("#start").val();
+        let DateDep = $("#end").val();
+TimeUpdate(DateArr, DateDep, displayStats);
 });

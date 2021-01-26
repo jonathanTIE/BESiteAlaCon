@@ -2,20 +2,19 @@
 
 {% block title_2 %}
     {% if session.idUser %}
-    <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
     {% endif %}
     <h2>Statistiques</h2>
 
         <label for="start">Date d'entrée:</label>
 
         <input type="date" id="start" name="trip-start"
-               value="2018-07-22"
-               min="2018-01-01" max="2018-12-31">
+               value="2021-01-24"
+               min="2018-01-01" max="2024-12-31">
 
         <label for="start">Date de fin:</label>
         <input type="date" id="end" name="trip-start"
-               value="2018-07-22"
-               min="2018-01-01" max="2018-12-31">
+               value="2021-01-24"
+               min="2018-01-01" max="2024-12-31">
 
 
     <div class="row">

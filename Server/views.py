@@ -88,6 +88,7 @@ def assignPlane():
     ids = form.select_parking_with_session(request)
     return db.set_parking_choice(*ids)
 
+
 @app.route("/departAvion", methods=['POST']) #take plane immatriculation as input
 def departurePlane():
     idAvion = int(db.get_plane_id(request.form['planeImmat'])['idAvion'])
@@ -126,5 +127,6 @@ def getGpsCoordsFromPath():
 
 @app.route('/getChart',methods=['POST'])
 def getChart():
-    liste = db.get_ChartData()
+
+    liste = db.get_ChartData(request.form['DateArr'],request.form['DateDep'])
     return jsonify(liste)
