@@ -217,16 +217,12 @@ $(document).ready(function () {
             var runways = $("input[name='choix-piste']:checked").val().split("-");
             let spawn =  runways[0];//plane.waypoint; $("#approach").text() ||
             let despawn = runways[1];//parking.runway;
-            console.log
             $.when(getPathLanding(spawn, parking),//parking.idParking)
             getPathDeparture(parking, despawn),
             getPlanePic(planeId))
                 .done(function(pathLand, pathDep, planePic)
                 {
-                    console.log(planeId);
-                    console.log(pathLand);
-                    console.log(pathDep);
-                    console.log(planePic);
+
                     //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
                     deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);
                     color_parkings();

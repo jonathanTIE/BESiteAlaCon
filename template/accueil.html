@@ -9,32 +9,38 @@
     {% if msg %}
     <h3>{{ msg }}</h3>
     {% endif %}
-    <div class="splash-container">
-        <div class="card ">
-            <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="../assets/images/logo.png" alt="logo"></a><span class="splash-description">Please enter your user information.</span></div>
-            <div class="card-body">
-                <form method="post" action="{{ url_for('connecter') }}">
-                    <div class="form-group">
-                        <input type="text" name="login" id="login" value="" placeholder="Votre login" />
+    {% if session.idUser %}
+        <center><img class="align-content-center" src="{{ url_for('static', filename='images/Japon.jpg')}}" /></center>
+    {% endif %}
+    {% if not session.idUser %}
+        <div class="splash-container">
+            <div class="card ">
+                <div class="card-header text-center"><img class="logo-img" src="static/images/logo_accueil.png" width="20%" height="20%" alt="logo"><span class="splash-description">Please enter your user information.</span></div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('connecter') }}">
+                        <div class="form-group">
+                            <input type="text" name="login" id="login" value="" placeholder="Votre login" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" value="" placeholder="Votre mot de passe" />
+                        </div>
+                        <div class="form-group">
+                            <label class="custom-control custom-checkbox">
+                                <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Remember Me</span>
+                            </label>
+                        </div>
+                        <input type="submit" class="btn btn-primary btn-lg btn-block">Sign in</input>
+                    </form>
+                </div>
+                <div class="card-footer bg-white p-0  ">
+                    <div class="card-footer-item card-footer-item-bordered">
+                        <a href="#" class="footer-link">Forgot Password</a>
                     </div>
-                    <div class="form-group">
-                        <input type="password" name="password" id="password" value="" placeholder="Votre mot de passe" />
-                    </div>
-                    <div class="form-group">
-                        <label class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Remember Me</span>
-                        </label>
-                    </div>
-                    <input type="submit" class="btn btn-primary btn-lg btn-block">Sign in</input>
-                </form>
-            </div>
-            <div class="card-footer bg-white p-0  ">
-                <div class="card-footer-item card-footer-item-bordered">
-                    <a href="#" class="footer-link">Forgot Password</a>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
+
 
 
 {% endblock %}

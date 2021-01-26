@@ -19,3 +19,4 @@ def get_free_park(request):
         raise Exception("invalid category given by user")
     data = get_parking_free(int(request.form['qtPark']), category)
     return data
+
