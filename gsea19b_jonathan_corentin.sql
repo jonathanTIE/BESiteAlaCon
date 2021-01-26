@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  localhost:3306
--- Généré le :  Jeu 21 Janvier 2021 à 12:01
+-- Généré le :  Mar 26 Janvier 2021 à 11:37
 -- Version du serveur :  5.7.26-0ubuntu0.18.04.1
 -- Version de PHP :  7.2.19-0ubuntu0.18.04.1
 
@@ -35,6 +35,25 @@ CREATE TABLE `asso_avionparking` (
   `idUserValidation` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Contenu de la table `asso_avionparking`
+--
+
+INSERT INTO `asso_avionparking` (`idAsso`, `idAvion`, `idParking`, `dateArrivee`, `dateDepart`, `idUserValidation`) VALUES
+(56, 1, 'P4', '2021-01-26 11:03:20', '2021-01-26 11:04:40', 1),
+(57, 2, 'P8', '2021-01-26 11:03:23', '2021-01-26 11:04:31', 1),
+(58, 3, 'P2', '2021-01-26 11:04:40', NULL, 1),
+(59, 4, 'P14', '2021-01-26 11:04:54', '2021-01-26 11:06:00', 1),
+(60, 5, 'P7', '2021-01-26 11:05:00', '2021-01-26 11:05:32', 1),
+(61, 6, 'P9', '2021-01-26 11:09:08', '2021-01-26 11:10:25', 1),
+(62, 7, 'P4', '2021-01-26 11:27:19', NULL, 1),
+(63, 8, 'P14', '2021-01-26 11:27:37', NULL, 1),
+(64, 9, 'P1', '2021-01-26 11:28:27', NULL, 1),
+(65, 10, 'P10', '2021-01-26 11:29:02', '2021-01-26 11:30:13', 1),
+(66, 11, 'P8', '2021-01-26 11:29:13', '2021-01-26 11:30:30', 1),
+(67, 12, 'P4', '2021-01-26 11:29:18', '2021-01-26 11:34:08', 1),
+(68, 12, 'P4', '2021-01-26 11:33:47', '2021-01-26 11:34:08', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -51,7 +70,11 @@ CREATE TABLE `asso_waypoint` (
 --
 
 INSERT INTO `asso_waypoint` (`WaypointBegin`, `Path`) VALUES
-('C1', 'ARR1-ARR2-A1-A2-A3');
+('C1', 'ARR1-ARR2-A1-A2-A3'),
+('T3', 'B1-B2-B3-DEP1-DEP2'),
+('05', 'B1-B2-B3-DEP1-DEP2'),
+('C2', 'ARR3-ARR4-ARR5-E1-E2-E3-E4'),
+('34R', 'F1-F2-F3-DEP3-DEP4');
 
 -- --------------------------------------------------------
 
@@ -74,7 +97,18 @@ CREATE TABLE `avions` (
 
 INSERT INTO `avions` (`idAvion`, `typeAvion`, `immatAvion`, `categorie`, `idCompagnie`, `images`) VALUES
 (1, 'A380', 'F-GAFT', 'A', 1, 'Avion_1.png'),
-(2, 'B787', 'JA0011', 'A', 2, 'Avion_2.png');
+(2, 'B777', 'HL7534', 'A', 8, 'Avion_5.png'),
+(3, 'TB-10', 'F-EVIL', 'C', 9, 'Avion_4.png'),
+(4, 'TB-20', 'F-GOOD', 'C', 9, 'Avion_4.png'),
+(5, 'PZL-104 Wilga', 'N123T', 'C', 9, 'Avion_4.png'),
+(6, 'B727', 'JA73NM', 'A', 2, 'Avion_7.png'),
+(7, 'B737', 'JA56AN', 'A', 7, 'Avion_7.png'),
+(8, 'Boeing 747 Supertanker', 'N470EV', 'B', 10, 'Avion_2.png'),
+(9, 'Douglas DC-10 Air Tanker', 'N17085', 'B', 11, 'Avion_6.png'),
+(10, 'Douglas DC-8', 'JA8003', 'A', 2, 'Avion_2.png'),
+(11, 'A300', 'JA8377', 'A', 6, 'Avion_6.png'),
+(12, 'NAMC YS-11', 'JAUNKW', 'A', 4, 'Avion_5.png'),
+(13, 'Lockheed L-1011 TriStar', 'JAUNKW', 'A', 4, 'Avion_3.png');
 
 -- --------------------------------------------------------
 
@@ -93,7 +127,16 @@ CREATE TABLE `compagnie` (
 
 INSERT INTO `compagnie` (`idCompagnie`, `nomCompagnie`) VALUES
 (1, 'Air France'),
-(2, 'Japan AIrlines');
+(2, 'Japan AIrlines'),
+(3, 'Philippine Air Lines	'),
+(4, 'All Nippon Airways'),
+(5, 'JASDF'),
+(6, 'Japan Air System'),
+(7, 'Skymark Airlines'),
+(8, 'Korean Air	'),
+(9, 'Vol de courses/plaisance'),
+(10, 'Evergreen International Airlines'),
+(11, '10 Tanker Air Carrier');
 
 -- --------------------------------------------------------
 
@@ -201,12 +244,25 @@ INSERT INTO `waypoint` (`idWaypoint`, `coordonnees`, `type`, `rang`) VALUES
 ('A3', '139.80132, 35.53793', 'taxiway', 3),
 ('ARR1', '139.80383, 35.52428', 'pisteArrivee', 1),
 ('ARR2', '139.82198, 35.54049', 'pisteArrivee', 2),
+('ARR3', '139.80307, 35.54261', 'pisteArrivee', 1),
+('ARR4', '139.80081, 35.54595', 'pisteArrivee', 2),
+('ARR5', '139.78678, 35.56565', 'pisteArrivee', 3),
 ('B1', '139.80004, 35.53732', 'taxiway', 1),
 ('B2', '139.80556, 35.52920', 'taxiway', 2),
 ('B3', '139.80143, 35.52579', 'taxiway', 3),
 ('C1', '139.78066, 35.50289', 'circuit', 1),
+('C2', '139.81992, 35.51907', 'circuit', 1),
 ('DEP1', '139.80376, 35.52421', 'pisteDepart', 1),
 ('DEP2', '139.84302, 35.55940', 'pisteDepart', 2),
+('DEP3', '139.80311, 35.54250', 'pisteDepart', 1),
+('DEP4', '139.77512, 35.58139', 'pisteDepart', 2),
+('E1', '139.78478, 35.56486', 'taxiway', 1),
+('E2', '139.78748, 35.56114', 'taxiway', 2),
+('E3', '139.78984, 35.55760', 'taxiway', 3),
+('E4', '139.79183, 35.55498', 'taxiway', 4),
+('F1', '139.79432, 35.55159', 'taxiway', 1),
+('F2', '139.79709, 35.54730', 'taxiway', 2),
+('F3', '139.80129, 35.54166', 'taxiway', 3),
 ('T1', '139.78913, 35.55393', 'taxiway', 1),
 ('T2', '139.79029, 35.55205', 'taxiway', 2),
 ('T3', '139.79165, 35.55012', 'taxiway', 3);
@@ -227,7 +283,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vueparkinglibre`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join `asso_avionparking` on((`parking`.`idParking` = `asso_avionparking`.`idParking`))) where isnull(`asso_avionparking`.`dateArrivee`) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join `asso_avionparking` on((`parking`.`idParking` = `asso_avionparking`.`idParking`))) where (isnull(`asso_avionparking`.`dateArrivee`) or ((`asso_avionparking`.`dateArrivee` is not null) and (`asso_avionparking`.`dateDepart` is not null))) ;
 
 --
 -- Index pour les tables exportées
@@ -288,17 +344,17 @@ ALTER TABLE `waypoint`
 -- AUTO_INCREMENT pour la table `asso_avionparking`
 --
 ALTER TABLE `asso_avionparking`
-  MODIFY `idAsso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idAsso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 --
 -- AUTO_INCREMENT pour la table `avions`
 --
 ALTER TABLE `avions`
-  MODIFY `idAvion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idAvion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT pour la table `compagnie`
 --
 ALTER TABLE `compagnie`
-  MODIFY `idCompagnie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idCompagnie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT pour la table `identification`
 --

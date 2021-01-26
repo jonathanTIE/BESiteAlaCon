@@ -87,28 +87,9 @@ def getAuthData(login,mdp):
 
     return res
 
-"""""
-def del_membreData(idUser):
-    try:
-        cnx = connexion()
-        cursor = cnx.cursor()
-        sql = "DELETE FROM membre WHERE idUser=%s"
-        param = (idUser,)
-        cursor.execute(sql, param)
-        cnx.commit()
-        msg = "suppOK"
-        close_bd(cursor,cnx)
-
-    except mysql.connector.Error as err:
-        msg = "Failed delete membre Data: {}".format(err)
-
-    return msg
-    
-"""
 
 
-
-def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
+def add_userdata(email, nom:str, prenom:str, statut:int,login:str): #Return password not hashed
     try:
         cnx = connexion()
         cursor = cnx.cursor()
@@ -133,7 +114,7 @@ def add_userdata(email, nom:str, prenom:str, statut:int,login:str):
 
         last_id = cursor.lastrowid
         cnx.commit()
-        msg = "addOK"
+        msg = Default_password
         close_bd(cursor, cnx)
 
     except mysql.connector.Error as err:
@@ -163,21 +144,6 @@ def update_membreData(champ,idUser,newvalue,hash=False):
     return msg
 
 
-def getLoginMdp(login,mdp):
-    try:
-        cnx = connexion()
-        cursor = cnx.cursor()
-        sql = "SELECT motPasse,login FROM identification WHERE login=%s and motPasse=%s"
-        param = (login, mdp)
-        cursor.execute(sql, param)
-        res = convert_dictionnary(cursor)
-        close_bd(cursor,cnx)
-
-    except mysql.connector.Error as err:
-        res = "Failed get verifAuth Data: {}".format(err)
-
-    return res
-
 """
 import smtplib, ssl
 port = 587 # For starttls
@@ -199,7 +165,7 @@ def get_parkingData():
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT * FROM parking"
+        sql = """SELECT * FROM parking"""
         cursor.execute(sql)
         res = convert_dictionnary(cursor)
         close_bd(cursor,cnx)
@@ -286,7 +252,7 @@ def set_parking_choice(planeId, parkingId, userId):
         cnx = connexion()
         cursor = cnx.cursor()
         sql = """
-            INSERT INTO asso_avionParking (idAvion, idParking, dateArrivee, dateDepart, idUserValidation)
+            INSERT INTO asso_avionparking (idAvion, idParking, dateArrivee, dateDepart, idUserValidation)
             VALUES 
             (%s, %s, NOW(), NULL, %s);
             """  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
@@ -314,13 +280,14 @@ def get_plane_id(planeImmat):
     except mysql.connector.Error as err:
         res = "Failed get plane ID: {}".format(err)
 
+
     return res
 
-def get_plane_cat(planeImmat):
+def get_plane_data(planeImmat):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
-        sql = "SELECT categorie from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
+        sql = "SELECT * from avions WHERE immatAvion=%s;"  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
         params = (planeImmat, )
         cursor.execute(sql, params)
         res = convert_dictionnary(cursor)[0]
@@ -382,21 +349,25 @@ def get_parking_terminal_waypoint(parking):
     return res
 
 def get_gps_coordinates(path): #path should be an array
-    pathOrderBy = ["`waypoint`.`idWaypoint`"] + path
-    print('pathorderby', pathOrderBy)
+    pathOrderBy = ["`idWaypoint`"] + path
+    pathOrderBy = tuple(pathOrderBy)
+    path = tuple(path)
     try:
         cnx = connexion()
         cursor = cnx.cursor()
 
         sql = """
-        SELECT * from `waypoint`
-        WHERE `waypoint`.`idWaypoint` IN  {}
-        ORDER BY FIELD({})
-        """.format(path, pathOrderBy)
-
-        params = (parking , )
-        cursor.execute(sql, params)
-        res = convert_dictionnary(cursor)[0]
+        (SELECT `waypoint`.`idWaypoint` AS `idWaypoint`, `waypoint`.`coordonnees` from `waypoint`
+        WHERE `waypoint`.`idWaypoint` IN  {})
+        UNION
+        (SELECT `parking`.`idParking` AS `idWaypoint`, `parking`.`coordonnees` from `parking`
+        WHERE `parking`.`idParking` IN  {})
+        ORDER BY FIELD{}
+        """.format(path, path, pathOrderBy)
+        sql = sql.replace("\'`", "`")
+        sql = sql.replace("`\'", "`")
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
         cnx.commit()
         close_bd(cursor,cnx)
 
@@ -404,3 +375,41 @@ def get_gps_coordinates(path): #path should be an array
         res = "Failed to get gps coordinates for path : {}".format(err)
 
     return res
+
+def get_ChartData():
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = """SELECT DISTINCT(idParking) as x, COUNT(idAvion) as y,
+              dateArrivee as A,dateDepart as D from asso_avionparking GROUP BY idParking"""
+        cursor.execute(sql)
+        res = convert_dictionnary(cursor)
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed get chartData Data: {}".format(err)
+
+    return res
+
+def set_departure_date_to_now(planeId):
+    try:
+        cnx = connexion()
+        cursor = cnx.cursor()
+        sql = """
+        UPDATE asso_avionparking
+        SET dateDepart = NOW()
+        WHERE idAvion = %s;
+        """
+        params = (planeId, )
+        cursor.execute(sql, params)
+        cnx.commit()
+        res = "update in asso_avionParking executed"
+        close_bd(cursor,cnx)
+
+    except mysql.connector.Error as err:
+        res = "Failed update to Parking  {}".format(err)
+
+    return res
+
+
+# [{x:"Parking 1",y :3},{x:"Parking 2",y :3}]
