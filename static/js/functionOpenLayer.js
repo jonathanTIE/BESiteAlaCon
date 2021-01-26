@@ -143,7 +143,7 @@ function move_marker(marker, line, stepMarker, callb)
         callb(); // fonction de callback à executer après le déplacement
         }
 
-    }, 70);
+    }, 20);
 }
 
 

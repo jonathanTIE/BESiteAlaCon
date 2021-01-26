@@ -36,12 +36,16 @@ $(document).ready(function () {
         var parkings = [];
         var category = $("#plane").attr("categorie");
         $.post("/getParkingLibre", {qtPark: 3, category:category}, function (data) {
-            $.each(data, function (i, park) {
-                parkings[i] = park.idParking;
-            });
-            for (i = 0; i < 3; i++) {
-                $("#parking-" + i.toString()).text(parkings[i]);
 
+            $.each(data, function (i, park) {
+            console.log(park);
+            parkings[i] = park.idParking;
+            });
+
+            for (i = 0; i < 3; i++) {
+                var parkName = parkings[i] || "indisponible";
+                $("#parking-" + i.toString()).text(parkName);
+                console.log(parkings[i]);
             }
             $("#plane").attr("nbParkings", parkings.length);
             updateButtonFront();
@@ -85,7 +89,7 @@ $(document).ready(function () {
     }
 
     function updateButtonFront() {
-        if (parseInt($("#plane").attr("nbParkings"),10) === 0) {
+        if (parseInt($("#plane").attr("nbParkings"),10) !== 3) {
             $('#solution-button').text("Recalculer");
         } else {
             $('#solution-button').text("Refuser");
@@ -165,6 +169,7 @@ $(document).ready(function () {
     {
         $.post("/departAvion", {planeImmat:planeImmat}, function (data) {
             },'json');
+        color_parkings();
     }
     function deplacerAvion(routeArrivee, routeDepart,immatAvion,images, cbk= function(){})
     {
@@ -179,13 +184,11 @@ $(document).ready(function () {
 
         // let Avion3 = listeAvion[2];
 
-        let stepMarker = 100;
+        let stepMarker = 500;
         map.addLayer(AjustAvion);
         let routeArr = new ol.geom.LineString(routeArrivee);
         var callb = function () { // function de callback
         };
-        console.log("pre move maker");
-        console.log(AjustAvion);
         move_marker(AjustAvion, routeArr, stepMarker, callb);//déplacement du l'avion 1 vers la piste de décollage ou atterrissage
 
         setTimeout(
@@ -217,24 +220,19 @@ $(document).ready(function () {
             var runways = $("input[name='choix-piste']:checked").val().split("-");
             let spawn =  runways[0];//plane.waypoint; $("#approach").text() ||
             let despawn = runways[1];//parking.runway;
-            console.log
             $.when(getPathLanding(spawn, parking),//parking.idParking)
             getPathDeparture(parking, despawn),
             getPlanePic(planeId))
                 .done(function(pathLand, pathDep, planePic)
                 {
-                    console.log(planeId);
-                    console.log(pathLand);
-                    console.log(pathDep);
-                    console.log(planePic);
                     //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
                     deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);
                     color_parkings();
+                    getPlaneParkingPair();
                 });
                 //color_parkings();
                 //changeCouleurParking(parking, "#D9521A", map.getLayers());
-                getPlaneParkingPair();
-                console.log("parking assigné & front end updaté !");
+
         });
     }
     /* fin mouvement et obtention coordonnes avion */
@@ -291,7 +289,6 @@ $(document).ready(function () {
             function OrderParking_All() {
 
                 $.post("/getParking", {qtPark: 100, category: 'C'}, function (dataAF) {
-                    console.log(dataAF);
                     $.each(dataAF, function (i,park) {
                         let nomParking = park.idParking;
                         changeCouleurParking(nomParking, "#D9521A", listeLayerParking); //Parking Free Classe C/B/A
@@ -396,18 +393,16 @@ color_parkings();
     });
 
     $(".parking-button").on('click', function (data) {
-        assignParking($("#plane").text(), $(this).text());
+        if($(this).text() !== "indisponible")
+        {
+            assignParking($("#plane").text(), $(this).text());
+        }
+
         //
     });
 
     /* FIN BOUTONS */
 
-    function insertFlightPlan(idAvion) {
-        $.post("/flightplan", {idLayer: idAvion}, function (data) {
-            console.log(data);
-        });
-
-    }
 
 
 

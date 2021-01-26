@@ -195,7 +195,7 @@ def get_parking_free(nb=3, cat=None):
             SELECT * FROM vueparkinglibre
             WHERE categorie IN {}
             ORDER BY RAND() LIMIT %s;
-        """.format(cat) #TODO : éviter de passer par un format pour la sanitation
+        """.format(cat)
         params=(nb, )
         cursor.execute(sql, params)
         res = convert_dictionnary(cursor)
@@ -252,7 +252,7 @@ def set_parking_choice(planeId, parkingId, userId):
         cnx = connexion()
         cursor = cnx.cursor()
         sql = """
-            INSERT INTO asso_avionParking (idAvion, idParking, dateArrivee, dateDepart, idUserValidation)
+            INSERT INTO asso_avionparking (idAvion, idParking, dateArrivee, dateDepart, idUserValidation)
             VALUES 
             (%s, %s, NOW(), NULL, %s);
             """  #Il n'est pas capable de lire les vues d'où le rouge mais ça fonctionne
