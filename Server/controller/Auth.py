@@ -43,7 +43,7 @@ def connect_account(request):
         session["newMdp"] = res[0]['newMdp']
         msg = True
     except:
-        msg = "echec d'authentification : vérifiez le mdp/login"
+        msg = "Echec d'authentification : vérifiez le mdp ou le login"
     return msg
 
 def update_pwd_account(request):

@@ -37,8 +37,8 @@
                 <div class="collapse navbar-collapse " id="navbarSupportedContent">
 
                   <h1 id="jap">東京羽田国際空港</h1>
-
-                    <ul class="navbar-nav ml-auto navbar-right-top">
+                    {% if session.idUser %}
+                      <ul class="navbar-nav ml-auto navbar-right-top">
 
                         <li class="nav-item dropdown notification">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
@@ -50,7 +50,7 @@
                                             <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img src="static/images/avatar-2.jpg" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
+                                                        <div class="notification-list-user-block"><span class="notification-list-user-name">Hôtesse de l'air</span>J'ai appréhendé le suspect avec ma Hâche de Guerre.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
@@ -58,7 +58,7 @@
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img src="static/images/avatar-3.jpg" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Info Press </span>Les JO de Tokyo seront sûrement à huit clos.
                                                         <div class="notification-date">2 days ago</div>
                                                     </div>
                                                 </div>
@@ -66,8 +66,8 @@
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img src="static/images/avatar-4.jpg" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
-                                                        <div class="notification-date">2 min ago</div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Aviation News</span> Un homme, arrêté après son refus de porter un masque, a forcé la fuite du Japon à atterrir temporairement.
+                                                        <div class="notification-date">2 months ago</div>
                                                     </div>
                                                 </div>
                                             </a>
@@ -93,24 +93,24 @@
                                 <li class="connection-list">
                                     <div class="row">
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="static/images/github.png" alt="" > <span>Github</span></a>
+                                            <a href="#" class="connection-item"><img src="static/images/GitHub_Logo.png" alt="" > <span>Github</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="static/images/dribbble.png" alt="" > <span>Dribbble</span></a>
+                                            <a href="#" class="connection-item"><img src="static/images/Logo_Samurai.png" alt="" > <span>Samouraï</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="static/images/dropbox.png" alt="" > <span>Dropbox</span></a>
+                                            <a href="https://twitter.com/Ichiban_Japan/status/1353018859029053440" class="connection-item"><img src="static/images/Twitter_Logo.png" alt="" > <span>Twitter</span></a>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="static/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
+                                            <a href="https://www.instagram.com/japonpaysage/?hl=fr" class="connection-item"><img src="static/images/Logo_Insta.png" alt=""> <span>Instagram</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="static/images/mail_chimp.png" alt="" ><span>Mail chimp</span></a>
+                                            <a href="#" class="connection-item"><img src="static/images/Logo_Gmail.png" alt="" ><span>Mail</span></a>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="static/images/slack.png" alt="" > <span>Slack</span></a>
+                                            <a href="#" class="connection-item"><img src="static/images/Icon_Slack.png" alt="" > <span>Slack</span></a>
                                         </div>
                                     </div>
                                 </li>
@@ -133,6 +133,7 @@
                         </li>
                     {%  endif %}
                     </ul>
+                {% endif %}
                 </div>
             </nav>
         </div>
