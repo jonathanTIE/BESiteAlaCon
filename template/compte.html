@@ -13,8 +13,8 @@
         <form class="splash-container" action="{{ url_for('build') }}" method="post">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="mb-1">Registrations Form</h3>
-                        <p>Please enter your user information.</p>
+                        <h3 class="mb-1">Ajouter un utilisateur</h3>
+                        <p>Rentrez les informations du nouvel utilisateur ci-dessous.</p>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -46,21 +46,29 @@
             </form>
 
     {%  endif %}
-
-    <form action="/maj-mdp" method="post">
-        <div class="form-group">
-            <label for="previousPassword">Ancien mot de passe</label>
-            <input id="previousPassword" name="previousPassword" type="password" placeholder="Password" class="form-control">
+    <form class="container">
+        <div class="card">
+            <div class="card-header">
+                <h3>Changez votre mot de passe ci-dessous:</h3>
+            </div>
+            <div class="card-body">
+                <form action="/maj-mdp" method="post">
+                    <div class="form-group">
+                        <label for="previousPassword">Ancien mot de passe</label>
+                        <input id="previousPassword" name="previousPassword" type="password" placeholder="Password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword">Nouveau mot de passe</label>
+                        <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputConfirmPassword">Confirmer mot de passe</label>
+                        <input id="inputConfirmPassword" name="inputConfirmPassword" type="password" placeholder="Password" class="form-control">
+                    </div>
+                        <button class="btn btn-block btn-primary" type="submit">Confirmer</button>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="inputPassword">Nouveau mot de passe</label>
-            <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="inputConfirmPassword">Confirmer mot de passe</label>
-            <input id="inputConfirmPassword" name="inputConfirmPassword" type="password" placeholder="Password" class="form-control">
-        </div>
-            <button class="btn btn-block btn-primary" type="submit">Confirmer</button>
     </form>
 
 
