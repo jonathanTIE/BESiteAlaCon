@@ -28,7 +28,7 @@ function TimeUpdate(DateArr,DateDep,cbk){
 
     });    //installer timeupdate sur les 2 widgets
 
-
+var myChart;
 function displayStats(donnees)
     {
         let labelsC = donnees.map(function (e)
@@ -41,11 +41,13 @@ function displayStats(donnees)
             return (e.y)
         });
 
-
+        if (myChart != undefined || myChart !=null) {
+            myChart.destroy();
+        }
 
 
         var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        myChart = new Chart(ctx, {
             type: 'polarArea',
             data: {
                 labels: labelsC, //dataC.label (x)
