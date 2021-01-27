@@ -224,8 +224,7 @@ $(document).ready(function () {
             getPlanePic(planeId))
                 .done(function(pathLand, pathDep, planePic)
                 {
-
-                    //TODO : si probléme dans l'update, mettre getPlaneParkingPair ici
+                    console.log(insertionStatus);
                     deplacerAvion(pathLand, pathDep, planeId, planePic, updateDepartureTime);
                     color_parkings();
                     getPlaneParkingPair();

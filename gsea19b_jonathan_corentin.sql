@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 27, 2021 at 12:51 PM
+-- Generation Time: Jan 27, 2021 at 04:41 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -35,6 +35,22 @@ CREATE TABLE `asso_avionparking` (
   `dateDepart` datetime DEFAULT NULL,
   `idUserValidation` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `asso_avionparking`
+--
+
+INSERT INTO `asso_avionparking` (`idAsso`, `idAvion`, `idParking`, `dateArrivee`, `dateDepart`, `idUserValidation`) VALUES
+(1, 1, 'P9', '2021-01-27 16:40:38', NULL, 5),
+(2, 2, 'P2', '2021-01-27 16:40:56', NULL, 5),
+(3, 3, 'P11', '2021-01-27 16:40:57', NULL, 5),
+(4, 4, 'P5', '2021-01-27 16:40:57', NULL, 5),
+(5, 5, 'P3', '2021-01-27 16:40:59', NULL, 5),
+(6, 5, 'P3', '2021-01-27 16:40:59', NULL, 5),
+(7, 6, 'P8', '2021-01-27 16:41:00', NULL, 5),
+(8, 7, 'P10', '2021-01-27 16:41:01', NULL, 5),
+(9, 8, 'P6', '2021-01-27 16:41:03', '2021-01-27 16:41:22', 5),
+(10, 9, 'P4', '2021-01-27 16:41:04', NULL, 5);
 
 -- --------------------------------------------------------
 
@@ -265,7 +281,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vueparkinglibre`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join (select distinct `asso_avionparking`.`idParking` AS `idParking`,`asso_avionparking`.`dateArrivee` AS `dateArrivee`,first_value(`asso_avionparking`.`dateDepart`) over ( partition by `asso_avionparking`.`idParking` order by `asso_avionparking`.`idAsso` desc) AS `FIRST_VALUE(dateDepart) OVER (PARTITION BY idParking ORDER BY idAsso DESC)` from `asso_avionparking` where `asso_avionparking`.`dateDepart` is null) `nonlibre` on(`parking`.`idParking` = `nonlibre`.`idParking`)) where `nonlibre`.`idParking` is null ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join (select distinct `asso_avionparking`.`idParking` AS `idParking`,`asso_avionparking`.`dateArrivee` AS `dateArrivee`,first_value(`asso_avionparking`.`dateDepart`) over ( partition by `asso_avionparking`.`idParking` order by `asso_avionparking`.`idAsso` desc) AS `first_value(``asso_avionparking``.``dateDepart``) over ( partition by ``asso_avionparking``.``idParking`` order by ``asso_avionparking``.``idAsso`` desc)` from `asso_avionparking` where `asso_avionparking`.`dateDepart` is null) `nonlibre` on(`parking`.`idParking` = `nonlibre`.`idParking`)) where `nonlibre`.`idParking` is null ;
 
 --
 -- Indexes for dumped tables
@@ -275,48 +291,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indexes for table `asso_avionparking`
 --
 ALTER TABLE `asso_avionparking`
-  ADD PRIMARY KEY (`idAsso`),
-  ADD KEY `FKAvion` (`idAvion`),
-  ADD KEY `FKParking` (`idParking`),
-  ADD KEY `FKUser` (`idUserValidation`);
-
---
--- Indexes for table `asso_waypoint`
---
-ALTER TABLE `asso_waypoint`
-  ADD KEY `WaypointBegin` (`WaypointBegin`);
-
---
--- Indexes for table `avions`
---
-ALTER TABLE `avions`
-  ADD PRIMARY KEY (`idAvion`),
-  ADD KEY `FKCompagnie` (`idCompagnie`);
-
---
--- Indexes for table `compagnie`
---
-ALTER TABLE `compagnie`
-  ADD PRIMARY KEY (`idCompagnie`);
-
---
--- Indexes for table `identification`
---
-ALTER TABLE `identification`
-  ADD PRIMARY KEY (`idUser`);
-
---
--- Indexes for table `parking`
---
-ALTER TABLE `parking`
-  ADD PRIMARY KEY (`idParking`),
-  ADD KEY `FKwaypoint` (`waypointProche`);
-
---
--- Indexes for table `waypoint`
---
-ALTER TABLE `waypoint`
-  ADD PRIMARY KEY (`idWaypoint`);
+  ADD PRIMARY KEY (`idAsso`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -326,49 +301,7 @@ ALTER TABLE `waypoint`
 -- AUTO_INCREMENT for table `asso_avionparking`
 --
 ALTER TABLE `asso_avionparking`
-  MODIFY `idAsso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=253;
-
---
--- AUTO_INCREMENT for table `avions`
---
-ALTER TABLE `avions`
-  MODIFY `idAvion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT for table `compagnie`
---
-ALTER TABLE `compagnie`
-  MODIFY `idCompagnie` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `identification`
---
-ALTER TABLE `identification`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `asso_avionparking`
---
-ALTER TABLE `asso_avionparking`
-  ADD CONSTRAINT `FKAvion` FOREIGN KEY (`idAvion`) REFERENCES `avions` (`idAvion`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `FKParking` FOREIGN KEY (`idParking`) REFERENCES `parking` (`idParking`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `FKUser` FOREIGN KEY (`idUserValidation`) REFERENCES `identification` (`idUser`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `avions`
---
-ALTER TABLE `avions`
-  ADD CONSTRAINT `FKCompagnie` FOREIGN KEY (`idCompagnie`) REFERENCES `compagnie` (`idCompagnie`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `parking`
---
-ALTER TABLE `parking`
-  ADD CONSTRAINT `FKwaypoint` FOREIGN KEY (`waypointProche`) REFERENCES `waypoint` (`idWaypoint`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  MODIFY `idAsso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
