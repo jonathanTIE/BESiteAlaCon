@@ -8,38 +8,60 @@
 {% if msg %}
     <h4>Compte crée avec le mot de passe {{ msg }} . Veuilliez le noter, il ne sera pas redonné !</h4>
 {% endif %}
-<form class="splash-container" action="{{ url_for('build') }}" method="post">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="mb-1">Registrations Form</h3>
-                <p>Please enter your user information.</p>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <input class="form-control form-control-lg" type="text" name="nom" required="" placeholder="Nom" autocomplete="on">
-                </div>
-                <div class="form-group">
-                    <input class="form-control form-control-lg" type="text" name="prenom" required="" placeholder="Prénom" autocomplete="on">
-                </div>
-                <div class="form-group">
-                    <input class="form-control form-control-lg" type="text" name="login" required="" placeholder="Login" autocomplete="on">
-                </div>
-                <div class="form-group">
-                    <input class="form-control form-control-lg" type="email" name="email" required="" placeholder="E-mail" autocomplete="on">
-                </div>
-                <label class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" value="1" name="radio-inline" checked="" class="custom-control-input"><span class="custom-control-label">Agent Vigie</span>
-                </label>
-                <label class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" value="0" name="radio-inline" class="custom-control-input"><span class="custom-control-label">Administrateur</span>
-                </label>
+
+    {%  if session["statut"] == 0 %}
+        <form class="splash-container" action="{{ url_for('build') }}" method="post">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-1">Registrations Form</h3>
+                        <p>Please enter your user information.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" type="text" name="nom" required="" placeholder="Nom" autocomplete="on">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" type="text" name="prenom" required="" placeholder="Prénom" autocomplete="on">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" type="text" name="login" required="" placeholder="Login" autocomplete="on">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" type="email" name="email" required="" placeholder="E-mail" autocomplete="on">
+                        </div>
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" value="1" name="radio-inline" checked="" class="custom-control-input"><span class="custom-control-label">Agent Vigie</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" value="0" name="radio-inline" class="custom-control-input"><span class="custom-control-label">Administrateur</span>
+                        </label>
 
 
-                <div class="form-group pt-2">
-                    <button class="btn btn-block btn-primary" type="submit">Ajouter l'utilisateur</button>
-                </div>
+                        <div class="form-group pt-2">
+                            <button class="btn btn-block btn-primary" type="submit">Ajouter l'utilisateur</button>
+                        </div>
 
-            </div>
+                    </div>
+                </div>
+            </form>
+
+    {%  endif %}
+
+    <form action="/maj-mdp" method="post">
+        <div class="form-group">
+            <label for="previousPassword">Ancien mot de passe</label>
+            <input id="previousPassword" name="previousPassword" type="password" placeholder="Password" class="form-control">
         </div>
+        <div class="form-group">
+            <label for="inputPassword">Nouveau mot de passe</label>
+            <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="inputConfirmPassword">Confirmer mot de passe</label>
+            <input id="inputConfirmPassword" name="inputConfirmPassword" type="password" placeholder="Password" class="form-control">
+        </div>
+            <button class="btn btn-block btn-primary" type="submit">Confirmer</button>
     </form>
+
+
 {% endblock %}
