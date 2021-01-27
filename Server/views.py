@@ -130,3 +130,4 @@ def getChart():
 
     liste = db.get_ChartData(request.form['DateArr'],request.form['DateDep'])
     return jsonify(liste)
+
