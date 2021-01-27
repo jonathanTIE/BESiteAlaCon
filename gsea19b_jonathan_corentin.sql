@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 27, 2021 at 04:41 PM
+-- Generation Time: Jan 27, 2021 at 04:48 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -281,7 +281,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vueparkinglibre`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join (select distinct `asso_avionparking`.`idParking` AS `idParking`,`asso_avionparking`.`dateArrivee` AS `dateArrivee`,first_value(`asso_avionparking`.`dateDepart`) over ( partition by `asso_avionparking`.`idParking` order by `asso_avionparking`.`idAsso` desc) AS `first_value(``asso_avionparking``.``dateDepart``) over ( partition by ``asso_avionparking``.``idParking`` order by ``asso_avionparking``.``idAsso`` desc)` from `asso_avionparking` where `asso_avionparking`.`dateDepart` is null) `nonlibre` on(`parking`.`idParking` = `nonlibre`.`idParking`)) where `nonlibre`.`idParking` is null ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vueparkinglibre`  AS  select `parking`.`idParking` AS `idParking`,`parking`.`categorie` AS `categorie` from (`parking` left join (select distinct `asso_avionparking`.`idParking` AS `idParking`,`asso_avionparking`.`dateArrivee` AS `dateArrivee`,first_value(`asso_avionparking`.`dateDepart`) over ( partition by `asso_avionparking`.`idParking` order by `asso_avionparking`.`idAsso` desc) AS `dateDepart` from `asso_avionparking` where `asso_avionparking`.`dateDepart` is null) `nonlibre` on(`parking`.`idParking` = `nonlibre`.`idParking`)) where `nonlibre`.`idParking` is null ;
 
 --
 -- Indexes for dumped tables
