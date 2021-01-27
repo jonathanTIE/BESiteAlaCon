@@ -124,14 +124,14 @@ def add_userdata(email, nom:str, prenom:str, statut:int,login:str): #Return pass
     return msg, last_id
 
 
-def update_membreData(champ,idUser,newvalue,hash=False):
+def update_membreData(champ, idUser, newvalue, hash=False):
     try:
         cnx = connexion()
         cursor = cnx.cursor()
         if hash:
             newvalue = hashlib.sha256(newvalue.encode())
             newvalue = newvalue.hexdigest()
-        sql = "UPDATE membre SET "+champ+" = %s WHERE idUser = %s;"
+        sql = "UPDATE identification SET "+champ+" = %s WHERE idUser = %s;"
         param = (newvalue, idUser)
         cursor.execute(sql, param)
         cnx.commit()
