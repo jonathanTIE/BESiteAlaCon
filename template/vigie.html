@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title_2 %}
-    {% if session.idUser %}
+    {% if session.idUser and session.newMdp != 2 %}}
     <p>Bonjour {{ session.nom }} {{session.prenom }}</p>
 
     <h2>Vigie</h2>
